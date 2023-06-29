@@ -1,0 +1,101 @@
+{
+	"files.exclude": {
+		"**/.git": true,
+		"**/.github": true,
+		"**/.gitignore": true,
+		//
+		"**/.svelte-kit": true,
+		"**/node_modules": true,
+		"**/patches": true,
+		"**/dist": true,
+		//
+		"**/build": true,
+		"**/.histoire": true,
+		"**/.turbo": true,
+		"**/.vercel": true,
+		//
+		"**/*.netlify": true,
+		"**/*.toml": true,
+		//
+		"**/*.d.ts": true,
+		"**/.env*": true,
+		"**/_config": true,
+		//
+		"**/.npm*": true,
+		"**/.husky": true,
+		"**/.templates": true,
+		"**/.changeset": true,
+		"**/*.dump": true,
+		"**/knip.ts": true,
+		//
+		"**/.prettier*": true,
+		"**/.*lint*": true,
+		"**/plopfile.mjs": true,
+		// all because tailwind intellisense stops working then it's excluded
+		"**/[!t]*.config.*": true,
+		"**/.editorconfig": true,
+		"**/*.favorites.*": true,
+		"**/tsconfig*.json": true,
+		"**/*-lock.*": true,
+		"**/*[-.]workspace.*": true,
+		//
+		"**/app.*": true,
+		"**/static": true
+	},
+	"editor.tokenColorCustomizations": {
+		"textMateRules": [
+			{
+				"scope": "keyword.control.flow.js, keyword.control.flow.ts, keyword.control.conditional.ts",
+				"settings": {
+					"foreground": "#e9cf3c",
+					"fontStyle": "italic underline",
+				
+				}
+			}
+		]
+	},
+	//  change if else color for javascript and typescript
+
+	"editor.tabSize": 2,
+	"editor.detectIndentation": false,
+	"search.exclude": {
+		"package-lock.json": true
+	},
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": [
+		"source.addMissingImports",
+		"source.fixAll.eslint",
+	],
+	"[json][jsonc]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"prettier.documentSelectors": ["**/*.astro"],
+	"[astro]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"[svelte]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "svelte.svelte-vscode"
+	},
+	"[typescriptreact]": {
+		"editor.formatOnSave": true,
+	},
+	"cSpell.words": [
+		"Btns",
+		"Cmpt",
+		"Congif",
+		"devlog",
+		"Drawflow",
+		"gifs",
+		"iframes",
+		"linklip",
+		"unrendered",
+		"YTGIF"
+	],
+	"explorer.sortOrder": "filesFirst",
+	"workbench.tree.indent": 16,
+	"liveServer.settings.NoBrowser": true
+}

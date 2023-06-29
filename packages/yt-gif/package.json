@@ -1,0 +1,36 @@
+{
+  "name": "@packages/yt-gif",
+  "type": "module",
+  "version": "0.4.0",
+  "scripts": {
+    "dev": "set NODE_OPTIONS=--inspect && vite dev --port 4001",
+    "test": "vitest",
+    "build": "vite build"
+  },
+  "keywords": [
+    "svelte"
+  ],
+  "files": [
+    "src",
+    "dist"
+  ],
+  "devDependencies": {
+    "@notionhq/client": "^2.2.5",
+    "@sveltejs/adapter-vercel": "^2.4.2",
+    "@sveltejs/kit": "^1.15.8",
+    "autoprefixer": "^10.4.7",
+    "fuzzy": "^0.1.3",
+    "jsdom": "^22.1.0",
+    "knip": "^2.14.1",
+    "postcss": "^8.4.23",
+    "sass": "^1.62.1",
+    "svelte": "^3.58.0",
+    "svelte-check": "^3.2.0",
+    "svelte-subscribe": "^1.0.5",
+    "tailwindcss": "^3.3.2",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.2",
+    "vite-tsconfig-paths": "^4.2.0",
+    "vitest": "^0.30.1"
+  }
+}

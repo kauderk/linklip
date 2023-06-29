@@ -1,0 +1,8 @@
+.yt-gif-awaiting-for-user-input-with-thumbnail {
+  /* https://stackoverflow.com/a/69008956 */
+  background-size: 100% 100%;
+}
+.yt-gif-awaiting-palyer--pulse-animation {
+  cursor: pointer;
+  animation: none;
+}

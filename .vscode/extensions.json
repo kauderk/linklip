@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "mikestead.dotenv",
+    "bradlc.vscode-tailwindcss",
+    "mhutchie.git-graph",
+    "svelte.svelte-vscode"
+  ],
+  "unwantedRecommendations": []
+}

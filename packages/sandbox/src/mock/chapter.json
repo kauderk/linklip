@@ -1,0 +1,114 @@
+{
+  "macro_chapters": [
+    {
+      "chapter": {
+        "repeat": "REPEAT_CHAPTER_TYPE_ENABLE_REPEAT",
+        "startTimeMs": "0",
+        "endTimeMs": "15000",
+        "repeatStateEntityKey": "EgxyZXBlYXRfc3RhdGUgyQIoAQ%3D%3D"
+      },
+      "thumbnails": [
+        {
+          "url": "https://i.ytimg.com/vi/ZwLekxsSY3Y/hqdefault_13000.jpg?sqp=-oaymwEiCKgBEF5IWvKriqkDFQgBFQAAAAAYASUAAMhCPQCAokN4AQ==&rs=AOn4CLBHqB_bN4CoZGF2zaEWyC250UF-Vw",
+          "width": 168,
+          "height": 94
+        },
+        {
+          "url": "https://i.ytimg.com/vi/ZwLekxsSY3Y/hqdefault_13000.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLCMYo0gMwm2ILJVBQgge3Ept5vJFg",
+          "width": 336,
+          "height": 188
+        }
+      ],
+      "title": { "simpleText": "Intro" },
+      "description": { "simpleText": "0:00" }
+    },
+    {
+      "chapter": {
+        "repeat": "REPEAT_CHAPTER_TYPE_ENABLE_REPEAT",
+        "startTimeMs": "30000",
+        "endTimeMs": "42000",
+        "repeatStateEntityKey": "EgxyZXBlYXRfc3RhdGUgyQIoAQ%3D%3D"
+      },
+      "thumbnails": [
+        {
+          "url": "https://i.ytimg.com/vi/ZwLekxsSY3Y/hqdefault_32866.jpg?sqp=-oaymwEiCKgBEF5IWvKriqkDFQgBFQAAAAAYASUAAMhCPQCAokN4AQ==&rs=AOn4CLDSP6XmNskcKck840PXSpFXiRAQGQ",
+          "width": 168,
+          "height": 94
+        },
+        {
+          "url": "https://i.ytimg.com/vi/ZwLekxsSY3Y/hqdefault_32866.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLBOYfTD8NRKckmXlTzkLRuzCu1LXA",
+          "width": 336,
+          "height": 188
+        }
+      ],
+      "title": { "simpleText": "Function" },
+      "description": { "simpleText": "0:30" }
+    },
+    {
+      "chapter": {
+        "repeat": "REPEAT_CHAPTER_TYPE_ENABLE_REPEAT",
+        "startTimeMs": "42000",
+        "endTimeMs": "66000",
+        "repeatStateEntityKey": "EgxyZXBlYXRfc3RhdGUgyQIoAQ%3D%3D"
+      },
+      "thumbnails": [
+        {
+          "url": "https://i.ytimg.com/vi/ZwLekxsSY3Y/hqdefault_65933.jpg?sqp=-oaymwEiCKgBEF5IWvKriqkDFQgBFQAAAAAYASUAAMhCPQCAokN4AQ==&rs=AOn4CLBz5tm57vrD9jOPhJDMDYGkxPndEg",
+          "width": 168,
+          "height": 94
+        },
+        {
+          "url": "https://i.ytimg.com/vi/ZwLekxsSY3Y/hqdefault_65933.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLBFaWmeeuaI8gTkRigRfwpRTDESvw",
+          "width": 336,
+          "height": 188
+        }
+      ],
+      "title": { "simpleText": "Performance" },
+      "description": { "simpleText": "0:42" }
+    },
+    {
+      "chapter": {
+        "repeat": "REPEAT_CHAPTER_TYPE_ENABLE_REPEAT",
+        "startTimeMs": "66000",
+        "endTimeMs": "81000",
+        "repeatStateEntityKey": "EgxyZXBlYXRfc3RhdGUgyQIoAQ%3D%3D"
+      },
+      "thumbnails": [
+        {
+          "url": "https://i.ytimg.com/vi/ZwLekxsSY3Y/hqdefault_79866.jpg?sqp=-oaymwEiCKgBEF5IWvKriqkDFQgBFQAAAAAYASUAAMhCPQCAokN4AQ==&rs=AOn4CLCcq1ihoP-QcC6H_f9e92-JcQ7MbA",
+          "width": 168,
+          "height": 94
+        },
+        {
+          "url": "https://i.ytimg.com/vi/ZwLekxsSY3Y/hqdefault_79866.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLCWmVjni67ATUHReDehbvH4xGdLpg",
+          "width": 336,
+          "height": 188
+        }
+      ],
+      "title": { "simpleText": "Firewall Pattern" },
+      "description": { "simpleText": "1:06" }
+    },
+    {
+      "chapter": {
+        "repeat": "REPEAT_CHAPTER_TYPE_ENABLE_REPEAT",
+        "startTimeMs": "81000",
+        "endTimeMs": "112000",
+        "repeatStateEntityKey": "EgxyZXBlYXRfc3RhdGUgyQIoAQ%3D%3D"
+      },
+      "thumbnails": [
+        {
+          "url": "https://i.ytimg.com/vi/ZwLekxsSY3Y/hqdefault_97000.jpg?sqp=-oaymwEiCKgBEF5IWvKriqkDFQgBFQAAAAAYASUAAMhCPQCAokN4AQ==&rs=AOn4CLBxeptCf63B0Icljo8Yn1bcmKDJBw",
+          "width": 168,
+          "height": 94
+        },
+        {
+          "url": "https://i.ytimg.com/vi/ZwLekxsSY3Y/hqdefault_97000.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLAbgdFASKtPZOu4yutOqXnAg6GoEg",
+          "width": 336,
+          "height": 188
+        }
+      ],
+      "title": { "simpleText": "Outro" },
+      "description": { "simpleText": "1:21" }
+    }
+  ]
+}

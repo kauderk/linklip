@@ -1,0 +1,71 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "moduleResolution": "node",
+    "module": "esnext",
+    "lib": ["es2020", "DOM"],
+    "target": "es2017",
+    "strict": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+
+    "alwaysStrict": true,
+    "strictPropertyInitialization": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+
+    /**
+			svelte-preprocess cannot figure out whether you have a value or a type, so tell TypeScript
+			to enforce using \`import type\` instead of \`import\` for Types.
+			*/
+    "isolatedModules": false,
+    "resolveJsonModule": true,
+    "ignoreDeprecations": "5.0",
+
+    /**
+			To have warnings/errors of the Svelte compiler at the correct position,
+			enable source maps by default.
+			*/
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "allowJs": true,
+    "checkJs": true,
+    "paths": {
+      "$src": ["src"],
+      "$mock": ["src/mock"],
+      "$mock/*": ["src/mock/*"],
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"],
+      "$chm": ["src/chrome_extension"],
+      "$chm/*": ["src/chrome_extension/*"],
+      "$v2": ["src/yt-gif/v0.2.0/js"],
+      "$v2/*": ["src/yt-gif/v0.2.0/js/*"],
+      "$v3": ["src/v0.3.0"],
+      "$v3/*": ["src/v0.3.0/*"],
+      "$cmp": ["src/components"],
+      "$cmp/*": ["src/components/*"],
+      "$styles": ["src/styles"],
+      "$styles/*": ["src/styles/*"],
+      "$stores": ["src/stores"],
+      "$stores/*": ["src/stores/*"]
+    }
+  },
+  "include": [
+    "src/**/*.d.ts",
+    "src/**/*.js",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/**/*.ts",
+    "src/**/*.svelte",
+    "src/**/**/*.svelte",
+    "static/global.d.ts"
+  ],
+  "exclude": ["*/**/**/*.js"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

@@ -1,0 +1,57 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "goOnline",
+      "type": "process",
+      "command": "${input:goOnline}"
+    },
+    {
+      "label": "goOffline",
+      "type": "process",
+      "command": "${input:goOffline}"
+    },
+    {
+      "label": "build:roam-research",
+      "type": "npm",
+      "path": "packages/yt-gif",
+      "script": "build:roam-research",
+      "group": "build"
+    },
+    {
+      "label": "Terminate All Tasks",
+      "command": "echo ${input:terminateAll}",
+      "type": "shell",
+      "problemMatcher": []
+    },
+    //
+    {
+      "label": "WatchBuild_LiveServer",
+      "dependsOn": ["goOnline", "build:roam-research"]
+    },
+    {
+      "label": "StopBuild_LiveServer",
+      "dependsOn": ["goOffline", "Terminate All Tasks"]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "goOnline",
+      "type": "command",
+      "command": "extension.liveServer.goOnline"
+    },
+    {
+      "id": "goOffline",
+      "type": "command",
+      "command": "extension.liveServer.goOffline"
+    },
+    {
+      "id": "terminateAll",
+      "type": "command",
+      "command": "workbench.action.tasks.terminate",
+      "args": "terminateAll"
+    }
+  ]
+}

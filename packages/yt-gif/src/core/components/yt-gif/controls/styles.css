@@ -1,0 +1,59 @@
+.yt-gif-invisible-element {
+  opacity: 0;
+  color: transparent;
+}
+.yt-gif-invisible-element:hover {
+  opacity: 1;
+}
+
+:root {
+  --ddm-tooltip-arrow-size: 2ch;
+  --ddm-scale-tooltip: 0;
+  --ddm-tooltip-traslate-y: 0;
+  --base-x-offset-content: 50%;
+}
+
+/* tooltip */
+:is([class*='yt-gif']) :is([data-tooltip])::before,
+:is([class*='yt-gif']) :is([data-tooltip])::after {
+  color: var(--ddm-tooltip-c);
+  font-size: 0.9em;
+  text-align: center;
+  height: auto;
+  width: max-content;
+  min-width: min-content;
+  max-width: 45ch !important;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(var(--ddm-tooltip-traslate-y))
+    scale(var(--ddm-scale-tooltip));
+  transition: 100ms transform;
+  transform-origin: bottom center;
+  font-weight: bold;
+  z-index: 10000;
+}
+:is([class*='yt-gif']) :is([data-tooltip])::before {
+  content: attr(data-tooltip);
+  background-color: var(--ddm-tooltip-bg);
+  border-radius: 0.7em;
+  padding: 0ch 1ch;
+  --ddm-tooltip-traslate-y: calc(-100% - var(--ddm-tooltip-arrow-size));
+}
+:is([class*='yt-gif']) :is([data-tooltip]):hover::before,
+:is([class*='yt-gif']) :is([data-tooltip]):hover::after {
+  --ddm-scale-tooltip: 1;
+}
+.yt-gif-max-tooltip::before {
+  width: max-content !important;
+  max-width: max-content !important;
+}
+/* GLOBAL */
+[class*='yt-gif'] .m-0 {
+  margin: 0 !important;
+}
+:is([class*='yt-gif']) .bp3-button::before {
+  margin: 0 !important;
+}
+:is(.bp3-button, .rm-video-timestamp):hover .yt-gif-url-btns {
+  display: flex !important;
+}

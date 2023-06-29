@@ -1,0 +1,50 @@
+{
+  "configurations": [
+    {
+      "type": "pwa-msedge",
+      "name": "Launch Microsoft Edge",
+      "request": "launch",
+      "runtimeArgs": ["--remote-debugging-port=9222"],
+      "url": "https://roamresearch.com/#/app/Neuronal_Firing",
+      "presentation": {
+        "hidden": true
+      },
+      "webRoot": "${workspaceFolder}/packages/yt-gif/dist",
+      "internalConsoleOptions": "openOnFirstSessionStart",
+      "postDebugTask": "StopBuild_LiveServer"
+    },
+    {
+      "type": "pwa-msedge",
+      "name": "Launch Microsoft Edge in headless mode",
+      "request": "launch",
+      "runtimeArgs": ["--headless", "--remote-debugging-port=9222"],
+      "url": "https://roamresearch.com/#/app/Neuronal_Firing",
+      "presentation": {
+        "hidden": true
+      },
+      "webRoot": "${workspaceFolder}/packages/yt-gif/dist",
+      "postDebugTask": "StopBuild_LiveServer"
+    },
+    {
+      "type": "vscode-edge-devtools.debug",
+      "name": "Open Edge DevTools",
+      "request": "attach",
+      "url": "https://roamresearch.com/#/app/Neuronal_Firing",
+      "presentation": {
+        "hidden": true
+      },
+      "webRoot": "${workspaceFolder}/packages/yt-gif/dist",
+      "preLaunchTask": "WatchBuild_LiveServer"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Launch Edge and attach DevTools",
+      "configurations": ["Launch Microsoft Edge", "Open Edge DevTools"]
+    },
+    {
+      "name": "Launch Edge Headless and attach DevTools",
+      "configurations": ["Launch Microsoft Edge in headless mode", "Open Edge DevTools"]
+    }
+  ]
+}

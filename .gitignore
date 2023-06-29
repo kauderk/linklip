@@ -1,0 +1,152 @@
+
+# Ignore
+###################################################################################################################### 
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, VSCode
+
+*.iml
+
+## Directory-based project format:
+.idea/
+
+## File-based project format:
+*.ipr
+*.iws
+
+## Plugin-specific files:
+
+# IntelliJ
+/out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+
+# ignore env variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# testing
+coverage
+
+# debug
+/bin
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ignore build files
+.travis.yml
+todo
+.svelte-kit/
+.next/
+out/
+build
+/build
+.vercel
+.output
+.turbo
+ build/**
+ dist/**
+build/**
+dist/**
+
+# ignore pnpm files
+.pnpm-debug.log
+
+# misc
+.DS_Store
+*.pem
+static/resources
+**/static/local
+/turbosvelte-cli
+package
+/package
+vitebook/.vitebook/dist
+
+# Astro
+###################################################################################################################### 
+# build output
+**/dist/
+**/.output/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env*.local
+
+# misc
+Thumbs.db
+
+# Exceptions
+###################################################################################################################### 
+!packages/libs/*/dist/
+!packages/utils/*/dist/
+# !packages/*/dist/
+
+!apps/bookit/package
+
+# Netlify
+###################################################################################################################### 
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+serverless-old
+serverless-cms-media-manager
+
+# testing
+/coverage
+
+# production
+/build
+/functions-build
+/dist
+**/yt-gif/dist
+
+# netlify
+.netlify
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# firebase-admin api tokens
+**/admin.json
+# any kind of database
+**/*.dump
+
+# python
+# Byte-compiled / optimized / DLL files 
+__pycache__/
+*.py[cod]
+*$py.class
+venv
+# packages
+.deta

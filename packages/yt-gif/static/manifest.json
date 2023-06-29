@@ -1,0 +1,35 @@
+{
+  "name": "Window Gif SvelteKit Extension",
+  "description": "PlayOnly and PauseOnly. A browser extension made with Svelte Kit",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "permissions": ["activeTab", "scripting", "tabs"],
+  "options_page": "options.html",
+  "action": {
+    "default_title": "Svelte Extension",
+    "default_icon": "favicon.png",
+    "default_popup": "index.html"
+  },
+  "chrome_url_overrides": {
+    "newtab": "content.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["content-bundle.css"],
+      "js": ["content-bundle.js"]
+    }
+  ],
+  "commands": {
+    "Ctrl+M": {
+      "suggested_key": {
+        "default": "Ctrl+M",
+        "mac": "Command+M"
+      },
+      "description": "Ctrl+M."
+    }
+  },
+  "icons": {
+    "48": "favicon.png"
+  }
+}

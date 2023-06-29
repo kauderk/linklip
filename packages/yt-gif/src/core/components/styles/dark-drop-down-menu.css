@@ -1,0 +1,80 @@
+:root {
+  --dropdown-main-btn-bg-h: rgba(167, 182, 194, 0.3);
+  --dropdown-shadow: rgb(16 22 26 / 10%);
+  --dropdown-c: rgb(172 179 191);
+
+  --yt-gif-icon-bg: #696969;
+
+  --drop-menu-btn-h: var(--dropdown-main-btn-bg-h);
+  --drop-menu-btn-f: red;
+  --drop-menu-btn-f: rgba(167, 182, 194, 0.2);
+  --dropdown--bg: #10161a;
+
+  --submenu-message-bg: #2f414e;
+
+  --submenu-styles-item-bg-h: rgba(74, 190, 195, 0.3);
+  --submenu-styles-content-bg: #415c69;
+
+  --submenu-info-btn-bg: #1b5021;
+  --submenu-info-btn-bg-h: rgba(44, 116, 52, 0.87);
+
+  --submenu-info-item-bg-h: #1c272f;
+
+  --deployment-extreme-bg: blue;
+  --deployment-mid-bg: red;
+
+  --deployment-forbidden-extreme-bg: var(--dropdown--bg);
+  --deployment-forbidden-mid-bg: #ad301b;
+
+  --deployment-allright-mid-bg: #176951;
+
+  --submenu-message-bg-high: #144b54;
+
+  --dropdown-pulse-anim-box-shadow-start: rgba(204, 169, 44, 0.4);
+  --dropdown-pulse-anim-box-shadow-mid: rgba(204, 169, 44, 0);
+  --dropdown-pulse-anim-box-shadow-end: rgba(204, 169, 44, 0);
+
+  --awaiting-player-bg: rgba(47, 47, 53, 0.561);
+  --awaiting-player-box-shadow: rgb(79 94 107);
+
+  --awaiting-player-pulse-anim-box-shadow-start: rgb(126 126 126 / 79%);
+  --awaiting-player-pulse-anim-box-shadow-mid: #565656;
+  --awaiting-player-pulse-anim-box-shadow-end: rgb(126 126 126 / 79%);
+
+  --ddm-tooltip-c: #989898;
+  --ddm-tooltip-bg: #333;
+
+  --tut-awaiting-input-contour: #3d4f58;
+  --info-ms-focus-contour: #006064;
+
+  --updt-pulse-anim-shadows: rgb(139 195 74 / 98%);
+  --updt-pulse-anim-shadows-mid: transparent;
+
+  --yt-gif-icon-focus-contour: rgba(19, 124, 189, 0.6);
+
+  --dropdown--bg-secondary: #202d36;
+
+  --url-btn-bg: #282828;
+  --url-btn-bg-h: #213c4d;
+
+  --ddm-not-allowed-bg: rgb(129 97 0 / 90%);
+  --ddm-not-allowed-bg-h: rgba(255, 193, 7, 0.62);
+  --ddm-updt-h: #02665d;
+
+  --sel-bg: #2f414eb3;
+  --sel-sel: #314d62;
+  --sel-disabled-bg: rgb(49 58 64);
+  --sel-disabled-c: #607d8b;
+
+  --sel-item-c: rgb(172 179 191);
+  --sel-item-c-sel: rgb(172 179 191);
+
+  --sel-btn-sel: #cecece;
+  --sel-btn-c: rgb(145 159 180);
+  --sel-btn-sel-c: rgb(135 135 135);
+
+  --sel-h: rgb(40 120 184 / 30%);
+
+  --tm-start-bg: #308d9f;
+  --tm-end-bg: #30649f;
+}
