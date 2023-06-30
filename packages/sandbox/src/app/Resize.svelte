@@ -6,6 +6,14 @@
 
   const config = {
     aspectRatio: aspectRatioFrom([16, 9]),
+    resizeMode: 'inlineBlock' as
+      | 'inlineBlock'
+      | 'inlineBlockReversed'
+      | 'pictureInPicture'
+      | 'right'
+      | 'left'
+      | 'bottom'
+      | 'top',
     bounds: 'mouse' as 'mouse' | 'rect' | 'none',
     hide: false,
     minWidth: 300,
@@ -150,7 +158,7 @@
           _rect.x = initialRect.left - delta
           _rect.width = initialRect.width + delta
           _rect.y = initialRect.top - delta / aspectRatio
-        } else {
+        } else if (_config.resizeMode == 'inlineBlock') {
           if (direction === 'right' || direction === 'left') {
             inlineBlock(widthDir, true)
           } else {
@@ -166,8 +174,23 @@
             const b = a == wR ? hR : wR
             _rect[on ? 'height' : 'width'] = (size / a) * b
           }
+        } else {
+          const resizeMode = _config.resizeMode
+          // right|left|top|bottom
+          const sideways = direction.match(/right|left/)
+          let delta = sideways ? deltaX : deltaY
+          delta = direction.match(/left|top/) ? delta * -1 : delta
+
+          if (resizeMode.match(/right|left/)) {
+            _rect.width = initialRect.width + delta * (resizeMode.match(/left/) ? -1 : 1)
+          } else {
+            _rect.height = initialRect.height + delta * (resizeMode.match(/top/) ? -1 : 1)
+          }
         }
-        _rect.height = _rect.width / _config.aspectRatio.value
+        // ugly, FIXME:
+        if (_config.resizeMode.length > 7) {
+          _rect.height = _rect.width / _config.aspectRatio.value
+        }
         // invalidate the signal!
         rect.set({ ...rect.value, ..._rect })
       },
@@ -179,8 +202,11 @@
     })
 
     function update() {
-      // prettier-ignore
-      element.style.aspectRatio = _config.aspectRatio.toString()
+      // ugly, FIXME:
+      if (_config.resizeMode.length > 7) {
+        element.style.aspectRatio = _config.aspectRatio.toString()
+      }
+
       element.classList.toggle('hideResize', _config.hide)
     }
     update()
