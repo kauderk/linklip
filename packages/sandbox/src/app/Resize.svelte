@@ -6,7 +6,7 @@
 
   const config = {
     aspectRatio: aspectRatioFrom([16, 9]),
-    resizeMode: 'inlineBlock' as 'inlineBlock' | 'inlineBlockReversed' | 'pictureInPicture',
+    bounds: 'mouse' as 'mouse' | 'rect' | 'none',
     hide: false,
     minWidth: 300,
     resizing: preSignal(false),
@@ -67,25 +67,48 @@
         if (_config.minWidth >= widthDir) {
           return
         }
-        const domRect = element.getBoundingClientRect()
-        // if the domRect is out of the screen, exit
-        const padding = _config.padding
-        if (
-          domRect.left - padding < 0 ||
-          domRect.right + padding > window.innerWidth ||
-          domRect.top - padding < 0 ||
-          domRect.bottom + padding > window.innerHeight
-        ) {
-          // if the next move is trying to move it back to the screen, then allow it
-          // prettier-ignore
+        if (config.bounds == 'mouse') {
+          const domRect = element.getBoundingClientRect()
+          // if the domRect is out of the screen, exit
+          const padding = _config.padding
           if (
-						   direction.match('left') && event.pageX < padding
-						|| direction.match('right') && event.pageX > window.innerWidth - padding
-						|| direction.match('top') && event.pageY < padding
-						|| direction.match('bottom') && event.pageY > window.innerHeight - padding
-					) {
-						return
-					}
+            domRect.left - padding < 0 ||
+            domRect.right + padding > window.innerWidth ||
+            domRect.top - padding < 0 ||
+            domRect.bottom + padding > window.innerHeight
+          ) {
+            // if the next move is trying to move it back to the screen, then allow it
+            // prettier-ignore
+            if (
+								direction.match('left') && event.pageX < padding
+							|| direction.match('right') && event.pageX > window.innerWidth - padding
+							|| direction.match('top') && event.pageY < padding
+							|| direction.match('bottom') && event.pageY > window.innerHeight - padding
+						) {
+							return
+						}
+          }
+        } else if (config.bounds == 'rect') {
+          const domRect = element.getBoundingClientRect()
+          const parent = document.body.getBoundingClientRect()
+          const padding = _config.padding
+          if (
+            domRect.left - padding < parent.left ||
+            domRect.right + padding > parent.right ||
+            domRect.top - padding < parent.top ||
+            domRect.bottom + padding > parent.bottom
+          ) {
+            // if the next move is trying to move it back to the screen, then allow it
+            // prettier-ignore
+            if (
+								direction.match('left') && event.pageX < padding
+							|| direction.match('right') && event.pageX > window.innerWidth - padding
+							|| direction.match('top') && event.pageY < padding
+							|| direction.match('bottom') && event.pageY > window.innerHeight - padding
+						) {
+							return
+						}
+          }
         }
 
         const _rect = { ...rect.value }
