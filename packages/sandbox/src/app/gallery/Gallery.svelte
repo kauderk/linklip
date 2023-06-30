@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { preSignal } from '$lib/pre-signal'
+  import { resize, type ResizeConfig } from '../Resize.svelte'
+
   function portal(target: HTMLElement) {
     const host = document.querySelector('.whenContentEditable')!
     host.appendChild(target)
@@ -28,9 +31,10 @@
     const rect = {
       left: startFrom.right + xPadding,
       top: hostRect.top,
-      width: Math.max(0, endAt.left - startFrom.right - xPadding),
+      'max-width': Math.max(0, endAt.left - startFrom.right - xPadding),
       height: hostRect.height,
     }
+    lookRect.maxWidth = rect['max-width']
 
     // PORTAL
     const sibling = hostRef.querySelector('.notion-topbar-action-buttons')!
@@ -48,18 +52,50 @@
   export let type = 'side'
   export let direction = 'left'
 
-  export let size = 10
-  export let w = 320
-  export let rect = {
+  export let size = 100
+  export let w = 200
+  export let lookRect = {
     maxWidth: w,
     itemWidth: w,
+  }
+
+  const resizeConfig = {
+    resizeMode: 'bottom',
+    bounds: 'rect',
+    padding: 0,
+    rect: preSignal({
+      height: 100,
+      width: 100,
+      x: 0,
+      y: 0,
+    }),
+  } satisfies ResizeConfig
+
+  function useRect(ref: HTMLElement) {
+    const r = ref.getBoundingClientRect()
+    resizeConfig.rect.set({
+      height: lookRect.itemWidth / (16 / 9),
+      width: r.width,
+      x: r.left,
+      y: r.top,
+    })
+    return {
+      destroy: resizeConfig.rect.subscribe(rect => {
+        ref.style.height = rect.height + 'px'
+      }),
+    }
+  }
+  function overflow(e: any) {
+    // annoying
+    const r = e.currentTarget.getBoundingClientRect()
+    e.currentTarget.classList.toggle('noOverflow', r.width < lookRect.maxWidth)
   }
 </script>
 
 {#if type == 'side'}
   <div
-    style:--maxWidth={rect.maxWidth}
-    style:--itemWidth={rect.itemWidth}
+    style:--maxWidth={lookRect.maxWidth}
+    style:--itemWidth={lookRect.itemWidth}
     class="gallery absolute z-10 h-full w-auto overflow-hidden opacity-30 {type}"
     style={`${direction}: 0;`}
     hidden
@@ -67,7 +103,7 @@
   >
     <div
       class:justify-end={direction == 'right'}
-      class="left-0 flex w-fit flex-wrap items-start gap-2 overflow-y-auto p-2"
+      class="left-0 flex w-fit flex-wrap content-start items-start gap-2 overflow-y-auto p-2"
       style="height: inherit;"
     >
       {#each Array(size) as _}
@@ -76,28 +112,37 @@
     </div>
   </div>
 {:else if type == 'top'}
-  <div class="gallery {type}" use:topBarPortal hidden style:--itemWidth={rect.itemWidth}>
-    <div
-      class=" absolute left-0 flex gap-2 overflow-x-auto p-2"
-      style="width: inherit;"
-      on:wheel={scrollHorizontally}
-    >
-      {#each Array(size) as _}
-        <div class="item float-left block aspect-video border border-slate-600 bg-slate-500" />
-      {/each}
+  <div class="gallery {type}" use:topBarPortal hidden style:--itemWidth={lookRect.itemWidth}>
+    <div class="resizer relative" use:resize={resizeConfig} use:useRect on:mouseup={overflow}>
+      <div
+        class="relative left-0 flex gap-2 overflow-x-auto overflow-y-hidden p-2"
+        style="width: inherit; height: inherit;"
+        on:wheel={scrollHorizontally}
+      >
+        {#each Array(size) as _}
+          <div
+            class="item float-left block aspect-video h-full border border-slate-600 bg-slate-500"
+          />
+        {/each}
+      </div>
     </div>
   </div>
 {/if}
 
 <style lang="scss">
+  .resizer {
+    :global([class*='bottom']) {
+      --grabber-offset: -10px;
+    }
+    &:global(.noOverflow .relative) {
+      overflow-x: hidden;
+    }
+  }
   .gallery.side > div {
     max-width: calc(var(--maxWidth) * 1px);
   }
   .gallery.side .item {
     width: calc(var(--itemWidth) * 1px);
-  }
-  .gallery.top .item {
-    height: calc((var(--itemWidth) / (16 / 9)) * 1px);
   }
   .gallery > div:not(:hover) {
     &::-webkit-scrollbar-thumb {
