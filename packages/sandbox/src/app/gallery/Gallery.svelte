@@ -52,9 +52,10 @@
   export let type = 'side'
   export let direction = 'left'
 
-  export let size = 100
+  export let size = 10
   export let w = 200
   export let lookRect = {
+    minHeight: 45,
     maxWidth: w,
     itemWidth: w,
   }
@@ -88,7 +89,14 @@
   function overflow(e: any) {
     // annoying
     const r = e.currentTarget.getBoundingClientRect()
-    e.currentTarget.classList.toggle('noOverflow', r.width < lookRect.maxWidth)
+    const noOverflow = r.width < lookRect.maxWidth
+    e.currentTarget.classList.toggle('noOverflow', noOverflow)
+    requestAnimationFrame(() => {
+      if (resizeConfig.rect.value.height < lookRect.minHeight) {
+        const offset = noOverflow ? 0 : 10
+        resizeConfig.rect.mod({ height: lookRect.minHeight + offset })
+      }
+    })
   }
 </script>
 
