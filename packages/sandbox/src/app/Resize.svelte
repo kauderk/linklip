@@ -75,10 +75,11 @@
         if (_config.minWidth >= widthDir) {
           return
         }
+        let outOfBounds = false
+        const domRect = element.getBoundingClientRect()
+        const padding = _config.padding
         if (_config.bounds == 'mouse') {
-          const domRect = element.getBoundingClientRect()
           // if the domRect is out of the screen, exit
-          const padding = _config.padding
           if (
             domRect.left - padding < 0 ||
             domRect.right + padding > window.innerWidth ||
@@ -97,25 +98,14 @@
 						}
           }
         } else if (_config.bounds == 'rect') {
-          const domRect = element.getBoundingClientRect()
           const parent = document.body.getBoundingClientRect()
-          const padding = _config.padding
           if (
             domRect.left - padding < parent.left ||
             domRect.right + padding > parent.right ||
             domRect.top - padding < parent.top ||
             domRect.bottom + padding > parent.bottom
           ) {
-            // if the mouse is going inside the domRect
-            // prettier-ignore
-            if (
-              (direction.match('left') && event.pageX < domRect.left) ||
-              (direction.match('right') && event.pageX > domRect.right) ||
-              (direction.match('top') && event.pageY < domRect.top) ||
-              (direction.match('bottom') && event.pageY > parent.bottom)
-            ) {
-              return
-            }
+            outOfBounds = true
           }
         }
 
@@ -185,6 +175,10 @@
             _rect.width = initialRect.width + delta * (resizeMode.match(/left/) ? -1 : 1)
           } else {
             _rect.height = initialRect.height + delta * (resizeMode.match(/top/) ? -1 : 1)
+          }
+
+          if (outOfBounds && (_rect.width > rect.value.width || _rect.height > rect.value.height)) {
+            return
           }
         }
         // ugly, FIXME:
