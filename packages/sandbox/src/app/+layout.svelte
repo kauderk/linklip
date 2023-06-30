@@ -7,6 +7,7 @@
   import { createContextMenu } from '../context-menu/fullscreen'
   import Resize from './Resize.svelte'
   import { player, storyboard } from './timeline/context'
+  import Gallery from './gallery/GalleryController.svelte'
 
   onMount(() => {
     const FirstUpperCase = (str: string) => str[0].toUpperCase() + str.slice(1)
@@ -14,25 +15,25 @@
       Object.entries({ player, storyboard }).map(e => [FirstUpperCase(e[0]), e[1]()])
     )
 
-    const sharedControls = new SharedControls({
-      target: document.body,
-      context,
-    })
-    const app = new App({
-      target: document.body,
-      props: {
-        host: document.querySelector(`[href*="youtu"]>span`)!,
-      },
-      context,
-    })
-    const resizeStyles = new Resize({
-      target: document.body,
-    })
     // document.body.classList.add('debug')
     return cleanSubscribers(
-      sharedControls.$destroy,
-      app.$destroy,
-      resizeStyles.$destroy,
+      //   new SharedControls({
+      //   target: document.body,
+      //   context,
+      // }).$destroy,
+      new Gallery({
+        target: document.body,
+      }).$destroy,
+      // new App({
+      //   target: document.body,
+      //   props: {
+      //     host: document.querySelector('.notion-scroller main')!,
+      //   },
+      //   context,
+      // }).$destroy,
+      new Resize({
+        target: document.body,
+      }).$destroy,
       createContextMenu(),
       () => document.body.classList.remove('debug')
     )
