@@ -1,7 +1,7 @@
 import type { FollowerCycle, Rect } from '../controller/follower'
 
 type x = {
-  update: (preRect: Rect) => Rect
+  update: (preRect: Rect, initRect: Rect) => Rect
   resize: (preRect: Rect, initRect: Rect, entry: DOMRectReadOnly) => Rect
 }
 export const cornerFollowerCycle = (pre: x) => {
@@ -10,12 +10,15 @@ export const cornerFollowerCycle = (pre: x) => {
       return {
         value: () => {
           const rect = hostRef.getBoundingClientRect()
-          return pre.update({
-            x: rect.x,
-            width: rect.width,
-            y: rect.bottom - initRect.height,
-            height: initRect.height,
-          })
+          return pre.update(
+            {
+              x: rect.x,
+              width: rect.width,
+              y: rect.bottom - initRect.height,
+              height: initRect.height,
+            },
+            initRect
+          )
         },
         mode: 'new',
         hostRef,
