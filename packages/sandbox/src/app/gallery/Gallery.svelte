@@ -1,6 +1,7 @@
 <script lang="ts">
   import { preSignal } from '$lib/pre-signal'
   import { resize, type ResizeConfig } from '../Resize.svelte'
+  import { createMouseTrack } from '../controller/mouse-track'
 
   function portal(target: HTMLElement) {
     const host = document.querySelector('.whenContentEditable')!
@@ -35,6 +36,7 @@
       height: hostRect.height,
     }
     lookRect.maxWidth = rect['max-width']
+    lookRect.minHeight = hostRef.clientHeight
 
     // PORTAL
     const sibling = hostRef.querySelector('.notion-topbar-action-buttons')!
@@ -86,18 +88,20 @@
       }),
     }
   }
-  function overflow(e: any) {
-    // annoying
-    const r = e.currentTarget.getBoundingClientRect()
-    const noOverflow = r.width < lookRect.maxWidth
-    e.currentTarget.classList.toggle('noOverflow', noOverflow)
-    requestAnimationFrame(() => {
-      if (resizeConfig.rect.value.height < lookRect.minHeight) {
-        const offset = noOverflow ? 0 : 10
-        resizeConfig.rect.mod({ height: lookRect.minHeight + offset })
-      }
-    })
-  }
+  const overflow = createMouseTrack({
+    mouseup(_, currentTarget) {
+      // annoying
+      const r = currentTarget.getBoundingClientRect()
+      const noOverflow = r.width < lookRect.maxWidth
+      currentTarget.classList.toggle('noOverflow', noOverflow)
+      requestAnimationFrame(() => {
+        if (resizeConfig.rect.value.height < lookRect.minHeight) {
+          const offset = noOverflow ? 0 : 10
+          resizeConfig.rect.mod({ height: lookRect.minHeight + offset })
+        }
+      })
+    },
+  })
 </script>
 
 {#if type == 'side'}
@@ -121,7 +125,7 @@
   </div>
 {:else if type == 'top'}
   <div class="gallery {type}" use:topBarPortal hidden style:--itemWidth={lookRect.itemWidth}>
-    <div class="resizer relative" use:resize={resizeConfig} use:useRect on:mouseup={overflow}>
+    <div class="resizer relative" use:resize={resizeConfig} use:useRect on:mousedown={overflow}>
       <div
         class="relative left-0 flex gap-2 overflow-x-auto overflow-y-hidden p-2"
         style="width: inherit; height: inherit;"
