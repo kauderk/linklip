@@ -9,6 +9,7 @@
     const page = document.querySelector('.notion-page-content')!
     const block = document.querySelector('[data-block-id]')!
     lookRect.maxWidth = (page.clientWidth - block.clientWidth) / 2
+    lookRect.maxHeight = window.innerHeight - (lookRect.minHeight + 10)
 
     target.hidden = false
   }
@@ -60,15 +61,17 @@
   export let size = 10
   export let w = 200
   export let rows = 1
+  export let fixed = true
   export let lookRect = {
     minHeight: 45,
     maxWidth: w,
+    maxHeight: 500,
     itemWidth: w,
   }
 
   const resizeConfig = {
     resizeMode: type == 'top' ? 'bottom' : 'right',
-    bounds: 'none',
+    bounds: 'rect',
     padding: 0,
     minWidth: 0,
     rect: preSignal({
@@ -112,24 +115,21 @@
 
 {#if type == 'side'}
   <div
+    style:--maxHeight={lookRect.maxHeight}
     style:--maxWidth={lookRect.maxWidth}
     style:--itemWidth={lookRect.itemWidth}
-    class="gallery absolute z-10 h-full w-auto select-none overflow-hidden opacity-30 {type}"
-    style={`${direction}: 0;`}
+    class:fixed
+    class="gallery z-10 h-full w-auto select-none opacity-30 {type}"
+    style="{direction}: 0; position: {fixed ? 'fixed' : 'absolute'}"
     hidden
     use:portal
   >
-    <div
-      class="resizer relative"
-      style="height: inherit;"
-      use:resize={resizeConfig}
-      use:useRect
-      on:mousedown={overflow}
-    >
+    <div class="resizer relative" style="height: auto;" use:useRect on:mousedown={overflow}>
       <div
         class:justify-end={direction == 'right'}
-        class="grid w-full grid-cols-2 content-start gap-2 overflow-y-auto p-2"
-        style="grid-template-columns: repeat({rows}, minmax(0, 1fr)); height: inherit;"
+        use:resize={resizeConfig}
+        class="grid w-full content-start gap-2 overflow-y-auto p-2"
+        style="grid-template-columns: repeat({rows}, minmax(0, 1fr)); height: auto;"
       >
         {#each Array(size) as _, i}
           <div class="item block aspect-video w-full border border-slate-600 bg-slate-500">{i}</div>
@@ -164,12 +164,17 @@
       overflow-x: hidden;
     }
   }
-  .gallery > div {
-    max-width: calc(var(--maxWidth) * 1px);
-  }
-  .gallery > div:not(:hover) {
-    &::-webkit-scrollbar-thumb {
-      background: transparent !important;
+  .gallery {
+    &:global(.fixed .grid) {
+      max-height: calc(var(--maxHeight) * 1px);
+    }
+    .resizer {
+      max-width: calc(var(--maxWidth) * 1px);
+      &:not(:hover) {
+        &::-webkit-scrollbar-thumb {
+          background: transparent !important;
+        }
+      }
     }
   }
 </style>

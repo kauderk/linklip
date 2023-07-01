@@ -3,5 +3,5 @@
 </script>
 
 <Gallery />
-<Gallery direction="right" />
-<Gallery type="top" />
+<Gallery direction="right" fixed={false} />
+<Gallery type="top" w={80} />

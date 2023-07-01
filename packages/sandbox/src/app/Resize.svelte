@@ -177,7 +177,7 @@
             _rect.height = initialRect.height + delta * (resizeMode.match(/top/) ? -1 : 1)
           }
 
-          if (outOfBounds && (_rect.width > rect.value.width || _rect.height > rect.value.height)) {
+          if (outOfBounds && _rect.height > rect.value.height) {
             return
           }
         }
