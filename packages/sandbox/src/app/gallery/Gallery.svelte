@@ -6,6 +6,9 @@
   function portal(target: HTMLElement) {
     const host = document.querySelector('.whenContentEditable')!
     host.appendChild(target)
+    const page = document.querySelector('.notion-page-content')!
+    const block = document.querySelector('[data-block-id]')!
+    lookRect.maxWidth = (page.clientWidth - block.clientWidth) / 2
 
     target.hidden = false
   }
@@ -51,11 +54,12 @@
     target.hidden = false
   }
 
-  export let type = 'side'
-  export let direction = 'left'
+  export let type: 'side' | 'top' = 'side'
+  export let direction: 'left' | 'right' = 'left'
 
   export let size = 10
   export let w = 200
+  export let rows = 1
   export let lookRect = {
     minHeight: 45,
     maxWidth: w,
@@ -63,9 +67,10 @@
   }
 
   const resizeConfig = {
-    resizeMode: 'bottom',
-    bounds: 'rect',
+    resizeMode: type == 'top' ? 'bottom' : 'right',
+    bounds: 'none',
     padding: 0,
+    minWidth: 0,
     rect: preSignal({
       height: 100,
       width: 100,
@@ -77,14 +82,15 @@
   function useRect(ref: HTMLElement) {
     const r = ref.getBoundingClientRect()
     resizeConfig.rect.set({
-      height: lookRect.itemWidth / (16 / 9),
-      width: r.width,
+      height: type == 'top' ? lookRect.itemWidth / (16 / 9) : r.height,
+      width: r.width || lookRect.itemWidth,
       x: r.left,
       y: r.top,
     })
     return {
       destroy: resizeConfig.rect.subscribe(rect => {
-        ref.style.height = rect.height + 'px'
+        const to = type == 'top' ? 'height' : 'width'
+        ref.style[to] = rect[to] + 'px'
       }),
     }
   }
@@ -108,24 +114,32 @@
   <div
     style:--maxWidth={lookRect.maxWidth}
     style:--itemWidth={lookRect.itemWidth}
-    class="gallery absolute z-10 h-full w-auto overflow-hidden opacity-30 {type}"
+    class="gallery absolute z-10 h-full w-auto select-none overflow-hidden opacity-30 {type}"
     style={`${direction}: 0;`}
     hidden
     use:portal
   >
     <div
-      class:justify-end={direction == 'right'}
-      class="left-0 flex w-fit flex-wrap content-start items-start gap-2 overflow-y-auto p-2"
+      class="resizer relative"
       style="height: inherit;"
+      use:resize={resizeConfig}
+      use:useRect
+      on:mousedown={overflow}
     >
-      {#each Array(size) as _}
-        <div class="item block aspect-video border border-slate-600 bg-slate-500" />
-      {/each}
+      <div
+        class:justify-end={direction == 'right'}
+        class="grid w-full grid-cols-2 content-start gap-2 overflow-y-auto p-2"
+        style="grid-template-columns: repeat({rows}, minmax(0, 1fr)); height: inherit;"
+      >
+        {#each Array(size) as _, i}
+          <div class="item block aspect-video w-full border border-slate-600 bg-slate-500">{i}</div>
+        {/each}
+      </div>
     </div>
   </div>
 {:else if type == 'top'}
   <div class="gallery {type}" use:topBarPortal hidden style:--itemWidth={lookRect.itemWidth}>
-    <div class="resizer relative" use:resize={resizeConfig} use:useRect on:mousedown={overflow}>
+    <div class="resizer relative" use:resize={resizeConfig} use:useRect on:mouseup={overflow}>
       <div
         class="relative left-0 flex gap-2 overflow-x-auto overflow-y-hidden p-2"
         style="width: inherit; height: inherit;"
@@ -150,11 +164,8 @@
       overflow-x: hidden;
     }
   }
-  .gallery.side > div {
+  .gallery > div {
     max-width: calc(var(--maxWidth) * 1px);
-  }
-  .gallery.side .item {
-    width: calc(var(--itemWidth) * 1px);
   }
   .gallery > div:not(:hover) {
     &::-webkit-scrollbar-thumb {
