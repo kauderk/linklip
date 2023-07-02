@@ -102,20 +102,17 @@
   }
   const overflow = createMouseTrack({
     mouseup(_, currentTarget) {
-      // annoying
-      const r = currentTarget.getBoundingClientRect()
-      const g = currentTarget.querySelector('.grid')!
-      const whole = isTop ? r.width < lookRect.maxWidth : g.scrollHeight > g.clientHeight
+      const g = currentTarget.querySelector('.p-2')!
+      const whole = isTop ? g.scrollWidth > g.clientWidth : g.scrollHeight > g.clientHeight
       currentTarget.classList.toggle('whole', whole)
       requestAnimationFrame(() => {
-        const offset = whole ? 0 : 10
         if (isTop) {
           if (resizeConfig.rect.value.height < lookRect.minHeight) {
-            resizeConfig.rect.mod({ height: lookRect.minHeight + offset })
+            resizeConfig.rect.mod({ height: lookRect.minHeight })
           }
         } else {
           if (resizeConfig.rect.value.width < lookRect.minWidth) {
-            resizeConfig.rect.mod({ width: lookRect.minWidth + offset })
+            resizeConfig.rect.mod({ width: lookRect.minWidth })
           }
         }
       })
@@ -135,7 +132,7 @@
     hidden
     use:portal
   >
-    <div class="resizer relative" use:useRect on:mousedown={overflow}>
+    <div class="resizer relative {direction}" use:useRect on:mousedown={overflow}>
       <div
         class:justify-end={direction == 'right'}
         use:resize={resizeConfig}
@@ -150,7 +147,12 @@
   </div>
 {:else if isTop}
   <div class="gallery {type}" use:topBarPortal hidden style:--itemWidth={lookRect.itemWidth}>
-    <div class="resizer relative" use:resize={resizeConfig} use:useRect on:mousedown={overflow}>
+    <div
+      class="resizer relative {type}"
+      use:resize={resizeConfig}
+      use:useRect
+      on:mousedown={overflow}
+    >
       <div
         class="relative left-0 flex gap-2 overflow-x-auto p-2"
         style="width: inherit; height: inherit;"
@@ -179,10 +181,14 @@
       height: inherit;
     }
     .resizer {
-      :global([class*='bottom']) {
-        --grabber-offset: -10px;
+      &:global(.whole) {
+        &.left :global(.grabber.right),
+        // &.right :global(.grabber.left),
+        &.top :global(.grabber.bottom) {
+          --grabber-offset: -10px;
+        }
       }
-      &:global(.whole .relative) {
+      &:global(.top:not(.whole) .relative) {
         overflow-x: hidden;
       }
       max-width: calc(var(--maxWidth) * 1px);
