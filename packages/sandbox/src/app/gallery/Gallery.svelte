@@ -67,10 +67,13 @@
     maxWidth: w,
     maxHeight: 500,
     itemWidth: w,
+    minWidth: 79,
   }
 
+  const isTop = type == 'top'
+
   const resizeConfig = {
-    resizeMode: type == 'top' ? 'bottom' : 'right',
+    resizeMode: isTop ? 'bottom' : 'right',
     bounds: 'rect',
     padding: 0,
     minWidth: 0,
@@ -85,14 +88,14 @@
   function useRect(ref: HTMLElement) {
     const r = ref.getBoundingClientRect()
     resizeConfig.rect.set({
-      height: type == 'top' ? lookRect.itemWidth / (16 / 9) : r.height,
+      height: isTop ? lookRect.itemWidth / (16 / 9) : r.height,
       width: r.width || lookRect.itemWidth,
       x: r.left,
       y: r.top,
     })
     return {
       destroy: resizeConfig.rect.subscribe(rect => {
-        const to = type == 'top' ? 'height' : 'width'
+        const to = isTop ? 'height' : 'width'
         ref.style[to] = rect[to] + 'px'
       }),
     }
@@ -101,12 +104,19 @@
     mouseup(_, currentTarget) {
       // annoying
       const r = currentTarget.getBoundingClientRect()
-      const noOverflow = r.width < lookRect.maxWidth
-      currentTarget.classList.toggle('noOverflow', noOverflow)
+      const g = currentTarget.querySelector('.grid')!
+      const whole = isTop ? r.width < lookRect.maxWidth : g.scrollHeight > g.clientHeight
+      currentTarget.classList.toggle('whole', whole)
       requestAnimationFrame(() => {
-        if (resizeConfig.rect.value.height < lookRect.minHeight) {
-          const offset = noOverflow ? 0 : 10
-          resizeConfig.rect.mod({ height: lookRect.minHeight + offset })
+        const offset = whole ? 0 : 10
+        if (isTop) {
+          if (resizeConfig.rect.value.height < lookRect.minHeight) {
+            resizeConfig.rect.mod({ height: lookRect.minHeight + offset })
+          }
+        } else {
+          if (resizeConfig.rect.value.width < lookRect.minWidth) {
+            resizeConfig.rect.mod({ width: lookRect.minWidth + offset })
+          }
         }
       })
     },
@@ -119,17 +129,18 @@
     style:--maxWidth={lookRect.maxWidth}
     style:--itemWidth={lookRect.itemWidth}
     class:fixed
+    class:absolute={!fixed}
     class="gallery z-10 h-full w-auto select-none opacity-30 {type}"
-    style="{direction}: 0; position: {fixed ? 'fixed' : 'absolute'}"
+    style="{direction}: 0;"
     hidden
     use:portal
   >
-    <div class="resizer relative" style="height: auto;" use:useRect on:mousedown={overflow}>
+    <div class="resizer relative" use:useRect on:mousedown={overflow}>
       <div
         class:justify-end={direction == 'right'}
         use:resize={resizeConfig}
         class="grid w-full content-start gap-2 overflow-y-auto p-2"
-        style="grid-template-columns: repeat({rows}, minmax(0, 1fr)); height: auto;"
+        style="grid-template-columns: repeat({rows}, minmax(0, 1fr));"
       >
         {#each Array(size) as _, i}
           <div class="item block aspect-video w-full border border-slate-600 bg-slate-500">{i}</div>
@@ -137,11 +148,11 @@
       </div>
     </div>
   </div>
-{:else if type == 'top'}
+{:else if isTop}
   <div class="gallery {type}" use:topBarPortal hidden style:--itemWidth={lookRect.itemWidth}>
-    <div class="resizer relative" use:resize={resizeConfig} use:useRect on:mouseup={overflow}>
+    <div class="resizer relative" use:resize={resizeConfig} use:useRect on:mousedown={overflow}>
       <div
-        class="relative left-0 flex gap-2 overflow-x-auto overflow-y-hidden p-2"
+        class="relative left-0 flex gap-2 overflow-x-auto p-2"
         style="width: inherit; height: inherit;"
         on:wheel={scrollHorizontally}
       >
@@ -156,19 +167,24 @@
 {/if}
 
 <style lang="scss">
-  .resizer {
-    :global([class*='bottom']) {
-      --grabber-offset: -10px;
-    }
-    &:global(.noOverflow .relative) {
-      overflow-x: hidden;
-    }
-  }
   .gallery {
     &:global(.fixed .grid) {
       max-height: calc(var(--maxHeight) * 1px);
     }
+    .resizer,
+    .grid {
+      height: auto;
+    }
+    &:global(.absolute :is(.resizer, .grid)) {
+      height: inherit;
+    }
     .resizer {
+      :global([class*='bottom']) {
+        --grabber-offset: -10px;
+      }
+      &:global(.whole .relative) {
+        overflow-x: hidden;
+      }
       max-width: calc(var(--maxWidth) * 1px);
       &:not(:hover) {
         &::-webkit-scrollbar-thumb {
