@@ -1,17 +1,23 @@
 <script lang="ts">
   import { preSignal } from '$lib/pre-signal'
+  import { onMount } from 'svelte'
   import { resize, type ResizeConfig } from '../Resize.svelte'
   import { createMouseTrack } from '../controller/mouse-track'
+  import { createDebouncedListener } from '$lib/resize'
 
   function portal(target: HTMLElement) {
     const host = document.querySelector('.whenContentEditable')!
     host.appendChild(target)
-    const page = document.querySelector('.notion-page-content')!
-    const block = document.querySelector('[data-block-id]')!
-    lookRect.maxWidth = (page.clientWidth - block.clientWidth) / 2
-    lookRect.maxHeight = window.innerHeight - (lookRect.minHeight + 10)
+    updateSideRect()
 
     target.hidden = false
+  }
+
+  function updateSideRect() {
+    const page = document.querySelector('.notion-page-content')!
+    const block = page.querySelector('[data-block-id]')!.getBoundingClientRect()
+    lookRect.maxWidth = block.left - 20
+    lookRect.maxHeight = window.innerHeight - (lookRect.minHeight + 10)
   }
 
   function scrollHorizontally(e: any) {
@@ -22,9 +28,9 @@
     e.preventDefault()
   }
 
-  function topBarPortal(target: HTMLElement) {
-    // CALC RECT
+  function updateTopRect() {
     const hostRef = document.querySelector('.notion-topbar > div')!
+
     const startFrom = hostRef
       .querySelector('div.notranslate.shadow-cursor-breadcrumb')!
       .getBoundingClientRect()
@@ -36,12 +42,17 @@
     const rect = {
       left: startFrom.right + xPadding,
       top: hostRect.top,
-      'max-width': Math.max(0, endAt.left - startFrom.right - xPadding),
       height: hostRect.height,
     }
-    lookRect.maxWidth = rect['max-width']
+    lookRect.maxWidth = Math.max(0, endAt.left - startFrom.right - xPadding)
     lookRect.minHeight = hostRef.clientHeight
+    return rect
+  }
+  function topBarPortal(target: HTMLElement) {
+    // CALC RECT
+    const hostRef = document.querySelector('.notion-topbar > div')!
 
+    const rect = updateTopRect()
     // PORTAL
     const sibling = hostRef.querySelector('.notion-topbar-action-buttons')!
     sibling.insertAdjacentElement('beforebegin', target)
@@ -118,6 +129,9 @@
       })
     },
   })
+
+  const updateRect = isTop ? updateTopRect : updateSideRect
+  onMount(() => createDebouncedListener(window, 'resize', updateRect))
 </script>
 
 {#if type == 'side'}
@@ -146,7 +160,13 @@
     </div>
   </div>
 {:else if isTop}
-  <div class="gallery {type}" use:topBarPortal hidden style:--itemWidth={lookRect.itemWidth}>
+  <div
+    style:--maxWidth={lookRect.maxWidth}
+    style:--itemWidth={lookRect.itemWidth}
+    class="gallery {type}"
+    use:topBarPortal
+    hidden
+  >
     <div
       class="resizer relative {type}"
       use:resize={resizeConfig}
