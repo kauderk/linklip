@@ -1,48 +1,41 @@
 import { createContext } from '$lib/create-context'
-import { preSignal, type PreSignal } from '$lib/pre-signal'
+import { preSignal } from '$lib/pre-signal'
 import { createDebouncedListener, createDebouncedObserver, createTimeout } from '$lib/resize'
 import { useClass } from '$lib/solid/useDirective'
 import { cleanSubscribers } from '$lib/stores'
 import { useContextMenu } from 'src/context-menu/ContextMenu.svelte'
 import { createTrackMouseHold } from './click-track'
 import { createMouseTrack } from './mouse-track'
+// prettier-ignore
+import { fitToTarget, mapRange, type FollowerConfig, type Rect, togglePointerTarget, type Stage, animationFrameInterval, type El } from './follower-lib'
 
 export const followers = preSignal({ message: '' as 'reset' | '' })
 export function follower(config: FollowerConfig) {
   const rect = config.rect
-  // console.log('init', rect.value)
   let hostStack = {
     fn: () => {},
     selectorKey: '',
     ref: <El>undefined,
-    id: '',
   }
   let dragging = config.dragging ?? preSignal(false)
   let stage = config.stage ?? (preSignal({ mode: 'free' }) as Stage)
   let follower = { ref: <HTMLElement>{} }
 
   //#region methods
-  function getSelector() {
-    return config.selectors[hostStack.selectorKey] ?? {}
-  }
   function send(props: {
     value: (() => Rect) | Rect
     mode: 'new' | 'clear' | 'update'
-
     canIntersect?: boolean
   }) {
     const { value, mode } = props
     const selector = getSelector()
-
     const newRect = () => (typeof value === 'function' ? value() : value)
-    if (isNaN(newRect().width)) {
-      console.error('NaN follower Rect', newRect())
-      return
-    }
-    const preRect = (bounded?: b) => (!bounded ? fitToTarget(newRect()) : newRect())
     const postRect = () => {
       const canIntersect = selector.canIntersect ?? props.canIntersect
-      return preRect(canIntersect)
+      if (!canIntersect) {
+        return fitToTarget(newRect())
+      }
+      return newRect()
     }
 
     if (mode == 'new') {
@@ -51,6 +44,8 @@ export function follower(config: FollowerConfig) {
       rect.set(postRect())
     }
   }
+
+  //#region branch cycle
   const overlay = {
     clean() {
       follower.ref.style.removeProperty('opacity')
@@ -61,11 +56,6 @@ export function follower(config: FollowerConfig) {
       follower.ref?.style.setProperty('opacity', hidden ? '0' : '1')
       follower.ref?.style.setProperty('pointer-events', hidden ? 'none' : 'unset')
     },
-  }
-  const selectors = Object.values(config.selectors)
-  const parseSelector = (sel: any): string => (typeof sel == 'string' ? sel : sel.selector)
-  function isHost(el?: Element): el is HTMLElement {
-    return selectors.some(sel => el?.matches(parseSelector(sel)))
   }
   const selection = {
     clean() {
@@ -85,6 +75,17 @@ export function follower(config: FollowerConfig) {
         selector: hostStack.selectorKey,
       })
     },
+  }
+  //#endregion
+
+  //#region find host
+  function getSelector() {
+    return config.selectors[hostStack.selectorKey] ?? {}
+  }
+  const selectors = Object.values(config.selectors)
+  const parseSelector = (sel: any): string => (typeof sel == 'string' ? sel : sel.selector)
+  function isHost(el?: Element): el is HTMLElement {
+    return selectors.some(sel => el?.matches(parseSelector(sel)))
   }
   function findHost(host?: Element) {
     if (isHost(host)) {
@@ -108,9 +109,16 @@ export function follower(config: FollowerConfig) {
       return host
     }
   }
+  //#endregion
 
   //#region createRectObserver
+  const animationFrame = animationFrameInterval(() => {
+    observer.disconnect()
+    if (!hostStack.ref) return
+    observer.observe(hostStack.ref)
+  })
   let destroyRectObserver = () => {}
+  // prettier-ignore
   const createRectObserver = () => {
     if (getSelector().canIntersect === false) return
 
@@ -118,6 +126,7 @@ export function follower(config: FollowerConfig) {
     const resize = selectors?.resize ? document.querySelector(selectors.resize) : (null as any)
     const scroll = selectors?.scroll ? document.querySelector(selectors.scroll) : (null as any)
 
+		const debounced = animationFrame.debounced
     const potentialObservers = [
       selectors?.window !== false ? createDebouncedListener(window, 'resize', debounced) : null,
       scroll ? createDebouncedListener(scroll, 'scroll', debounced) : null,
@@ -128,28 +137,8 @@ export function follower(config: FollowerConfig) {
       ...potentialObservers.filter(Boolean)
     )
   }
-  let framing: any, interval: any
-  const clearTimers = () => {
-    clearInterval(interval)
-    cancelAnimationFrame(framing)
-    framing = interval = undefined
-  }
-  const followCurrent = () => {
-    observer.disconnect()
-    if (!hostStack.ref) return
-    observer.observe(hostStack.ref)
-  }
-  function debounced(on: boolean) {
-    // console.log('debounced', arguments)
-    if (on && interval === undefined) {
-      interval = setInterval(() => {
-        framing = requestAnimationFrame(followCurrent)
-      }, 0)
-    } else {
-      followCurrent()
-      clearTimers()
-    }
-  }
+  //#endregion
+
   //#endregion
 
   /**
@@ -187,9 +176,7 @@ export function follower(config: FollowerConfig) {
     }
     selection.mode(!!tryHost)
   }
-  //#endregion
 
-  let intersectionRatio = 0
   const observer = new IntersectionObserver(
     entries => {
       if (stage.peek().mode !== 'host') return
@@ -199,13 +186,12 @@ export function follower(config: FollowerConfig) {
       }
 
       const entry = entries[0]
-      const ratio = (intersectionRatio = entry.intersectionRatio)
+      const ratio = entry.intersectionRatio
       overlay.tryHide(ratio < 0.1)
 
       if (ratio === 0) {
         return
       }
-      // console.log('resize', ratio)
       const res = getSelector().followerCycle.resize(
         follower.ref,
         entry,
@@ -324,9 +310,6 @@ export function follower(config: FollowerConfig) {
       getSelector().styleHost?.(hostStack.ref, rect.peek())
     },
     mount(host?: Element) {
-      // FIXME:
-      // @ts-expect-error
-      hostStack.id = host.parentNode.href
       branchOutHost(host)
 
       return cleanSubscribers(
@@ -334,7 +317,7 @@ export function follower(config: FollowerConfig) {
         overlay.clean,
         observer.disconnect.bind(observer),
         createTimeout(() => (follower.ref.hidden = false)),
-        clearTimers,
+        animationFrame.clearTimers,
         destroyRectObserver,
         () => {
           // prettier-ignore
@@ -350,93 +333,8 @@ export function follower(config: FollowerConfig) {
   }
 }
 
-export type FollowerConfig = Omit<Config, 'aspectRatio'>
-export type Config = {
-  width: number
-  aspectRatio: [number, number]
-  selectors: Record<
-    string,
-    {
-      selector: string
-      observerSelectors?: {
-        resize?: string
-        scroll?: string
-        window?: boolean
-      }
-      followerCycle: FollowerCycle
-      canIntersect?: boolean
-      styleHost?: (hostRef?: HTMLElement, rect?: Rect) => void
-      panicToLastHost?: boolean
-      tryFindHost?: (hostRef: HTMLElement) => Element | null | undefined
-    }
-  >
-  rect: PreSignal<Rect>
-  dragging?: PreSignal<boolean>
-  stage?: Stage
-}
-type Stage = PreSignal<{
-  mode: 'host' | 'free' | 'theater' | 'panic'
-  selector?: string
-}>
-
-type El = HTMLElement | undefined
-type Send = ReturnType<typeof follower>['sendType']
-export type FollowerCycle = {
-  update: (hostRef: HTMLElement, initRect: Rect) => Send
-  resize: (
-    followerRef: El,
-    entry: IntersectionObserverEntry,
-    initRect: Rect,
-    isFull: boolean
-  ) => Send | undefined
-  clean?: (followerRef: El) => void
-}
-
 export const { getFollowerContext, setFollowerContext } = createContext({
   follower,
 })
-function mapRange(input: number) {
-  const intervals = []
-  for (let i = 0; i <= 100; i += input) {
-    intervals.push(i / 100)
-  }
-  return intervals
-}
-export type Rect = {
-  x: number
-  y: number
-  width: number
-  height: number
-}
-function fitToTarget(_rect: Rect) {
-  // avoid going out of the screen
-  if (_rect.x < 0) _rect.x = 0
-  if (_rect.y < 0) _rect.y = 0
-  if (_rect.x + _rect.width > window.innerWidth) _rect.x = window.innerWidth - _rect.width
-  if (_rect.y + _rect.height > window.innerHeight) _rect.y = window.innerHeight - _rect.height
-  return _rect
-}
 
-function togglePointerTarget(on: boolean, el?: HTMLElement) {
-  toggleStyle('outline', '10px solid blue', on, el)
-}
-export function toggleStyle(key: string, value: string, add: boolean, el?: HTMLElement) {
-  // store the value plus the state
-  if (add) {
-    const current = el?.style.getPropertyValue(key)
-    const store = current ? current + '_original' : '_unset'
-    el?.style.setProperty(`--stored-${key}`, store)
-    el?.style.setProperty(key, value)
-  }
-  // restore the original value or remove it if it was unset
-  else {
-    const stored = el?.style.getPropertyValue(`--stored-${key}`)
-    const [store, state] = (stored || '').split('_')
-    if (state == 'original') {
-      el?.style.setProperty(key, store)
-    } else if (state == 'unset') {
-      el?.style.removeProperty(key)
-    }
-    el?.style.removeProperty(`--stored-${key}`)
-  }
-}
+export * from './follower-lib'
