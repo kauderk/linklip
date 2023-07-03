@@ -201,6 +201,13 @@
           },
         }),
       },
+      sideGallery: {
+        selector: '.item.block',
+        followerCycle,
+        observerSelectors: {
+          scroll: '.gallery .grid',
+        },
+      },
     },
   } satisfies FollowerConfig
 

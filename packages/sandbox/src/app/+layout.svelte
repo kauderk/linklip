@@ -21,9 +21,9 @@
       //   target: document.body,
       //   context,
       // }).$destroy,
-      // new Gallery({
-      //   target: document.body,
-      // }).$destroy,
+      new Gallery({
+        target: document.body,
+      }).$destroy,
       new App({
         target: document.body,
         props: {

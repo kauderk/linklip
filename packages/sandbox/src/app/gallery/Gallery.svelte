@@ -70,7 +70,7 @@
   export let direction: 'left' | 'right' = 'left'
 
   export let size = 10
-  export let w = 200
+  export let w = 300
   export let rows = 1
   export let fixed = true
   export let lookRect = {
@@ -150,7 +150,7 @@
       <div
         class:justify-end={direction == 'right'}
         use:resize={resizeConfig}
-        class="grid w-full content-start gap-2 overflow-y-auto p-2"
+        class="items grid w-full content-start gap-2 overflow-y-auto p-2"
         style="grid-template-columns: repeat({rows}, minmax(0, 1fr));"
       >
         {#each Array(size) as _, i}
@@ -174,7 +174,7 @@
       on:mousedown={overflow}
     >
       <div
-        class="relative left-0 flex gap-2 overflow-x-auto p-2"
+        class="items relative left-0 flex gap-2 overflow-x-auto p-2"
         style="width: inherit; height: inherit;"
         on:wheel={scrollHorizontally}
       >
