@@ -45,15 +45,14 @@ function resizeSubscription(
 }
 
 export function updateWindow(
-  fn: DebouncedCallback<'resize' | 'scroll'>,
+  fn: DebouncedCallback<'resize' | 'wheel'>,
   delay = 300,
   called = false
 ) {
   if (called) fn(false, new Event('any') as any)
-  const scroll = document.querySelector('.notion-frame .notion-scroller') as any
   return cleanSubscribers(
     createDebouncedListener(window, 'resize', fn, delay),
-    createDebouncedListener(scroll, 'scroll', fn, delay)
+    createDebouncedListener(window, 'wheel', fn, delay)
   )
 }
 
