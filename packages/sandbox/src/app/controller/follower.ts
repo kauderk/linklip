@@ -8,6 +8,7 @@ import { createTrackMouseHold } from './click-track'
 import { createMouseTrack } from './mouse-track'
 // prettier-ignore
 import { fitToTarget, mapRange, type FollowerConfig, type Rect, togglePointerTarget, type Stage, animationFrameInterval, type El } from './follower-lib'
+import { createListeners } from '$lib/event-life-cycle'
 
 export const followers = preSignal({ message: '' as 'reset' | '' })
 export function follower(config: FollowerConfig) {
@@ -266,14 +267,30 @@ export function follower(config: FollowerConfig) {
         useContextMenu(
           e,
           {
-            nodes: [
-              {
-                content: 'Resize',
-                callback(openState) {
-                  // console.log(openState)
+            nodes: Object.entries(config.selectors).map(([key, value]) => {
+              return {
+                content: key,
+                callback() {
+                  console.log(arguments)
                 },
-              },
-            ],
+                action(ref) {
+                  const hover = (toggle: boolean) => () =>
+                    document
+                      .querySelector(value.selector)
+                      ?.classList.toggle('follower-outline', toggle)
+
+                  return {
+                    destroy: cleanSubscribers(
+                      createListeners(ref, {
+                        mouseenter: hover(true),
+                        mouseleave: hover(false),
+                      }),
+                      hover(false)
+                    ),
+                  }
+                },
+              }
+            }),
           },
           true
         )
