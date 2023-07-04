@@ -201,11 +201,27 @@
           },
         }),
       },
-      sideGallery: {
-        selector: '.item.block',
+      leftGallery: {
+        selector: '.left .item.block',
         followerCycle,
         observerSelectors: {
-          scroll: '.gallery .grid',
+          scroll: '.gallery .left .items',
+        },
+      },
+      rightGallery: {
+        selector: '.right .item.block',
+        followerCycle,
+        observerSelectors: {
+          scroll: '.gallery .right .items',
+        },
+      },
+      topGallery: {
+        selector: '.top .item.block',
+        followerCycle,
+        observerSelectors: {
+          scroll: '.gallery .top .items',
+          resize: '.gallery .top .items',
+          window: false,
         },
       },
     },
