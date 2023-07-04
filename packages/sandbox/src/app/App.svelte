@@ -178,6 +178,52 @@
           },
         },
       },
+      notionMainScroller: {
+        selector: '.notion-scroller main',
+        // canIntersect: false,
+        // observerSelectors,
+        followerCycle: cornerFollowerCycle({
+          update: (r, i) => {
+            // console.log('update', arguments)
+            return {
+              ...i,
+              x: r.x - cornerOffset.x,
+              y: r.y - cornerOffset.y,
+            }
+          },
+          resize: (r, i, e) => {
+            // console.log('resize', arguments)
+            return {
+              ...i,
+              x: window.innerWidth - i.width - cornerOffset.x,
+              y: window.innerHeight - i.height - cornerOffset.y,
+            }
+          },
+        }),
+      },
+      leftGallery: {
+        selector: '.left .item.block',
+        followerCycle,
+        observerSelectors: {
+          scroll: '.gallery .left .items',
+        },
+      },
+      rightGallery: {
+        selector: '.right .item.block',
+        followerCycle,
+        observerSelectors: {
+          scroll: '.gallery .right .items',
+        },
+      },
+      topGallery: {
+        selector: '.top .item.block',
+        followerCycle,
+        observerSelectors: {
+          scroll: '.gallery .top .items',
+          resize: '.gallery .top .items',
+          window: false,
+        },
+      },
     },
   } satisfies FollowerConfig
 
