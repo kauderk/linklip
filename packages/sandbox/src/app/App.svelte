@@ -116,7 +116,7 @@
         followerCycle,
       },
       sharedControls: {
-        selector: '.shared-controls',
+        selector: '.shared-controls *',
         observerSelectors,
         tryFindHost(preHostRef: HTMLElement) {
           return document.querySelector('.notion-page-content')
@@ -225,6 +225,7 @@
         },
       },
     },
+    pictureInPicture: true,
   } satisfies FollowerConfig
 
   export let player = getPlayerContext()

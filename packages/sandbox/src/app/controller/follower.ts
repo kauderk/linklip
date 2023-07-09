@@ -238,24 +238,14 @@ export function follower(config: FollowerConfig) {
         },
         mode: 'update',
       })
-
-      // offPointer update
-      if (e.target !== pointer.ref) {
-        togglePointerTarget(false, pointer.ref)
-        pointer.ref = e.target as any
-        if (isHost(pointer.ref)) {
-          togglePointerTarget(true, pointer.ref)
-        }
-      }
     },
 
     mouseup(e) {
-      // offPointer up
-      togglePointerTarget(false, pointer.ref)
-      pointer.ref = undefined
       follower.ref.classList.remove('pointer')
 
-      branchOutHost(e.target as any)
+      if (getSelector().panicToLastHost && isHost(hostStack.ref)) {
+        branchOutHost(hostStack.ref)
+      }
       dragging.value = false
     },
   })
