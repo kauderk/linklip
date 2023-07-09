@@ -71,9 +71,11 @@ export function togglePointerTarget(on: boolean, el?: HTMLElement) {
 export function toggleStyle(key: string, value: string, add: boolean, el?: HTMLElement) {
   // store the value plus the state
   if (add) {
-    const current = el?.style.getPropertyValue(key)
-    const store = current ? current + '_original' : '_unset'
-    el?.style.setProperty(`--stored-${key}`, store)
+    if ('_unset' !== el?.style.getPropertyValue(`--stored-${key}`)) {
+      const current = el?.style.getPropertyValue(key)
+      const store = current ? current + '_original' : '_unset'
+      el?.style.setProperty(`--stored-${key}`, store)
+    }
     el?.style.setProperty(key, value)
   }
   // restore the original value or remove it if it was unset
