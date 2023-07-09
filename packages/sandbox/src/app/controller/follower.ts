@@ -250,40 +250,46 @@ export function follower(config: FollowerConfig) {
     },
   })
 
+  //#region context menu
+  const contextMenuSelectorNodes = Object.entries(config.selectors).map(([key, value]) => {
+    return {
+      content: key,
+      callback() {
+        const newHost = document.querySelector(value.selector)
+        if (!newHost) return
+        branchOutHost(newHost)
+      },
+      action(ref: HTMLElement) {
+        const hover = (toggle: boolean) => () =>
+          document.querySelector(value.selector)?.classList.toggle('follower-outline', toggle)
+
+        return {
+          destroy: cleanSubscribers(
+            createListeners(ref, {
+              mouseenter: hover(true),
+              mouseleave: hover(false),
+            }),
+            hover(false)
+          ),
+        }
+      },
+    }
+  })
+  if (config.pictureInPicture) {
+    contextMenuSelectorNodes.unshift(<any>{
+      content: 'Picture In Picture',
+      callback() {
+        branchOutHost(undefined)
+      },
+    })
+  }
+  //#endregion
+
   return {
     dragThreshold: createTrackMouseHold({
       threshold: trackPointer,
       hold(e) {
-        useContextMenu(
-          e,
-          {
-            nodes: Object.entries(config.selectors).map(([key, value]) => {
-              return {
-                content: key,
-                callback() {
-                  console.log(arguments)
-                },
-                action(ref) {
-                  const hover = (toggle: boolean) => () =>
-                    document
-                      .querySelector(value.selector)
-                      ?.classList.toggle('follower-outline', toggle)
-
-                  return {
-                    destroy: cleanSubscribers(
-                      createListeners(ref, {
-                        mouseenter: hover(true),
-                        mouseleave: hover(false),
-                      }),
-                      hover(false)
-                    ),
-                  }
-                },
-              }
-            }),
-          },
-          true
-        )
+        useContextMenu(e, { nodes: contextMenuSelectorNodes }, true)
       },
     }),
     registerFollower(ref: HTMLElement) {

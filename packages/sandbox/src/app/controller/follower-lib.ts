@@ -21,6 +21,7 @@ export type Config = {
       tryFindHost?: (hostRef: HTMLElement) => Element | null | undefined
     }
   >
+  pictureInPicture?: boolean
   rect: PreSignal<Rect>
   dragging?: PreSignal<boolean>
   stage?: Stage
