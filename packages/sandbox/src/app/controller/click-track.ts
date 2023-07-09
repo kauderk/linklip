@@ -18,14 +18,30 @@ export function createTrackMouseHold(props: Partial<typeof Props>) {
   const holdDelay = props.holdDelay ?? Props.holdDelay
 
   return createMouseTrack({
+    trigger(event) {
+      if (event.which === 3) {
+        document.body.addEventListener('contextmenu', e => e.preventDefault(), { once: true })
+        return true
+      }
+      return event.which === 1
+    },
     mousedown(event) {
       // move
       startX = event.clientX
       startY = event.clientY
 
+      // clear
+      clearTimeout(timer)
+
+      // right click
+      if (event.which === 3) {
+        props.hold?.(event)
+        up = true
+        return
+      }
+
       // hold
       up = false
-      clearTimeout(timer)
       timer = setTimeout(() => {
         if (move || up) return
         props.hold?.(event)

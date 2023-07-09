@@ -12,12 +12,15 @@ type EventHandler<K extends string, T, E = MouseEvent> = {
 export function createMouseTrack(
   fns: EventHandler<'mousedown', HTMLElement> &
     EventHandler<'mouseup' | 'mousemove', Window> &
-    EventHandler<'keydown' /*| 'keyup' */, Window>
+    EventHandler<'keydown' /*| 'keyup' */, Window> & {
+      trigger?: (e: MouseEvent, target: HTMLElement) => boolean | undefined
+    }
 ) {
+  const trigger = fns.trigger ?? (e => e.which === 1)
   return function trackMouse(e: MouseEvent) {
-    if (e.which !== 1) return
-
     const freezeTarget = e.currentTarget as HTMLElement
+    if (!trigger(e, freezeTarget)) return
+
     fns.mousedown?.(e as any, freezeTarget)
 
     const mousemove = (e: any) => fns.mousemove?.(e, freezeTarget)
