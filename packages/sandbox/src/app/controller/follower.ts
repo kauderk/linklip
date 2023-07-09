@@ -88,10 +88,13 @@ export function follower(config: FollowerConfig) {
   function isHost(el?: Element): el is HTMLElement {
     return selectors.some(sel => el?.matches(parseSelector(sel)))
   }
+  function canPanicToRef() {
+    return getSelector().panicToLastHost && isHost(hostStack.ref)
+  }
   function findHost(host?: Element) {
     if (isHost(host)) {
       return host
-    } else if (getSelector().panicToLastHost && isHost(hostStack.ref)) {
+    } else if (canPanicToRef()) {
       return hostStack.ref
     }
   }
@@ -212,7 +215,6 @@ export function follower(config: FollowerConfig) {
   )
 
   let delta = { x: 0, y: 0 }
-  let pointer: { ref?: HTMLElement } = {}
   const trackPointer = createMouseTrack({
     mousedown(e) {
       e.stopPropagation()
@@ -243,9 +245,9 @@ export function follower(config: FollowerConfig) {
     mouseup(e) {
       follower.ref.classList.remove('pointer')
 
-      if (getSelector().panicToLastHost && isHost(hostStack.ref)) {
-        branchOutHost(hostStack.ref)
-      }
+      const ref = canPanicToRef() ? hostStack.ref : undefined
+      branchOutHost(ref)
+
       dragging.value = false
     },
   })
@@ -336,7 +338,6 @@ export function follower(config: FollowerConfig) {
           // prettier-ignore
           getSelector().styleHost?.(hostStack.ref)
           getSelector().followerCycle.clean?.(follower.ref)
-          pointer = {}
           follower = {} as any
           hostStack = {} as any
         }
