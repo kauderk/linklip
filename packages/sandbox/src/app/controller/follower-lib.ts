@@ -115,3 +115,7 @@ export function animationFrameInterval(callback: () => any) {
     clearTimers,
   }
 }
+
+export function camelCaseToTitleCase(camel: string) {
+  return camel.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())
+}

@@ -7,7 +7,7 @@ import { useContextMenu } from 'src/context-menu/ContextMenu.svelte'
 import { createTrackMouseHold } from './click-track'
 import { createMouseTrack } from './mouse-track'
 // prettier-ignore
-import { fitToTarget, mapRange, type FollowerConfig, type Rect, togglePointerTarget, type Stage, animationFrameInterval, type El } from './follower-lib'
+import { fitToTarget, mapRange, type FollowerConfig, type Rect, togglePointerTarget, type Stage, animationFrameInterval, type El, camelCaseToTitleCase } from './follower-lib'
 import { createListeners } from '$lib/event-life-cycle'
 
 export const followers = preSignal({ message: '' as 'reset' | '' })
@@ -253,7 +253,7 @@ export function follower(config: FollowerConfig) {
   //#region context menu
   const contextMenuSelectorNodes = Object.entries(config.selectors).map(([key, value]) => {
     return {
-      content: key,
+      content: camelCaseToTitleCase(key),
       callback() {
         const newHost = document.querySelector(value.selector)
         if (!newHost) return
