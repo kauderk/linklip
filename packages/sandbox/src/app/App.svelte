@@ -203,6 +203,7 @@
         followerCycle,
         observerSelectors: {
           scroll: '.gallery .left .items',
+          resize: '.gallery .left .items',
         },
       },
       rightGallery: {
@@ -210,6 +211,7 @@
         followerCycle,
         observerSelectors: {
           scroll: '.gallery .right .items',
+          resize: '.gallery .right .items',
         },
       },
       topGallery: {
@@ -242,7 +244,7 @@
       config.stage.subscribe(stage => {
         config.resizeMode =
           stage.mode === 'host'
-            ? stage.selector == 'notionPage'
+            ? ['notionPage', 'notionMainScroller'].includes(stage.selector!)
               ? 'inlineBlockReversed'
               : 'inlineBlock'
             : 'pictureInPicture'

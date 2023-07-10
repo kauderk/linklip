@@ -51,6 +51,9 @@
     [style*='--selector'] {
       outline: 1px var(--outline-style) greenyellow;
     }
+    [data-follower*='Gallery'] .grabber {
+      display: none;
+    }
     .follower-outline {
       outline: 1px solid red;
       opacity: 0.6;

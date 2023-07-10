@@ -49,13 +49,15 @@ export function follower(config: FollowerConfig) {
   const selection = {
     clean() {
       hostStack.ref?.style.removeProperty('--selector')
+      delete follower.ref.dataset.follower
       stage.set({ mode: 'free' })
     },
     tryDock(hostRef: HTMLElement) {
       const selector = Object.entries(config.selectors).find(([_, sel]) =>
         hostRef.matches(parseSelector(sel))
       )![0]
-      hostRef.style.setProperty('--selector', selector)
+      hostRef.style.setProperty('--selector', selector) // React won't remove it
+      follower.ref.dataset.follower = selector
       return selector
     },
     mode(mode: boolean) {
