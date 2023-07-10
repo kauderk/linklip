@@ -236,7 +236,11 @@ export function follower(config: FollowerConfig) {
       if (e.target !== pointer.ref) {
         togglePointerTarget(false, pointer.ref)
         pointer.ref = e.target as any
-        if (maybeUsePointer(pointer.ref)) {
+        const preSelector = findSelector(pointer.ref)
+        if (preSelector && preSelector.canUsePointer) {
+          const outline = preSelector.outlineSelector
+          // prettier-ignore
+          pointer.ref = outline ? document.querySelector(outline) ?? pointer.ref : pointer.ref as any
           togglePointerTarget(true, pointer.ref)
         }
       }

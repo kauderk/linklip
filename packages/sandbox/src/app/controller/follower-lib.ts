@@ -9,6 +9,7 @@ export type Config = {
     string,
     {
       selector: string
+      outlineSelector?: string
       observerSelectors?: {
         resize?: string
         scroll?: string

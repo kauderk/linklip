@@ -120,6 +120,7 @@
       },
       sharedControls: {
         selector: '.shared-controls *',
+        outlineSelector: '.shared-controls',
         observerSelectors,
         tryFindHost(preHostRef: HTMLElement) {
           return document.querySelector('.notion-page-content')
