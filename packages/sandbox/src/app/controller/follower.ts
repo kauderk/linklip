@@ -124,8 +124,6 @@ export function follower(config: FollowerConfig) {
   let destroyRectObserver = () => {}
   // prettier-ignore
   const createRectObserver = () => {
-    if (getSelector().canIntersect === false) return
-
     const selectors = getSelector().observerSelectors
     const resize = selectors?.resize ? document.querySelector(selectors.resize) : (null as any)
     const scroll = selectors?.scroll ? document.querySelector(selectors.scroll) : (null as any)
@@ -184,7 +182,8 @@ export function follower(config: FollowerConfig) {
   const observer = new IntersectionObserver(
     entries => {
       if (stage.peek().mode !== 'host') return
-      if (getSelector().canIntersect === false) {
+      const selector = getSelector()
+      if (selector.canIntersect === false || !selector.followerCycle.resize) {
         hostStack.fn()
         return
       }
@@ -196,7 +195,7 @@ export function follower(config: FollowerConfig) {
       if (ratio === 0) {
         return
       }
-      const res = getSelector().followerCycle.resize(
+      const res = selector.followerCycle.resize(
         follower.ref,
         entry,
         rect.peek(),

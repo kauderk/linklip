@@ -21,7 +21,6 @@ export const cornerFollowerCycle = (pre: x) => {
           )
         },
         mode: 'new',
-        hostRef,
         canIntersect: true,
       }
     },

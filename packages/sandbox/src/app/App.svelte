@@ -73,7 +73,6 @@
       return {
         value: () => hostRef.getBoundingClientRect(),
         mode: 'new',
-        hostRef,
       }
     },
     clean(followerRef) {
@@ -180,8 +179,6 @@
       },
       notionMainScroller: {
         selector: '.notion-scroller main',
-        // canIntersect: false,
-        // observerSelectors,
         followerCycle: cornerFollowerCycle({
           update: (r, i) => {
             // console.log('update', arguments)

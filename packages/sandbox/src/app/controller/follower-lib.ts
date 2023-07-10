@@ -35,7 +35,7 @@ export type El = HTMLElement | undefined
 type Send = ReturnType<typeof follower>['sendType']
 export type FollowerCycle = {
   update: (hostRef: HTMLElement, initRect: Rect) => Send
-  resize: (
+  resize?: (
     followerRef: El,
     entry: IntersectionObserverEntry,
     initRect: Rect,
