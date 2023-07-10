@@ -286,6 +286,7 @@ export function follower(config: FollowerConfig) {
           useClass(ref, { dragging }).destroy,
           rect.subscribe(rect => {
             if (isNaN(rect.width)) {
+              console.log('rect.width is NaN', rect)
               return
             }
             ref.style.left = rect.x + 'px'

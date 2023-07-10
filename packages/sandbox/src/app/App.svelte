@@ -67,7 +67,16 @@
   const followerCycle = {
     update(hostRef, initRect) {
       return {
-        value: () => hostRef.getBoundingClientRect(),
+        value() {
+          // https://stackoverflow.com/q/39417566
+          const rect = hostRef.getBoundingClientRect()
+          return {
+            x: rect.x,
+            y: rect.y,
+            width: rect.width,
+            height: rect.height,
+          }
+        },
       }
     },
     clean(followerRef) {
