@@ -15,7 +15,6 @@ export type Config = {
         window?: boolean
       }
       followerCycle: FollowerCycle
-      canIntersect?: boolean
       styleHost?: (hostRef?: HTMLElement, rect?: Rect) => void
       panicToLastHost?: boolean
       tryFindHost?: (hostRef: HTMLElement) => Element | null | undefined

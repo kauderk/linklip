@@ -20,7 +20,6 @@
       notionTopBar: {
         selector: '.notion-topbar > div',
         panicToLastHost: true,
-        canIntersect: false,
         followerCycle: {
           // prettier-ignore
           update(hostRef, initRect) {
@@ -39,7 +38,6 @@
                   height: hostRect.height,
                 }
               },
-              mode: 'new',
             }
           },
         },
@@ -47,7 +45,6 @@
       notionMainScroller: {
         selector: '.notion-scroller main',
         panicToLastHost: true,
-        canIntersect: false,
         followerCycle: {
           update(hostRef, initRect) {
             return {
@@ -63,7 +60,6 @@
                   height,
                 }
               },
-              mode: 'new',
             }
           },
         },

@@ -21,16 +21,16 @@
         target: document.body,
         context,
       }).$destroy,
-      // new Gallery({
-      //   target: document.body,
-      // }).$destroy,
-      // new App({
-      //   target: document.body,
-      //   props: {
-      //     host: document.querySelector('.notion-scroller main')!,
-      //   },
-      //   context,
-      // }).$destroy,
+      new Gallery({
+        target: document.body,
+      }).$destroy,
+      new App({
+        target: document.body,
+        props: {
+          host: document.querySelector('.notion-scroller main')!,
+        },
+        context,
+      }).$destroy,
       new Resize({
         target: document.body,
       }).$destroy,

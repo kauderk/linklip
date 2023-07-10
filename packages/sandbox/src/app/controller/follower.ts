@@ -23,25 +23,19 @@ export function follower(config: FollowerConfig) {
   let follower = { ref: <HTMLElement>{} }
 
   //#region methods
-  function send(props: {
-    value: (() => Rect) | Rect
-    mode: 'new' | 'clear' | 'update'
-    canIntersect?: boolean
-  }) {
-    const { value, mode } = props
-    const selector = getSelector()
+  function send(props: { value: (() => Rect) | Rect; canOverflow?: boolean }) {
+    const { value } = props
     const newRect = () => (typeof value === 'function' ? value() : value)
     const postRect = () => {
-      const canIntersect = selector.canIntersect ?? props.canIntersect
-      if (!canIntersect) {
+      if (props.canOverflow === false) {
         return fitToTarget(newRect())
       }
       return newRect()
     }
 
-    if (mode == 'new') {
+    if (typeof value === 'function') {
       hostStack.fn = () => rect.set(postRect())
-    } else if (mode == 'update') {
+    } else {
       rect.set(postRect())
     }
   }
@@ -173,7 +167,6 @@ export function follower(config: FollowerConfig) {
           x: freezeRect.x,
           y: freezeRect.y,
         }),
-        mode: 'new',
       })
     }
     selection.mode(!!tryHost)
@@ -183,7 +176,7 @@ export function follower(config: FollowerConfig) {
     entries => {
       if (stage.peek().mode !== 'host') return
       const selector = getSelector()
-      if (selector.canIntersect === false || !selector.followerCycle.resize) {
+      if (!selector.followerCycle.resize) {
         hostStack.fn()
         return
       }
@@ -237,7 +230,6 @@ export function follower(config: FollowerConfig) {
           x: e.clientX - delta.x,
           y: e.clientY - delta.y,
         },
-        mode: 'update',
       })
     },
 
