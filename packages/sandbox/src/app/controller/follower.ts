@@ -54,7 +54,7 @@ export function follower(config: FollowerConfig) {
     },
     tryDock(hostRef: HTMLElement) {
       const selector = Object.entries(config.selectors).find(([_, sel]) =>
-        hostRef.matches(parseSelector(sel))
+        isSelector(hostRef, sel)
       )![0]
       hostRef.style.setProperty('--selector', selector) // React won't remove it
       follower.ref.dataset.follower = selector
@@ -75,25 +75,28 @@ export function follower(config: FollowerConfig) {
   }
   const selectors = Object.values(config.selectors)
   const parseSelector = (sel: any): string => (typeof sel == 'string' ? sel : sel.selector)
-  function isHost(el?: Element): el is HTMLElement {
-    return selectors.some(sel => el?.matches(parseSelector(sel)))
+  function isSelector(el: Element | undefined, sel: object) {
+    return el?.matches(parseSelector(sel))
   }
-  function canPanicToRef() {
-    return getSelector().panicToLastHost && isHost(hostStack.ref)
+  function findSelector(el: any) {
+    return selectors.find(sel => isSelector(el, sel))
   }
-  function findHost(host?: Element) {
-    if (isHost(host)) {
-      return host
-    } else if (canPanicToRef()) {
-      return hostStack.ref
-    }
+  function maybeIsHost(el?: Element) {
+    return findSelector(el) ? <HTMLElement>el : undefined
+  }
+  function maybeUsePointer(el: any) {
+    return findSelector(el)?.canUsePointer ? el : undefined
+  }
+  function maybePanicToRef() {
+    return getSelector().panicToLastHost && maybeIsHost(hostStack.ref) ? hostStack.ref : undefined
   }
   function tryFindHost(host: HTMLElement) {
     hostStack.selectorKey = selection.tryDock(host)
     const selector = getSelector()
     if (selector.tryFindHost) {
-      const pre = selector.tryFindHost(host) as El
-      if (isHost(pre)) {
+      let pre = selector.tryFindHost(host) as El
+      pre = maybeIsHost(pre)
+      if (pre) {
         hostStack.selectorKey = selection.tryDock(pre)
         return pre
       } else {
@@ -139,7 +142,7 @@ export function follower(config: FollowerConfig) {
   function branchOutHost(host?: Element) {
     observer.disconnect()
 
-    const tryHost = findHost(host)
+    const tryHost = maybeIsHost(host) ?? maybePanicToRef()
     selection.clean()
     getSelector().followerCycle?.clean?.(follower.ref)
     destroyRectObserver()
