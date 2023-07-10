@@ -206,6 +206,7 @@ export function follower(config: FollowerConfig) {
   )
 
   let delta = { x: 0, y: 0 }
+  let pointer: { ref?: HTMLElement } = {}
   const trackPointer = createMouseTrack({
     mousedown(e) {
       e.stopPropagation()
@@ -230,13 +231,25 @@ export function follower(config: FollowerConfig) {
           y: e.clientY - delta.y,
         }),
       })
+
+      // offPointer update
+      if (e.target !== pointer.ref) {
+        togglePointerTarget(false, pointer.ref)
+        pointer.ref = e.target as any
+        if (maybeUsePointer(pointer.ref)) {
+          togglePointerTarget(true, pointer.ref)
+        }
+      }
     },
 
     mouseup(e) {
+      // offPointer up
+      togglePointerTarget(false, pointer.ref)
+      pointer.ref = undefined
       follower.ref.classList.remove('pointer')
 
-      const ref = canPanicToRef() ? hostStack.ref : undefined
-      branchOutHost(ref)
+      const maybeHost = maybeUsePointer(e.target) ?? maybePanicToRef()
+      branchOutHost(maybeHost)
 
       dragging.value = false
     },

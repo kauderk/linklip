@@ -116,6 +116,7 @@
         observerSelectors,
         styleHost,
         followerCycle,
+        canUsePointer: true,
       },
       sharedControls: {
         selector: '.shared-controls *',
@@ -124,6 +125,7 @@
           return document.querySelector('.notion-page-content')
         },
         followerCycle,
+        canUsePointer: true,
       },
       notionPage: {
         selector: '.notion-page-content',

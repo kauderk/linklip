@@ -18,6 +18,7 @@ export type Config = {
       styleHost?: (hostRef?: HTMLElement, rect?: Rect) => void
       panicToLastHost?: boolean
       tryFindHost?: (hostRef: HTMLElement) => Element | null | undefined
+      canUsePointer?: boolean
     }
   >
   pictureInPicture?: boolean
