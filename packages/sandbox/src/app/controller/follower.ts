@@ -23,20 +23,14 @@ export function follower(config: FollowerConfig) {
   let follower = { ref: <HTMLElement>{} }
 
   //#region methods
-  function send(props: { value: (() => Rect) | Rect; canOverflow?: boolean }) {
+  function send(props: { value: (() => Rect) | Rect }) {
     const { value } = props
     const newRect = () => (typeof value === 'function' ? value() : value)
-    const postRect = () => {
-      if (props.canOverflow === false) {
-        return fitToTarget(newRect())
-      }
-      return newRect()
-    }
 
     if (typeof value === 'function') {
-      hostStack.fn = () => rect.set(postRect())
+      hostStack.fn = () => rect.set(newRect())
     } else {
-      rect.set(postRect())
+      rect.set(newRect())
     }
   }
 
@@ -224,12 +218,12 @@ export function follower(config: FollowerConfig) {
     mousemove(e) {
       const old = rect.peek()
       send({
-        value: {
+        value: fitToTarget({
           width: old.width,
           height: old.height,
           x: e.clientX - delta.x,
           y: e.clientY - delta.y,
-        },
+        }),
       })
     },
 
