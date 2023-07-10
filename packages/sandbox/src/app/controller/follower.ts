@@ -74,8 +74,9 @@ export function follower(config: FollowerConfig) {
     return config.selectors[hostStack.selectorKey] ?? {}
   }
   const selectors = Object.values(config.selectors)
-  const parseSelector = (sel: any): string => (typeof sel == 'string' ? sel : sel.selector)
-  function isSelector(el: Element | undefined, sel: object) {
+  type Sel = FollowerConfig['selectors'][string] | string
+  const parseSelector = (sel: Sel): string => (typeof sel == 'string' ? sel : sel.selector.target)
+  function isSelector(el: Element | undefined, sel: Sel) {
     return el?.matches(parseSelector(sel))
   }
   function findSelector(el: any) {
@@ -85,10 +86,12 @@ export function follower(config: FollowerConfig) {
     return findSelector(el) ? <HTMLElement>el : undefined
   }
   function maybeUsePointer(el: any) {
-    return findSelector(el)?.canUsePointer ? el : undefined
+    return findSelector(el)?.selector.pointer ? el : undefined
   }
   function maybePanicToRef() {
-    return getSelector().panicToLastHost && maybeIsHost(hostStack.ref) ? hostStack.ref : undefined
+    return getSelector().selector.panicToLast && maybeIsHost(hostStack.ref)
+      ? hostStack.ref
+      : undefined
   }
   function tryFindHost(host: HTMLElement) {
     hostStack.selectorKey = selection.tryDock(host)
@@ -236,11 +239,11 @@ export function follower(config: FollowerConfig) {
       if (e.target !== pointer.ref) {
         togglePointerTarget(false, pointer.ref)
         pointer.ref = e.target as any
-        const preSelector = findSelector(pointer.ref)
-        if (preSelector && preSelector.canUsePointer) {
-          const outline = preSelector.outlineSelector
-          // prettier-ignore
-          pointer.ref = outline ? document.querySelector(outline) ?? pointer.ref : pointer.ref as any
+        const preSelector = findSelector(pointer.ref)?.selector
+        if (preSelector && preSelector.pointer) {
+          pointer.ref = preSelector.outline
+            ? document.querySelector(preSelector.outline) ?? pointer.ref
+            : (pointer.ref as any)
           togglePointerTarget(true, pointer.ref)
         }
       }
@@ -264,13 +267,15 @@ export function follower(config: FollowerConfig) {
     return {
       content: camelCaseToTitleCase(key),
       callback() {
-        const newHost = document.querySelector(value.selector)
+        const newHost = document.querySelector(value.selector.target)
         if (!newHost) return
         branchOutHost(newHost)
       },
       action(ref: HTMLElement) {
         const hover = (toggle: boolean) => () =>
-          document.querySelector(value.selector)?.classList.toggle('follower-outline', toggle)
+          document
+            .querySelector(value.selector.target)
+            ?.classList.toggle('follower-outline', toggle)
 
         return {
           destroy: cleanSubscribers(

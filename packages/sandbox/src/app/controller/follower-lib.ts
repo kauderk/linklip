@@ -8,8 +8,12 @@ export type Config = {
   selectors: Record<
     string,
     {
-      selector: string
-      outlineSelector?: string
+      selector: {
+        target: string
+        outline?: string
+        pointer?: boolean
+        panicToLast?: boolean
+      }
       observerSelectors?: {
         resize?: string
         scroll?: string
@@ -17,9 +21,7 @@ export type Config = {
       }
       followerCycle: FollowerCycle
       styleHost?: (hostRef?: HTMLElement, rect?: Rect) => void
-      panicToLastHost?: boolean
       tryFindHost?: (hostRef: HTMLElement) => Element | null | undefined
-      canUsePointer?: boolean
     }
   >
   pictureInPicture?: boolean

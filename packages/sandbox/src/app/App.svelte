@@ -112,24 +112,30 @@
     ...createConfig(),
     selectors: {
       notionLink: {
-        selector: `[href*="youtu"]>span`,
+        selector: {
+          target: `[href*="youtu"]>span`,
+          pointer: true,
+        },
         observerSelectors,
         styleHost,
         followerCycle,
-        canUsePointer: true,
       },
       sharedControls: {
-        selector: '.shared-controls *',
-        outlineSelector: '.shared-controls',
+        selector: {
+          target: '.shared-controls *',
+          outline: '.shared-controls',
+          pointer: true,
+        },
         observerSelectors,
         tryFindHost(preHostRef: HTMLElement) {
           return document.querySelector('.notion-page-content')
         },
         followerCycle,
-        canUsePointer: true,
       },
       notionPage: {
-        selector: '.notion-page-content',
+        selector: {
+          target: '.notion-page-content',
+        },
         observerSelectors,
         followerCycle: cornerFollowerCycle({
           update: r => ({
@@ -146,7 +152,9 @@
         }),
       },
       notionTopBar: {
-        selector: '.notion-topbar > div',
+        selector: {
+          target: '.notion-topbar > div',
+        },
         followerCycle: {
           update(hostRef) {
             return {
@@ -181,7 +189,9 @@
         },
       },
       notionMainScroller: {
-        selector: '.notion-scroller main',
+        selector: {
+          target: '.notion-scroller main',
+        },
         followerCycle: cornerFollowerCycle({
           update: (r, i) => {
             // console.log('update', arguments)
@@ -202,7 +212,9 @@
         }),
       },
       leftGallery: {
-        selector: '.left .item.block',
+        selector: {
+          target: '.left .item.block',
+        },
         followerCycle,
         observerSelectors: {
           scroll: '.gallery .left .items',
@@ -210,7 +222,9 @@
         },
       },
       rightGallery: {
-        selector: '.right .item.block',
+        selector: {
+          target: '.right .item.block',
+        },
         followerCycle,
         observerSelectors: {
           scroll: '.gallery .right .items',
@@ -218,7 +232,9 @@
         },
       },
       topGallery: {
-        selector: '.top .item.block',
+        selector: {
+          target: '.top .item.block',
+        },
         followerCycle,
         observerSelectors: {
           scroll: '.gallery .top .items',

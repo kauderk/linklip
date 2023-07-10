@@ -12,14 +12,18 @@
   const config = {
     selectors: {
       notionPage: {
-        selector: '.notion-page-content',
+        selector: {
+          target: '.notion-page-content',
+          panicToLast: true,
+        },
         observerSelectors,
-        panicToLastHost: true,
         followerCycle: defaultCornerFollowerCycle,
       },
       notionTopBar: {
-        selector: '.notion-topbar > div',
-        panicToLastHost: true,
+        selector: {
+          target: '.notion-topbar > div',
+          panicToLast: true,
+        },
         followerCycle: {
           // prettier-ignore
           update(hostRef, initRect) {
@@ -43,8 +47,10 @@
         },
       },
       notionMainScroller: {
-        selector: '.notion-scroller main',
-        panicToLastHost: true,
+        selector: {
+          target: '.notion-scroller main',
+          panicToLast: true,
+        },
         followerCycle: {
           update(hostRef, initRect) {
             return {
@@ -79,7 +85,7 @@
 
   onMount(() =>
     cleanSubscribers(
-      follower.mount(document.querySelector(config.selectors.notionMainScroller.selector)!)
+      follower.mount(document.querySelector(config.selectors.notionMainScroller.selector.target)!)
     )
   )
 </script>
