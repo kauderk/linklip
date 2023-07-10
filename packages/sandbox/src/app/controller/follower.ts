@@ -7,7 +7,8 @@ import { useContextMenu } from 'src/context-menu/ContextMenu.svelte'
 import { createTrackMouseHold } from './click-track'
 import { createMouseTrack } from './mouse-track'
 // prettier-ignore
-import { fitToTarget, mapRange, type FollowerConfig, type Rect, togglePointerTarget, type Stage, animationFrameInterval, type El } from './follower-lib'
+import { fitToTarget, mapRange, type FollowerConfig, type Rect, togglePointerTarget, type Stage, animationFrameInterval, type El, camelCaseToTitleCase } from './follower-lib'
+import { createListeners } from '$lib/event-life-cycle'
 
 export const followers = preSignal({ message: '' as 'reset' | '' })
 export function follower(config: FollowerConfig) {
@@ -22,26 +23,14 @@ export function follower(config: FollowerConfig) {
   let follower = { ref: <HTMLElement>{} }
 
   //#region methods
-  function send(props: {
-    value: (() => Rect) | Rect
-    mode: 'new' | 'clear' | 'update'
-    canIntersect?: boolean
-  }) {
-    const { value, mode } = props
-    const selector = getSelector()
+  function send(props: { value: (() => Rect) | Rect }) {
+    const { value } = props
     const newRect = () => (typeof value === 'function' ? value() : value)
-    const postRect = () => {
-      const canIntersect = selector.canIntersect ?? props.canIntersect
-      if (!canIntersect) {
-        return fitToTarget(newRect())
-      }
-      return newRect()
-    }
 
-    if (mode == 'new') {
-      hostStack.fn = () => rect.set(postRect())
-    } else if (mode == 'update') {
-      rect.set(postRect())
+    if (typeof value === 'function') {
+      hostStack.fn = () => rect.set(newRect())
+    } else {
+      rect.set(newRect())
     }
   }
 
@@ -60,13 +49,15 @@ export function follower(config: FollowerConfig) {
   const selection = {
     clean() {
       hostStack.ref?.style.removeProperty('--selector')
+      delete follower.ref.dataset.follower
       stage.set({ mode: 'free' })
     },
     tryDock(hostRef: HTMLElement) {
       const selector = Object.entries(config.selectors).find(([_, sel]) =>
         hostRef.matches(parseSelector(sel))
       )![0]
-      hostRef.style.setProperty('--selector', selector)
+      hostRef.style.setProperty('--selector', selector) // React won't remove it
+      follower.ref.dataset.follower = selector
       return selector
     },
     mode(mode: boolean) {
@@ -87,10 +78,13 @@ export function follower(config: FollowerConfig) {
   function isHost(el?: Element): el is HTMLElement {
     return selectors.some(sel => el?.matches(parseSelector(sel)))
   }
+  function canPanicToRef() {
+    return getSelector().panicToLastHost && isHost(hostStack.ref)
+  }
   function findHost(host?: Element) {
     if (isHost(host)) {
       return host
-    } else if (getSelector().panicToLastHost && isHost(hostStack.ref)) {
+    } else if (canPanicToRef()) {
       return hostStack.ref
     }
   }
@@ -120,8 +114,6 @@ export function follower(config: FollowerConfig) {
   let destroyRectObserver = () => {}
   // prettier-ignore
   const createRectObserver = () => {
-    if (getSelector().canIntersect === false) return
-
     const selectors = getSelector().observerSelectors
     const resize = selectors?.resize ? document.querySelector(selectors.resize) : (null as any)
     const scroll = selectors?.scroll ? document.querySelector(selectors.scroll) : (null as any)
@@ -171,7 +163,6 @@ export function follower(config: FollowerConfig) {
           x: freezeRect.x,
           y: freezeRect.y,
         }),
-        mode: 'new',
       })
     }
     selection.mode(!!tryHost)
@@ -180,7 +171,8 @@ export function follower(config: FollowerConfig) {
   const observer = new IntersectionObserver(
     entries => {
       if (stage.peek().mode !== 'host') return
-      if (getSelector().canIntersect === false) {
+      const selector = getSelector()
+      if (!selector.followerCycle.resize) {
         hostStack.fn()
         return
       }
@@ -192,7 +184,7 @@ export function follower(config: FollowerConfig) {
       if (ratio === 0) {
         return
       }
-      const res = getSelector().followerCycle.resize(
+      const res = selector.followerCycle.resize(
         follower.ref,
         entry,
         rect.peek(),
@@ -211,7 +203,6 @@ export function follower(config: FollowerConfig) {
   )
 
   let delta = { x: 0, y: 0 }
-  let pointer: { ref?: HTMLElement } = {}
   const trackPointer = createMouseTrack({
     mousedown(e) {
       e.stopPropagation()
@@ -229,54 +220,65 @@ export function follower(config: FollowerConfig) {
     mousemove(e) {
       const old = rect.peek()
       send({
-        value: {
+        value: fitToTarget({
           width: old.width,
           height: old.height,
           x: e.clientX - delta.x,
           y: e.clientY - delta.y,
-        },
-        mode: 'update',
+        }),
       })
-
-      // offPointer update
-      if (e.target !== pointer.ref) {
-        togglePointerTarget(false, pointer.ref)
-        pointer.ref = e.target as any
-        if (isHost(pointer.ref)) {
-          togglePointerTarget(true, pointer.ref)
-        }
-      }
     },
 
     mouseup(e) {
-      // offPointer up
-      togglePointerTarget(false, pointer.ref)
-      pointer.ref = undefined
       follower.ref.classList.remove('pointer')
 
-      branchOutHost(e.target as any)
+      const ref = canPanicToRef() ? hostStack.ref : undefined
+      branchOutHost(ref)
+
       dragging.value = false
     },
   })
+
+  //#region context menu
+  const contextMenuSelectorNodes = Object.entries(config.selectors).map(([key, value]) => {
+    return {
+      content: camelCaseToTitleCase(key),
+      callback() {
+        const newHost = document.querySelector(value.selector)
+        if (!newHost) return
+        branchOutHost(newHost)
+      },
+      action(ref: HTMLElement) {
+        const hover = (toggle: boolean) => () =>
+          document.querySelector(value.selector)?.classList.toggle('follower-outline', toggle)
+
+        return {
+          destroy: cleanSubscribers(
+            createListeners(ref, {
+              mouseenter: hover(true),
+              mouseleave: hover(false),
+            }),
+            hover(false)
+          ),
+        }
+      },
+    }
+  })
+  if (config.pictureInPicture) {
+    contextMenuSelectorNodes.unshift(<any>{
+      content: 'Picture In Picture',
+      callback() {
+        branchOutHost(undefined)
+      },
+    })
+  }
+  //#endregion
 
   return {
     dragThreshold: createTrackMouseHold({
       threshold: trackPointer,
       hold(e) {
-        useContextMenu(
-          e,
-          {
-            nodes: [
-              {
-                content: 'Resize',
-                callback(openState) {
-                  // console.log(openState)
-                },
-              },
-            ],
-          },
-          true
-        )
+        useContextMenu(e, { nodes: contextMenuSelectorNodes }, true)
       },
     }),
     registerFollower(ref: HTMLElement) {
@@ -286,6 +288,7 @@ export function follower(config: FollowerConfig) {
           useClass(ref, { dragging }).destroy,
           rect.subscribe(rect => {
             if (isNaN(rect.width)) {
+              console.log('rect.width is NaN', rect)
               return
             }
             ref.style.left = rect.x + 'px'
@@ -323,7 +326,6 @@ export function follower(config: FollowerConfig) {
           // prettier-ignore
           getSelector().styleHost?.(hostStack.ref)
           getSelector().followerCycle.clean?.(follower.ref)
-          pointer = {}
           follower = {} as any
           hostStack = {} as any
         }

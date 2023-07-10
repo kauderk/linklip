@@ -43,20 +43,27 @@
     })
   }
   function update(menuRef: HTMLElement) {
-    const fRect = menu.peek()()
+    const fRect = fitToTarget({
+      ...menu.peek()(),
+      width: menuRef.offsetWidth,
+      height: menuRef.offsetHeight,
+    })
     menuRef.style.setProperty('--x', fRect.x + 'px')
     menuRef.style.setProperty('--y', fRect.y + 'px')
   }
   function adjustRect(menuRef: HTMLElement) {
     return {
-      destroy: updateWindow(() => update(menuRef), 600, true),
+      destroy: updateWindow(() => update(menuRef), 300, true),
     }
   }
   function handle_click_outside(event: MouseEvent) {
     const target = event.target as HTMLElement
-    if (!target.classList.contains('context-menu')) {
-      open.value = false
+    if (!target.closest('.context-menu')) {
+      close()
     }
+  }
+  function close() {
+    open.value = false
   }
 </script>
 
@@ -69,6 +76,7 @@
   import { onMount } from 'svelte'
   import Template, { defineTemplate } from '../template/Template.svelte'
   import Show from './Show.svelte'
+  import { fitToTarget } from 'src/app/controller/follower-lib'
   let template = defineTemplate<{
     item: ContextMenuSchemaActionNode
     open: PreSignal<boolean | undefined>
@@ -87,21 +95,19 @@
   )
 </script>
 
-<svelte:window
-  on:mousedown={handle_click_outside}
-  on:beforeprint={() => {
-    setTimeout(() => (open.value = false), 300)
-  }}
-/>
+<svelte:window on:mousedown={handle_click_outside} on:beforeprint={() => setTimeout(close, 300)} />
 
 <Template bind:template let:props>
+  {@const action = props.item.action ?? (() => {})}
   <!-- prettier-ignore -->
   <li class="action" class:hover={props.item.hover} on:mouseleave={e=>e.currentTarget.classList.remove('hover')}>
 		<button
 			on:click={() => {
 				// @ts-expect-error undefined
 				props.item.callback(props.open)
+				close()
 			}}
+			use:action={props}
 			>{props.item.content}</button
 		>
 	</li>

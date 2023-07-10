@@ -15,12 +15,12 @@ export type Config = {
         window?: boolean
       }
       followerCycle: FollowerCycle
-      canIntersect?: boolean
       styleHost?: (hostRef?: HTMLElement, rect?: Rect) => void
       panicToLastHost?: boolean
       tryFindHost?: (hostRef: HTMLElement) => Element | null | undefined
     }
   >
+  pictureInPicture?: boolean
   rect: PreSignal<Rect>
   dragging?: PreSignal<boolean>
   stage?: Stage
@@ -34,7 +34,7 @@ export type El = HTMLElement | undefined
 type Send = ReturnType<typeof follower>['sendType']
 export type FollowerCycle = {
   update: (hostRef: HTMLElement, initRect: Rect) => Send
-  resize: (
+  resize?: (
     followerRef: El,
     entry: IntersectionObserverEntry,
     initRect: Rect,
@@ -71,9 +71,11 @@ export function togglePointerTarget(on: boolean, el?: HTMLElement) {
 export function toggleStyle(key: string, value: string, add: boolean, el?: HTMLElement) {
   // store the value plus the state
   if (add) {
-    const current = el?.style.getPropertyValue(key)
-    const store = current ? current + '_original' : '_unset'
-    el?.style.setProperty(`--stored-${key}`, store)
+    if ('_unset' !== el?.style.getPropertyValue(`--stored-${key}`)) {
+      const current = el?.style.getPropertyValue(key)
+      const store = current ? current + '_original' : '_unset'
+      el?.style.setProperty(`--stored-${key}`, store)
+    }
     el?.style.setProperty(key, value)
   }
   // restore the original value or remove it if it was unset
@@ -111,4 +113,8 @@ export function animationFrameInterval(callback: () => any) {
     debounced,
     clearTimers,
   }
+}
+
+export function camelCaseToTitleCase(camel: string) {
+  return camel.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())
 }

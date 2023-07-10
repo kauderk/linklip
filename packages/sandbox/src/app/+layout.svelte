@@ -17,10 +17,10 @@
 
     // document.body.classList.add('debug')
     return cleanSubscribers(
-      //   new SharedControls({
-      //   target: document.body,
-      //   context,
-      // }).$destroy,
+      new SharedControls({
+        target: document.body,
+        context,
+      }).$destroy,
       new Gallery({
         target: document.body,
       }).$destroy,
@@ -50,6 +50,13 @@
     }
     [style*='--selector'] {
       outline: 1px var(--outline-style) greenyellow;
+    }
+    [data-follower*='Gallery'] .grabber {
+      display: none;
+    }
+    .follower-outline {
+      outline: 1px solid red;
+      opacity: 0.6;
     }
   </style>
 </svelte:head>

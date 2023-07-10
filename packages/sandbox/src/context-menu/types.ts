@@ -16,5 +16,12 @@ type ContextMenuSchemaParentNode = {
 export type ContextMenuSchemaActionNode = {
   content: string
   hover?: boolean
+  action?: (
+    ref: HTMLButtonElement,
+    item: {
+      item: ContextMenuSchemaActionNode
+      open: PreSignal<boolean | undefined>
+    }
+  ) => void
   callback: (openState?: PreSignal<boolean>) => void
 }

@@ -8,7 +8,7 @@ export const cornerFollowerCycle = (pre: x) => {
   return {
     update(hostRef, initRect) {
       return {
-        value: () => {
+        value() {
           const rect = hostRef.getBoundingClientRect()
           return pre.update(
             {
@@ -20,9 +20,6 @@ export const cornerFollowerCycle = (pre: x) => {
             initRect
           )
         },
-        mode: 'new',
-        hostRef,
-        canIntersect: true,
       }
     },
     resize(followerRef, entry, initRect, isFull) {
@@ -40,8 +37,7 @@ export const cornerFollowerCycle = (pre: x) => {
 					y: (entry.boundingClientRect.bottom - initRect.height) + bottomOffset,
 					height: initRect.height,
 				}, initRect, entry.intersectionRect),
-				mode: 'update',
-				canIntersect: true,
+				
 			}
     },
   } satisfies FollowerCycle
@@ -55,4 +51,4 @@ export const defaultCornerFollowerCycle = cornerFollowerCycle({
 export const observerSelectors = {
   scroll: '.notion-frame .notion-scroller',
   resize: '.notion-page-content',
-}
+} as const

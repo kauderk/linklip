@@ -60,20 +60,23 @@
     type FollowerCycle,
   } from './controller/follower'
   import { createHoverTrack } from './controller/hover-tracker'
-  import {
-    cornerFollowerCycle,
-    defaultCornerFollowerCycle,
-    observerSelectors,
-  } from './follower/corner'
+  import { cornerFollowerCycle, observerSelectors } from './follower/corner'
   import { getPlayerContext } from './timeline/context'
   import { setTimelineContext } from './timeline/controller'
 
   const followerCycle = {
     update(hostRef, initRect) {
       return {
-        value: () => hostRef.getBoundingClientRect(),
-        mode: 'new',
-        hostRef,
+        value() {
+          // https://stackoverflow.com/q/39417566
+          const rect = hostRef.getBoundingClientRect()
+          return {
+            x: rect.x,
+            y: rect.y,
+            width: rect.width,
+            height: rect.height,
+          }
+        },
       }
     },
     clean(followerRef) {
@@ -97,7 +100,6 @@
           width: entry.intersectionRect.width,
           height: entry.intersectionRect.height,
         },
-        mode: 'update',
       }
     },
   } satisfies FollowerCycle
@@ -116,7 +118,7 @@
         followerCycle,
       },
       sharedControls: {
-        selector: '.shared-controls',
+        selector: '.shared-controls *',
         observerSelectors,
         tryFindHost(preHostRef: HTMLElement) {
           return document.querySelector('.notion-page-content')
@@ -142,30 +144,27 @@
       },
       notionTopBar: {
         selector: '.notion-topbar > div',
-        canIntersect: false,
         followerCycle: {
-          ...defaultCornerFollowerCycle,
-          // prettier-ignore
           update(hostRef) {
-						const startFrom = hostRef.querySelector('div.notranslate.shadow-cursor-breadcrumb')!.getBoundingClientRect()
-						const hostRect = hostRef.getBoundingClientRect()
-						// if the hostRect is at x:0, y: 0, width: 100, height: 30
-						// return at x: 20%, y: 0, width: 60%, height: 30
-						const xPadding = 15
-						const height = hostRect.height
-						const width = height * (16 / 9)
-						return {
-							value: {
-								x: startFrom.right+xPadding,
-								y: hostRect.top,
-								width,
-								height,
-							},
-							mode: 'new',
-							hostRef,
-							canIntersect: false,
-						}
-					},
+            return {
+              value() {
+                // prettier-ignore
+                const startFrom = hostRef.querySelector('div.notranslate.shadow-cursor-breadcrumb')!.getBoundingClientRect()
+                const hostRect = hostRef.getBoundingClientRect()
+                // if the hostRect is at x:0, y: 0, width: 100, height: 30
+                // return at x: 20%, y: 0, width: 60%, height: 30
+                const xPadding = 15
+                const height = hostRect.height
+                const width = height * (16 / 9)
+                return {
+                  x: startFrom.right + xPadding,
+                  y: hostRect.top,
+                  width,
+                  height,
+                }
+              },
+            }
+          },
           // TODO: should provide the rect
           clean(followerRef) {
             if (!followerRef) return
@@ -180,8 +179,6 @@
       },
       notionMainScroller: {
         selector: '.notion-scroller main',
-        // canIntersect: false,
-        // observerSelectors,
         followerCycle: cornerFollowerCycle({
           update: (r, i) => {
             // console.log('update', arguments)
@@ -206,6 +203,7 @@
         followerCycle,
         observerSelectors: {
           scroll: '.gallery .left .items',
+          resize: '.gallery .left .items',
         },
       },
       rightGallery: {
@@ -213,6 +211,7 @@
         followerCycle,
         observerSelectors: {
           scroll: '.gallery .right .items',
+          resize: '.gallery .right .items',
         },
       },
       topGallery: {
@@ -225,6 +224,7 @@
         },
       },
     },
+    pictureInPicture: true,
   } satisfies FollowerConfig
 
   export let player = getPlayerContext()
@@ -244,7 +244,7 @@
       config.stage.subscribe(stage => {
         config.resizeMode =
           stage.mode === 'host'
-            ? stage.selector == 'notionPage'
+            ? ['notionPage', 'notionMainScroller'].includes(stage.selector!)
               ? 'inlineBlockReversed'
               : 'inlineBlock'
             : 'pictureInPicture'
