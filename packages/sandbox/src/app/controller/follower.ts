@@ -9,9 +9,10 @@ import { createMouseTrack } from './mouse-track'
 // prettier-ignore
 import { fitToTarget, mapRange, type FollowerConfig, type Rect, togglePointerTarget, type Stage, animationFrameInterval, type El, camelCaseToTitleCase } from './follower-lib'
 import { createListeners } from '$lib/event-life-cycle'
+import { createDefaultStage } from '../follower/store'
 
 export const followers = preSignal({ message: '' as 'reset' | '' })
-export function follower(config: FollowerConfig) {
+export function follower<F extends FollowerConfig>(config: F) {
   const rect = config.rect
   let hostStack = {
     fn: () => {},
@@ -19,7 +20,7 @@ export function follower(config: FollowerConfig) {
     ref: <El>undefined,
   }
   let dragging = config.dragging ?? preSignal(false)
-  let stage = config.stage ?? (preSignal({ mode: 'free' }) as Stage)
+  let stage = config.stage ?? createDefaultStage()
   let follower = { ref: <HTMLElement>{} }
 
   //#region methods
@@ -50,7 +51,7 @@ export function follower(config: FollowerConfig) {
     clean() {
       hostStack.ref?.style.removeProperty('--selector')
       delete follower.ref.dataset.follower
-      stage.set({ mode: 'free' })
+      stage.mod({ mode: 'free' })
     },
     tryDock(hostRef: HTMLElement) {
       const selector = Object.entries(config.selectors).find(([_, sel]) =>
@@ -336,6 +337,14 @@ export function follower(config: FollowerConfig) {
     },
     styleHost() {
       getSelector().styleHost?.(hostStack.ref, rect.peek())
+    },
+    trySwitchHost(target?: F['selectors'][keyof F['selectors']]['selector']['target']) {
+      const potential = config.selectors[target!]?.selector.target
+      if (!potential) return
+      const newHost = document.querySelector(potential)
+      if (!newHost) return
+      branchOutHost(newHost)
+      return true
     },
     mount(host?: Element) {
       branchOutHost(host)

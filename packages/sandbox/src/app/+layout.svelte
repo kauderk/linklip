@@ -8,11 +8,12 @@
   import Resize from './Resize.svelte'
   import { player, storyboard } from './timeline/context'
   import Gallery from './gallery/GalleryController.svelte'
+  import { stages } from './follower/store'
 
   onMount(() => {
     const FirstUpperCase = (str: string) => str[0].toUpperCase() + str.slice(1)
     const context = new Map(
-      Object.entries({ player, storyboard }).map(e => [FirstUpperCase(e[0]), e[1]()])
+      Object.entries({ player, storyboard, stages }).map(e => [FirstUpperCase(e[0]), e[1]()])
     )
 
     // document.body.classList.add('debug')

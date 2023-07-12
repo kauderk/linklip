@@ -22,7 +22,7 @@
 				height,
 			}),
       resizing: preSignal(false),
-      stage: preSignal({ mode: 'free' }) as Exclude<Config['stage'], undefined>,
+      stage: createDefaultStage(),
       resizeMode: 'inlineBlock' as ResizeConfig['resizeMode'],
     }
   }
@@ -63,6 +63,7 @@
   import { cornerFollowerCycle, observerSelectors } from './follower/corner'
   import { getPlayerContext } from './timeline/context'
   import { setTimelineContext } from './timeline/controller'
+  import { createDefaultStage, getStagesContext } from './follower/store'
 
   const followerCycle = {
     update(hostRef, initRect) {
@@ -247,6 +248,7 @@
   } satisfies FollowerConfig
 
   export let player = getPlayerContext()
+  const stages = getStagesContext()
   const { paused, fullScreen, time } = player
   export let timeline = setTimelineContext({ controlsMinHeight: 38 })
   const { resizeRect } = timeline.context

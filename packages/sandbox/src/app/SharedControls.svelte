@@ -6,6 +6,7 @@
   import { preSignal } from '$lib/pre-signal'
   import { defaultCornerFollowerCycle, observerSelectors } from './follower/corner'
   import Controls from './Controls.svelte'
+  import { createDefaultStage, getStagesContext } from './follower/store'
 
   const width = 600
   const height = 70
@@ -78,9 +79,11 @@
       width,
       height,
     }),
+    stage: createDefaultStage(),
   } satisfies FollowerConfig
 
   const follower = setSharedControlsContext(config)
+  const stages = getStagesContext()
   const { registerFollower } = follower
 
   onMount(() =>
