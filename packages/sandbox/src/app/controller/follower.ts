@@ -158,7 +158,7 @@ export function follower<F extends FollowerConfig>(config: F) {
       createRectObserver()
 
       getSelector().styleHost?.(hostStack.ref, rect.peek())
-      send(getSelector().followerCycle.update(hostStack.ref, rect.peek()))
+      send(getSelector().followerCycle.update(hostStack.ref, rect.peek(), rect))
       observer.observe(hostStack.ref)
     } else {
       const freezeRect = follower.ref.getBoundingClientRect()

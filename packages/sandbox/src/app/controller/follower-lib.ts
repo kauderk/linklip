@@ -37,7 +37,7 @@ export type Stage = PreSignal<{
 export type El = HTMLElement | undefined
 type Send = ReturnType<typeof follower>['sendType']
 export type FollowerCycle = {
-  update: (hostRef: HTMLElement, initRect: Rect) => Send
+  update: (hostRef: HTMLElement, initRect: Rect, initRectSignal: PreSignal<Rect>) => Send
   resize?: (
     followerRef: El,
     entry: IntersectionObserverEntry,

@@ -194,25 +194,21 @@
         selector: {
           target: '.notion-scroller main',
         },
-        followerCycle: cornerFollowerCycle({
-          update: (r, i) => {
-            // console.log('update', arguments)
+        followerCycle: {
+          update(hostRef, _, signal) {
             return {
-              ...i,
-              x: r.x - cornerOffset.x,
-              y: r.y - cornerOffset.y,
+              value() {
+                const crr = signal.peek()
+                const v = selectorsFuncs.notionMainScroller.update(hostRef)
+                return {
+                  ...crr,
+                  x: v.x + v.width - crr.width - cornerOffset.x,
+                  y: window.innerHeight - crr.height - cornerOffset.y,
+                }
+              },
             }
           },
-          resize: (r, i, e) => {
-            const hostRef = document.querySelector('.notion-scroller main')
-            const v = selectorsFuncs.notionMainScroller.update(hostRef!)
-            return {
-              ...i,
-              x: v.x + v.width - i.width - cornerOffset.x,
-              y: window.innerHeight - i.height - cornerOffset.y,
-            }
-          },
-        }),
+        },
       },
       leftGallery: {
         selector: {
