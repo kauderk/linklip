@@ -59,5 +59,8 @@
       outline: 1px solid red;
       opacity: 0.6;
     }
+    .notion-help-button {
+      display: none !important;
+    }
   </style>
 </svelte:head>

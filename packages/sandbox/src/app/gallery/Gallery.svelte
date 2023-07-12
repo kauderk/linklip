@@ -69,7 +69,7 @@
   export let type: 'side' | 'top' = 'side'
   export let direction: 'left' | 'right' = 'left'
 
-  export let size = 20
+  export let size = 1
   export let w = 300
   export let rows = 1
   export let fixed = true
