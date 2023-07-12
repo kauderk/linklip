@@ -300,6 +300,7 @@ export function follower<F extends FollowerConfig>(config: F) {
   }
   //#endregion
 
+  type Targets = keyof F['selectors']
   return {
     dragThreshold: createTrackMouseHold({
       threshold: trackPointer,
@@ -338,16 +339,20 @@ export function follower<F extends FollowerConfig>(config: F) {
     styleHost() {
       getSelector().styleHost?.(hostStack.ref, rect.peek())
     },
-    trySwitchHost(target?: F['selectors'][keyof F['selectors']]['selector']['target']) {
-      const potential = config.selectors[target!]?.selector.target
+    trySwitchHost(target?: Targets) {
+      const potential = config.selectors[target as any]?.selector.target
       if (!potential) return
       const newHost = document.querySelector(potential)
       if (!newHost) return
       branchOutHost(newHost)
       return true
     },
-    mount(host?: Element) {
-      branchOutHost(host)
+    mount(host?: Element | Targets) {
+      if (typeof host === 'string') {
+        this.trySwitchHost(host)
+      } else {
+        branchOutHost(host as any)
+      }
 
       return cleanSubscribers(
         selection.clean,

@@ -28,7 +28,7 @@
       new App({
         target: document.body,
         props: {
-          host: document.querySelector('.notion-scroller main')!,
+          host: 'notionTopBar',
         },
         context,
       }).$destroy,

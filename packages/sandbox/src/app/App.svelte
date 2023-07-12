@@ -254,7 +254,7 @@
   const { rect } = config
   const { registerFollower } = follower
 
-  export let host: Element | undefined = undefined
+  export let host: Element | undefined | string = undefined
   const bottom = ['notionPage', 'notionMainScroller']
   const top = ['notionTopBar']
   onMount(() =>
