@@ -129,8 +129,8 @@
           pointer: true,
         },
         observerSelectors,
-        tryFindHost(preHostRef: HTMLElement) {
-          return document.querySelector('.notion-page-content')
+        tryFindHost() {
+          return stages.sharedControls.peek().selector
         },
         followerCycle,
       },

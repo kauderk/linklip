@@ -69,7 +69,7 @@
   export let type: 'side' | 'top' = 'side'
   export let direction: 'left' | 'right' = 'left'
 
-  export let size = 1
+  export let size = 0
   export let w = 300
   export let rows = 1
   export let fixed = true
@@ -141,7 +141,7 @@
     style:--itemWidth={lookRect.itemWidth}
     class:fixed
     class:absolute={!fixed}
-    class="gallery z-10 h-full w-auto select-none opacity-30 {type}"
+    class="gallery z-10 h-auto w-auto select-none opacity-30 {type}"
     style="{direction}: 0;"
     hidden
     use:portal

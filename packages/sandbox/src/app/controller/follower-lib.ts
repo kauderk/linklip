@@ -21,7 +21,7 @@ export type Config = {
       }
       followerCycle: FollowerCycle
       styleHost?: (hostRef?: HTMLElement, rect?: Rect) => void
-      tryFindHost?: (hostRef: HTMLElement) => Element | null | undefined
+      tryFindHost?: () => string | undefined
     }
   >
   pictureInPicture?: boolean

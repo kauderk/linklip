@@ -80,7 +80,7 @@
 
   onMount(() =>
     cleanSubscribers(
-      follower.mount('notionTopBar'),
+      follower.mount('notionMainScroller'),
       config.stage.subscribe(stage => {
         stages.sharedControls.set(stage)
       })

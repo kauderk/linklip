@@ -94,11 +94,18 @@ export function follower<F extends FollowerConfig>(config: F) {
       ? hostStack.ref
       : undefined
   }
+  function tryHost(target?: string) {
+    const potential = config.selectors[target as any]?.selector.target
+    if (!potential) return
+    const newHost = document.querySelector(potential) as HTMLElement
+    if (!newHost) return
+    return newHost
+  }
   function tryFindHost(host: HTMLElement) {
     hostStack.selectorKey = selection.tryDock(host)
     const selector = getSelector()
     if (selector.tryFindHost) {
-      let pre = selector.tryFindHost(host) as El
+      let pre = tryHost(selector.tryFindHost())
       pre = maybeIsHost(pre)
       if (pre) {
         hostStack.selectorKey = selection.tryDock(pre)

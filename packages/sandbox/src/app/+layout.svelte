@@ -28,7 +28,7 @@
       new App({
         target: document.body,
         props: {
-          host: 'notionTopBar',
+          host: 'notionLink',
         },
         context,
       }).$destroy,
