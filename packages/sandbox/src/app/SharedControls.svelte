@@ -1,12 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { type FollowerConfig, follower as setSharedControlsContext } from './controller/follower'
+  import { follower as setSharedControlsContext } from './controller/follower'
+  import type { FollowerConfig } from './controller/follower-lib'
   import { cleanSubscribers } from '$lib/stores'
-  import SVG from './SVG.svelte'
   import { preSignal } from '$lib/pre-signal'
   import { defaultCornerFollowerCycle, observerSelectors } from './follower/corner'
   import Controls from './Controls.svelte'
   import { createDefaultStage, getStagesContext } from './follower/store'
+  import { selectorsFuncs } from './follower/selectors'
 
   const width = 600
   const height = 70
@@ -56,16 +57,7 @@
           update(hostRef, initRect) {
             return {
               value() {
-                const hostRect = hostRef.getBoundingClientRect()
-                const height = 50
-                const width = Math.min(1000, hostRect.width)
-                // center it vertically, max width 1000 and 50 height at the bottom
-                return {
-                  x: window.innerWidth / 2 - width / 2,
-                  y: window.innerHeight - height,
-                  width,
-                  height,
-                }
+                return selectorsFuncs.notionMainScroller.update(hostRef)
               },
             }
           },
@@ -88,7 +80,10 @@
 
   onMount(() =>
     cleanSubscribers(
-      follower.mount(document.querySelector(config.selectors.notionMainScroller.selector.target)!)
+      follower.mount(document.querySelector(config.selectors.notionMainScroller.selector.target)!),
+      config.stage.subscribe(stage => {
+        stages.sharedControls.set(stage)
+      })
     )
   )
 </script>

@@ -55,7 +55,6 @@
   import {
     setFollowerContext,
     toggleStyle,
-    type Config,
     type FollowerConfig,
     type FollowerCycle,
   } from './controller/follower'
@@ -64,6 +63,7 @@
   import { getPlayerContext } from './timeline/context'
   import { setTimelineContext } from './timeline/controller'
   import { createDefaultStage, getStagesContext } from './follower/store'
+  import { selectorsFuncs } from './follower/selectors'
 
   const followerCycle = {
     update(hostRef, initRect) {
@@ -105,10 +105,11 @@
     },
   } satisfies FollowerCycle
 
-  const cornerOffset = {
+  let cornerOffset = {
     y: 70,
     x: 20,
   }
+  const originalCornerOffset = { ...cornerOffset }
   const config = {
     ...createConfig(),
     selectors: {
@@ -203,10 +204,11 @@
             }
           },
           resize: (r, i, e) => {
-            // console.log('resize', arguments)
+            const hostRef = document.querySelector('.notion-scroller main')
+            const v = selectorsFuncs.notionMainScroller.update(hostRef!)
             return {
               ...i,
-              x: window.innerWidth - i.width - cornerOffset.x,
+              x: v.x + v.width - i.width - cornerOffset.x,
               y: window.innerHeight - i.height - cornerOffset.y,
             }
           },
@@ -257,6 +259,8 @@
   const { registerFollower } = follower
 
   export let host: Element | undefined = undefined
+  const bottom = ['notionPage', 'notionMainScroller']
+  const top = ['notionTopBar']
   onMount(() =>
     cleanSubscribers(
       follower.mount(host),
@@ -265,7 +269,7 @@
       config.stage.subscribe(stage => {
         config.resizeMode =
           stage.mode === 'host'
-            ? ['notionPage', 'notionMainScroller'].includes(stage.selector!)
+            ? bottom.includes(stage.selector!)
               ? 'inlineBlockReversed'
               : 'inlineBlock'
             : 'pictureInPicture'
@@ -278,6 +282,19 @@
       config.resizing.subscribe(resizing => {
         if (!resizing) {
           follower.styleHost()
+        }
+      }),
+      stages.sharedControls.subscribe(stage => {
+        const self = config.stage.peek()
+        if (stage.mode != 'host' || self.mode == 'free') return
+
+        // FIXME: no side effects
+        cornerOffset = {
+          ...originalCornerOffset,
+          y: !bottom.includes(stage.selector!) ? 10 : originalCornerOffset.y,
+        }
+        if ([...bottom, ...top].includes(self.selector!)) {
+          follower.trySwitchHost(stage.selector)
         }
       })
     )
