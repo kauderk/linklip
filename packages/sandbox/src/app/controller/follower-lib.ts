@@ -22,7 +22,11 @@ export type Config = {
       followerCycle: FollowerCycle
       styleHost?: (hostRef?: HTMLElement, rect?: Rect) => void
       tryFindHost?: () => string | undefined
-      preBranch?: () => void | Promise<void>
+      preBranch?: (payload: {
+        current?: string
+        next: string
+        selected: boolean
+      }) => void | Promise<void>
     }
   >
   pictureInPicture?: boolean

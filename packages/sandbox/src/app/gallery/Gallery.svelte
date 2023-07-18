@@ -134,9 +134,11 @@
   onMount(() => createDebouncedListener(window, 'resize', updateRect))
 
   function branch(target: HTMLElement) {
+    const gl = 'gallery-' + (isTop ? 'top' : direction)
+    target.classList.add(gl)
     // @ts-expect-error
-    target.branch = () => {
-      size = size + 1
+    target.branch = (id, add) => {
+      size = size + (add ? 1 : -1)
       return tick()
     }
   }
@@ -149,7 +151,7 @@
     style:--itemWidth={lookRect.itemWidth}
     class:fixed
     class:absolute={!fixed}
-    class="gallery gallery-{direction} z-10 h-auto w-auto select-none opacity-30 {type}"
+    class="gallery z-10 h-auto w-auto select-none opacity-30 {type}"
     style="{direction}: 0;"
     use:branch
     hidden
@@ -174,6 +176,7 @@
     style:--itemWidth={lookRect.itemWidth}
     class="gallery {type}"
     use:topBarPortal
+    use:branch
     hidden
   >
     <div

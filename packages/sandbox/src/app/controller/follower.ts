@@ -275,7 +275,19 @@ export function follower<F extends FollowerConfig>(config: F) {
     return {
       content: camelCaseToTitleCase(key),
       async callback() {
-        await value.preBranch?.()
+        const s = stage.peek()
+        // deselect current
+        await config.selectors[s.selector ?? '']?.preBranch?.({
+          current: s.selector,
+          next: key,
+          selected: false,
+        })
+        // select new
+        await value.preBranch?.({
+          current: s.selector,
+          next: key,
+          selected: true,
+        })
         const newHost = document.querySelector(value.selector.target)
         if (!newHost) return
         branchOutHost(newHost)

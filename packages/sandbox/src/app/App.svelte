@@ -215,11 +215,7 @@
           target: '.left .item.block',
         },
         followerCycle,
-        preBranch() {
-          const gallery = document.querySelector('.gallery-left')
-          // @ts-expect-error
-          return gallery?.branch() // Promise
-        },
+        preBranch,
         observerSelectors: {
           scroll: '.gallery .left .items',
           resize: '.gallery .left .items',
@@ -230,6 +226,7 @@
           target: '.right .item.block',
         },
         followerCycle,
+        preBranch,
         observerSelectors: {
           scroll: '.gallery .right .items',
           resize: '.gallery .right .items',
@@ -240,6 +237,7 @@
           target: '.top .item.block',
         },
         followerCycle,
+        preBranch,
         observerSelectors: {
           scroll: '.gallery .top .items',
           resize: '.gallery .top .items',
@@ -249,6 +247,13 @@
     },
     pictureInPicture: true,
   } satisfies FollowerConfig
+  function preBranch(payload: { selected: boolean }) {
+    // @ts-expect-error
+    const direction = this.selector.target.split(' ')[0].slice(1)
+    const gallery = document.querySelector('.gallery-' + direction)
+    // @ts-expect-error
+    return gallery?.branch('[href*="youtu"]>span', payload.selected) // Promise
+  }
 
   export let player = getPlayerContext()
   const stages = getStagesContext()
