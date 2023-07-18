@@ -18,10 +18,10 @@
 
     // document.body.classList.add('debug')
     return cleanSubscribers(
-      new SharedControls({
-        target: document.body,
-        context,
-      }).$destroy,
+      // new SharedControls({
+      //   target: document.body,
+      //   context,
+      // }).$destroy,
       new Gallery({
         target: document.body,
       }).$destroy,

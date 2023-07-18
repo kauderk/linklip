@@ -215,6 +215,11 @@
           target: '.left .item.block',
         },
         followerCycle,
+        preBranch() {
+          const gallery = document.querySelector('.gallery-left')
+          // @ts-expect-error
+          return gallery?.branch() // Promise
+        },
         observerSelectors: {
           scroll: '.gallery .left .items',
           resize: '.gallery .left .items',

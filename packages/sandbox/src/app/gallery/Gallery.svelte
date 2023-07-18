@@ -1,6 +1,6 @@
 <script lang="ts">
   import { preSignal } from '$lib/pre-signal'
-  import { onMount } from 'svelte'
+  import { onMount, tick } from 'svelte'
   import { resize, type ResizeConfig } from '../Resize.svelte'
   import { createMouseTrack } from '../controller/mouse-track'
   import { createDebouncedListener } from '$lib/resize'
@@ -132,6 +132,14 @@
 
   const updateRect = isTop ? updateTopRect : updateSideRect
   onMount(() => createDebouncedListener(window, 'resize', updateRect))
+
+  function branch(target: HTMLElement) {
+    // @ts-expect-error
+    target.branch = () => {
+      size = size + 1
+      return tick()
+    }
+  }
 </script>
 
 {#if type == 'side'}
@@ -141,8 +149,9 @@
     style:--itemWidth={lookRect.itemWidth}
     class:fixed
     class:absolute={!fixed}
-    class="gallery z-10 h-auto w-auto select-none opacity-30 {type}"
+    class="gallery gallery-{direction} z-10 h-auto w-auto select-none opacity-30 {type}"
     style="{direction}: 0;"
+    use:branch
     hidden
     use:portal
   >

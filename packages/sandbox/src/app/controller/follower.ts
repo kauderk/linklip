@@ -274,7 +274,8 @@ export function follower<F extends FollowerConfig>(config: F) {
   const contextMenuSelectorNodes = Object.entries(config.selectors).map(([key, value]) => {
     return {
       content: camelCaseToTitleCase(key),
-      callback() {
+      async callback() {
+        await value.preBranch?.()
         const newHost = document.querySelector(value.selector.target)
         if (!newHost) return
         branchOutHost(newHost)
