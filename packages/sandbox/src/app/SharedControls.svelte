@@ -89,17 +89,24 @@
 </script>
 
 <div class="shared-controls" hidden use:registerFollower>
-  <Controls dragThreshold={follower.dragThreshold} />
+  <div class="wrapper">
+    <Controls dragThreshold={follower.dragThreshold} />
+  </div>
 </div>
 
 <style lang="scss">
   .shared-controls:global(:not([data-follower='notionPage'])) {
     z-index: 102;
   }
-  .shared-controls {
+  .wrapper {
     background-color: #272727;
     border: 3px solid #202020;
     border-radius: 10px;
+
+    max-width: 500px;
+    margin-inline-start: auto;
+  }
+  .shared-controls {
     // padding: 0.5em;
     position: fixed;
     z-index: 100;

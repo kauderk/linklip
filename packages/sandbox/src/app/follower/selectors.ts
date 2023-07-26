@@ -3,7 +3,7 @@ export const selectorsFuncs = {
     update(hostRef: Element) {
       const hostRect = hostRef.getBoundingClientRect()
       const height = 50
-      const width = Math.min(1000, hostRect.width)
+      const width = hostRect.width
       // center it vertically, max width 1000 and 50 height at the bottom
       return {
         x: window.innerWidth / 2 - width / 2,
