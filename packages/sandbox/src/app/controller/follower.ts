@@ -104,8 +104,8 @@ export function follower<F extends FollowerConfig>(config: F) {
   function tryFindHost(host: HTMLElement) {
     hostStack.selectorKey = selection.tryDock(host)
     const selector = getSelector()
-    if (selector.tryFindHost) {
-      let pre = tryHost(selector.tryFindHost())
+    if (selector.stageSignal) {
+      let pre = tryHost(selector.stageSignal.peek().selector)
       pre = maybeIsHost(pre)
       if (pre) {
         hostStack.selectorKey = selection.tryDock(pre)
@@ -271,45 +271,51 @@ export function follower<F extends FollowerConfig>(config: F) {
   })
 
   //#region context menu
-  const contextMenuSelectorNodes = Object.entries(config.selectors).map(([key, value]) => {
-    return {
-      content: camelCaseToTitleCase(key),
-      async callback() {
-        const s = stage.peek()
-        // deselect current
-        await config.selectors[s.selector ?? '']?.preBranch?.({
-          current: s.selector,
-          next: key,
-          selected: false,
-        })
-        // select new
-        await value.preBranch?.({
-          current: s.selector,
-          next: key,
-          selected: true,
-        })
-        const newHost = document.querySelector(value.selector.target)
-        if (!newHost) return
-        branchOutHost(newHost)
-      },
-      action(ref: HTMLElement) {
-        const hover = (toggle: boolean) => () =>
-          document
-            .querySelector(value.selector.target)
-            ?.classList.toggle('follower-outline', toggle)
+  const sharedStages = Object.values(config.selectors)
+    .map(val => val.stageSignal?.shared ?? [])
+    .flat()
+  const contextMenuSelectorNodes = Object.entries(config.selectors)
+    .map(([key, value]) => {
+      if (sharedStages.includes(key)) return
+      return {
+        content: camelCaseToTitleCase(key),
+        async callback() {
+          const s = stage.peek()
+          // deselect current
+          await config.selectors[s.selector ?? '']?.preBranch?.({
+            current: s.selector,
+            next: key,
+            selected: false,
+          })
+          // select new
+          await value.preBranch?.({
+            current: s.selector,
+            next: key,
+            selected: true,
+          })
+          const newHost = document.querySelector(value.selector.target)
+          if (!newHost) return
+          branchOutHost(newHost)
+        },
+        action(ref: HTMLElement) {
+          const hover = (toggle: boolean) => () =>
+            document
+              .querySelector(value.selector.target)
+              ?.classList.toggle('follower-outline', toggle)
 
-        return {
-          destroy: cleanSubscribers(
-            createListeners(ref, {
-              mouseenter: hover(true),
-              mouseleave: hover(false),
-            }),
-            hover(false)
-          ),
-        }
-      },
-    }
-  })
+          return {
+            destroy: cleanSubscribers(
+              createListeners(ref, {
+                mouseenter: hover(true),
+                mouseleave: hover(false),
+              }),
+              hover(false)
+            ),
+          }
+        },
+      }
+    })
+    .filter(Boolean)
   if (config.pictureInPicture) {
     contextMenuSelectorNodes.unshift(<any>{
       content: 'Picture In Picture',
@@ -325,6 +331,7 @@ export function follower<F extends FollowerConfig>(config: F) {
     dragThreshold: createTrackMouseHold({
       threshold: trackPointer,
       hold(e) {
+        // @ts-expect-error
         useContextMenu(e, { nodes: contextMenuSelectorNodes }, true)
       },
     }),

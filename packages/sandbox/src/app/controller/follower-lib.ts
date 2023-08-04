@@ -1,5 +1,6 @@
 import { createContext } from '$lib/create-context'
 import type { PreSignal } from '$lib/pre-signal'
+import type { StageSignal } from '../follower/store'
 import type { follower } from './follower'
 export type FollowerConfig = Omit<Config, 'aspectRatio'>
 export type Config = {
@@ -21,7 +22,7 @@ export type Config = {
       }
       followerCycle: FollowerCycle
       styleHost?: (hostRef?: HTMLElement, rect?: Rect) => void
-      tryFindHost?: () => string | undefined
+      stageSignal?: StageSignal
       preBranch?: (payload: {
         current?: string
         next: string

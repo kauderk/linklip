@@ -105,6 +105,9 @@
     },
   } satisfies FollowerCycle
 
+  export let player = getPlayerContext()
+  const stages = getStagesContext()
+
   let cornerOffset = {
     y: 70,
     x: 20,
@@ -129,9 +132,7 @@
           pointer: true,
         },
         observerSelectors,
-        tryFindHost() {
-          return stages.sharedControls.peek().selector
-        },
+        stageSignal: stages.sharedControls,
         followerCycle,
       },
       notionPage: {
@@ -255,8 +256,6 @@
     return gallery?.branch('[href*="youtu"]>span', payload.selected) // Promise
   }
 
-  export let player = getPlayerContext()
-  const stages = getStagesContext()
   const { paused, fullScreen, time } = player
   export let timeline = setTimelineContext({ controlsMinHeight: 38 })
   const { resizeRect } = timeline.context
