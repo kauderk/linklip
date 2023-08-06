@@ -181,6 +181,24 @@ export function follower<F extends FollowerConfig>(config: F) {
     }
     selection.mode(!!tryHost)
   }
+  async function preBranch(key = '') {
+    const s = stage.peek()
+    // deselect current
+    await config.selectors[s.selector ?? '']?.preBranch?.({
+      current: s.selector,
+      next: key,
+      selected: false,
+    })
+    // select new
+    await config.selectors[key]?.preBranch?.({
+      current: s.selector,
+      next: key,
+      selected: true,
+    })
+  }
+  function branch(host?: Element | (() => Element | undefined), key?: string) {
+    return preBranch(key).then(() => branchOutHost(typeof host === 'function' ? host() : host))
+  }
 
   const observer = new IntersectionObserver(
     entries => {
@@ -264,7 +282,7 @@ export function follower<F extends FollowerConfig>(config: F) {
       follower.ref.classList.remove('pointer')
 
       const maybeHost = maybeUsePointer(e.target) ?? maybePanicToRef()
-      branchOutHost(maybeHost)
+      branch(maybeHost)
 
       dragging.value = false
     },
@@ -280,19 +298,7 @@ export function follower<F extends FollowerConfig>(config: F) {
       return {
         content: camelCaseToTitleCase(key),
         async callback() {
-          const s = stage.peek()
-          // deselect current
-          await config.selectors[s.selector ?? '']?.preBranch?.({
-            current: s.selector,
-            next: key,
-            selected: false,
-          })
-          // select new
-          await value.preBranch?.({
-            current: s.selector,
-            next: key,
-            selected: true,
-          })
+          await preBranch(key)
           const newHost = document.querySelector(value.selector.target)
           if (!newHost) return
           branchOutHost(newHost)
@@ -319,9 +325,7 @@ export function follower<F extends FollowerConfig>(config: F) {
   if (config.pictureInPicture) {
     contextMenuSelectorNodes.unshift(<any>{
       content: 'Picture In Picture',
-      callback() {
-        branchOutHost(undefined)
-      },
+      callback: branch,
     })
   }
   //#endregion
@@ -355,7 +359,7 @@ export function follower<F extends FollowerConfig>(config: F) {
           }),
           followers.subscribe(state => {
             if (state.message == 'reset') {
-              branchOutHost()
+              branch()
             }
             // don't invalidate the state
             state.message = ''
@@ -371,14 +375,14 @@ export function follower<F extends FollowerConfig>(config: F) {
       if (!potential) return
       const newHost = document.querySelector(potential)
       if (!newHost) return
-      branchOutHost(newHost)
+      branch(newHost)
       return true
     },
     mount(host?: Element | Targets) {
       if (typeof host === 'string') {
         this.trySwitchHost(host)
       } else {
-        branchOutHost(host as any)
+        branch(host as any)
       }
 
       return cleanSubscribers(

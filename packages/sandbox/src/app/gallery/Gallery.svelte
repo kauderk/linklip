@@ -138,6 +138,7 @@
     target.classList.add(gl)
     // @ts-expect-error
     target.branch = (id, add) => {
+      if (size === 0 && !add) return
       size = size + (add ? 1 : -1)
       return tick()
     }
