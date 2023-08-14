@@ -9,6 +9,7 @@
   import { player, storyboard } from './timeline/context'
   import Gallery from './gallery/GalleryController.svelte'
   import { stages } from './follower/store'
+  import Theater from './gallery/Theater.svelte'
 
   onMount(() => {
     const FirstUpperCase = (str: string) => str[0].toUpperCase() + str.slice(1)
@@ -23,6 +24,9 @@
         context,
       }).$destroy,
       new Gallery({
+        target: document.body,
+      }).$destroy,
+      new Theater({
         target: document.body,
       }).$destroy,
       new App({

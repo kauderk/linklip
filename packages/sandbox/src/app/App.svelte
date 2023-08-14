@@ -125,6 +125,19 @@
         styleHost,
         followerCycle,
       },
+      theater: {
+        selector: {
+          target: `.theater_content`,
+        },
+        followerCycle: {
+          update: followerCycle.update,
+        },
+        preBranch(payload) {
+          const gallery = document.querySelector('.theater_content')
+          // @ts-expect-error
+          return gallery?.branch(null, payload.selected) // Promise
+        },
+      },
       sharedControls: {
         selector: {
           target: '.shared-controls *',
