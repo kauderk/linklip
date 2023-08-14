@@ -13,7 +13,8 @@
       | 'right'
       | 'left'
       | 'bottom'
-      | 'top',
+      | 'top'
+      | 'center',
     bounds: 'mouse' as 'mouse' | 'rect' | 'none',
     hide: false,
     minWidth: 300,
@@ -164,6 +165,17 @@
             const b = a == wR ? hR : wR
             _rect[on ? 'height' : 'width'] = (size / a) * b
           }
+        } else if (_config.resizeMode == 'center') {
+          const sideways = direction.match(/right|left/)
+          let delta = sideways ? deltaX : deltaY
+          delta = direction.match(/left|top/) ? delta * -1 : delta
+
+          _rect.width = initialRect.width + delta
+          _rect.height = _rect.width / aspectRatio
+
+          const pivot = delta / 2
+          _rect.x = initialRect.left - pivot
+          _rect.y = initialRect.top - pivot / aspectRatio
         } else {
           const resizeMode = _config.resizeMode
           // right|left|top|bottom

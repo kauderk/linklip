@@ -132,6 +132,7 @@
         followerCycle: {
           update: followerCycle.update,
         },
+        styleHost,
         preBranch(payload) {
           const gallery = document.querySelector('.theater_content')
           // @ts-expect-error
@@ -285,12 +286,7 @@
       timeline.context.mount(),
       player.mount(),
       config.stage.subscribe(stage => {
-        config.resizeMode =
-          stage.mode === 'host'
-            ? bottom.includes(stage.selector!)
-              ? 'inlineBlockReversed'
-              : 'inlineBlock'
-            : 'pictureInPicture'
+        config.resizeMode = 'center'
         const old = config.rect.peek()
         config.rect.set({
           ...old,

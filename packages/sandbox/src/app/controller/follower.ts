@@ -90,7 +90,7 @@ export function follower<F extends FollowerConfig>(config: F) {
     return findSelector(el)?.selector.pointer ? el : undefined
   }
   function maybePanicToRef() {
-    return getSelector().selector.panicToLast && maybeIsHost(hostStack.ref)
+    return getSelector().selector?.panicToLast && maybeIsHost(hostStack.ref)
       ? hostStack.ref
       : undefined
   }

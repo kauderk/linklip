@@ -32,7 +32,7 @@
       new App({
         target: document.body,
         props: {
-          host: 'notionLink',
+          host: undefined,
         },
         context,
       }).$destroy,
