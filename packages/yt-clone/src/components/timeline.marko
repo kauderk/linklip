@@ -1,1 +1,24 @@
-<span>Timeline Component</span>
+$ const arr = [
+  'play',
+  'pause',
+  'high',
+  'low',
+  'muted',
+  'captions',
+  'mini',
+  'tall',
+  'wide',
+  'open',
+  'close',
+  'drag',
+  'x',
+  'maximize',
+  'logo-idle',
+  '',
+] as const
+
+<div class='flex h-9 gap-1'>
+  <for|icon| of=arr>
+    <SVG icon=icon/>
+  </for>
+</div>
