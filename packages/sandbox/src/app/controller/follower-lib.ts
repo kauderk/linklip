@@ -31,6 +31,9 @@ export type Config = {
       postBranch?: () => void
     }
   >
+  hostLess?: {
+    postBranch?: () => void
+  }
   pictureInPicture?: boolean
   rect: PreSignal<Rect>
   dragging?: PreSignal<boolean>

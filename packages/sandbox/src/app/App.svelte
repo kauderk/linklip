@@ -266,6 +266,11 @@
         },
       },
     },
+    hostLess: {
+      postBranch() {
+        config.resizeMode = 'pictureInPicture'
+      },
+    },
     pictureInPicture: true,
   } satisfies FollowerConfig
   function preBranch(payload: { selected: boolean }) {
