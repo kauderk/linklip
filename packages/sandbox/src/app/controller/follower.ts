@@ -9,9 +9,10 @@ import { createMouseTrack } from './mouse-track'
 // prettier-ignore
 import { fitToTarget, mapRange, type FollowerConfig, type Rect, togglePointerTarget, type Stage, animationFrameInterval, type El, camelCaseToTitleCase } from './follower-lib'
 import { createListeners } from '$lib/event-life-cycle'
+import { createDefaultStage } from '../follower/store'
 
 export const followers = preSignal({ message: '' as 'reset' | '' })
-export function follower(config: FollowerConfig) {
+export function follower<F extends FollowerConfig>(config: F) {
   const rect = config.rect
   let hostStack = {
     fn: () => {},
@@ -19,7 +20,7 @@ export function follower(config: FollowerConfig) {
     ref: <El>undefined,
   }
   let dragging = config.dragging ?? preSignal(false)
-  let stage = config.stage ?? (preSignal({ mode: 'free' }) as Stage)
+  let stage = config.stage ?? createDefaultStage()
   let follower = { ref: <HTMLElement>{} }
 
   //#region methods
@@ -50,11 +51,11 @@ export function follower(config: FollowerConfig) {
     clean() {
       hostStack.ref?.style.removeProperty('--selector')
       delete follower.ref.dataset.follower
-      stage.set({ mode: 'free' })
+      stage.mod({ mode: 'free' })
     },
     tryDock(hostRef: HTMLElement) {
       const selector = Object.entries(config.selectors).find(([_, sel]) =>
-        hostRef.matches(parseSelector(sel))
+        isSelector(hostRef, sel)
       )![0]
       hostRef.style.setProperty('--selector', selector) // React won't remove it
       follower.ref.dataset.follower = selector
@@ -74,26 +75,39 @@ export function follower(config: FollowerConfig) {
     return config.selectors[hostStack.selectorKey] ?? {}
   }
   const selectors = Object.values(config.selectors)
-  const parseSelector = (sel: any): string => (typeof sel == 'string' ? sel : sel.selector)
-  function isHost(el?: Element): el is HTMLElement {
-    return selectors.some(sel => el?.matches(parseSelector(sel)))
+  type Sel = FollowerConfig['selectors'][string] | string
+  const parseSelector = (sel: Sel): string => (typeof sel == 'string' ? sel : sel.selector.target)
+  function isSelector(el: Element | undefined, sel: Sel) {
+    return el?.matches(parseSelector(sel))
   }
-  function canPanicToRef() {
-    return getSelector().panicToLastHost && isHost(hostStack.ref)
+  function findSelector(el: any) {
+    return selectors.find(sel => isSelector(el, sel))
   }
-  function findHost(host?: Element) {
-    if (isHost(host)) {
-      return host
-    } else if (canPanicToRef()) {
-      return hostStack.ref
-    }
+  function maybeIsHost(el?: Element) {
+    return findSelector(el) ? <HTMLElement>el : undefined
+  }
+  function maybeUsePointer(el: any) {
+    return findSelector(el)?.selector.pointer ? el : undefined
+  }
+  function maybePanicToRef() {
+    return getSelector().selector?.panicToLast && maybeIsHost(hostStack.ref)
+      ? hostStack.ref
+      : undefined
+  }
+  function tryHost(target?: string) {
+    const potential = config.selectors[target as any]?.selector.target
+    if (!potential) return
+    const newHost = document.querySelector(potential) as HTMLElement
+    if (!newHost) return
+    return newHost
   }
   function tryFindHost(host: HTMLElement) {
     hostStack.selectorKey = selection.tryDock(host)
     const selector = getSelector()
-    if (selector.tryFindHost) {
-      const pre = selector.tryFindHost(host) as El
-      if (isHost(pre)) {
+    if (selector.stageSignal) {
+      let pre = tryHost(selector.stageSignal.peek().selector)
+      pre = maybeIsHost(pre)
+      if (pre) {
         hostStack.selectorKey = selection.tryDock(pre)
         return pre
       } else {
@@ -139,7 +153,7 @@ export function follower(config: FollowerConfig) {
   function branchOutHost(host?: Element) {
     observer.disconnect()
 
-    const tryHost = findHost(host)
+    const tryHost = maybeIsHost(host) ?? maybePanicToRef()
     selection.clean()
     getSelector().followerCycle?.clean?.(follower.ref)
     destroyRectObserver()
@@ -151,11 +165,13 @@ export function follower(config: FollowerConfig) {
       createRectObserver()
 
       getSelector().styleHost?.(hostStack.ref, rect.peek())
-      send(getSelector().followerCycle.update(hostStack.ref, rect.peek()))
+      send(getSelector().followerCycle.update(hostStack.ref, rect.peek(), rect))
+      getSelector().postBranch?.()
       observer.observe(hostStack.ref)
     } else {
       const freezeRect = follower.ref.getBoundingClientRect()
       overlay.clean()
+      config.hostLess?.postBranch?.()
 
       send({
         value: () => ({
@@ -166,6 +182,24 @@ export function follower(config: FollowerConfig) {
       })
     }
     selection.mode(!!tryHost)
+  }
+  async function preBranch(key = '') {
+    const s = stage.peek()
+    // deselect current
+    await config.selectors[s.selector ?? '']?.preBranch?.({
+      current: s.selector,
+      next: key,
+      selected: false,
+    })
+    // select new
+    await config.selectors[key]?.preBranch?.({
+      current: s.selector,
+      next: key,
+      selected: true,
+    })
+  }
+  function branch(host?: Element | (() => Element | undefined), key?: string) {
+    return preBranch(key).then(() => branchOutHost(typeof host === 'function' ? host() : host))
   }
 
   const observer = new IntersectionObserver(
@@ -203,6 +237,7 @@ export function follower(config: FollowerConfig) {
   )
 
   let delta = { x: 0, y: 0 }
+  let pointer: { ref?: HTMLElement } = {}
   const trackPointer = createMouseTrack({
     mousedown(e) {
       e.stopPropagation()
@@ -227,57 +262,82 @@ export function follower(config: FollowerConfig) {
           y: e.clientY - delta.y,
         }),
       })
+
+      // offPointer update
+      if (e.target !== pointer.ref) {
+        togglePointerTarget(false, pointer.ref)
+        pointer.ref = e.target as any
+        const preSelector = findSelector(pointer.ref)?.selector
+        if (preSelector && preSelector.pointer) {
+          pointer.ref = preSelector.outline
+            ? document.querySelector(preSelector.outline) ?? pointer.ref
+            : (pointer.ref as any)
+          togglePointerTarget(true, pointer.ref)
+        }
+      }
     },
 
     mouseup(e) {
+      // offPointer up
+      togglePointerTarget(false, pointer.ref)
+      pointer.ref = undefined
       follower.ref.classList.remove('pointer')
 
-      const ref = canPanicToRef() ? hostStack.ref : undefined
-      branchOutHost(ref)
+      const maybeHost = maybeUsePointer(e.target) ?? maybePanicToRef()
+      branch(maybeHost)
 
       dragging.value = false
     },
   })
 
   //#region context menu
-  const contextMenuSelectorNodes = Object.entries(config.selectors).map(([key, value]) => {
-    return {
-      content: camelCaseToTitleCase(key),
-      callback() {
-        const newHost = document.querySelector(value.selector)
-        if (!newHost) return
-        branchOutHost(newHost)
-      },
-      action(ref: HTMLElement) {
-        const hover = (toggle: boolean) => () =>
-          document.querySelector(value.selector)?.classList.toggle('follower-outline', toggle)
+  const sharedStages = Object.values(config.selectors)
+    .map(val => val.stageSignal?.shared ?? [])
+    .flat()
+  const contextMenuSelectorNodes = Object.entries(config.selectors)
+    .map(([key, value]) => {
+      if (sharedStages.includes(key)) return
+      return {
+        content: camelCaseToTitleCase(key),
+        async callback() {
+          await preBranch(key)
+          const newHost = document.querySelector(value.selector.target)
+          if (!newHost) return
+          branchOutHost(newHost)
+        },
+        action(ref: HTMLElement) {
+          const hover = (toggle: boolean) => () =>
+            document
+              .querySelector(value.selector.target)
+              ?.classList.toggle('follower-outline', toggle)
 
-        return {
-          destroy: cleanSubscribers(
-            createListeners(ref, {
-              mouseenter: hover(true),
-              mouseleave: hover(false),
-            }),
-            hover(false)
-          ),
-        }
-      },
-    }
-  })
+          return {
+            destroy: cleanSubscribers(
+              createListeners(ref, {
+                mouseenter: hover(true),
+                mouseleave: hover(false),
+              }),
+              hover(false)
+            ),
+          }
+        },
+      }
+    })
+    .filter(Boolean)
   if (config.pictureInPicture) {
     contextMenuSelectorNodes.unshift(<any>{
       content: 'Picture In Picture',
-      callback() {
-        branchOutHost(undefined)
-      },
+      callback: branch,
     })
   }
   //#endregion
 
+  type Targets = keyof F['selectors']
   return {
     dragThreshold: createTrackMouseHold({
       threshold: trackPointer,
       hold(e) {
+        // @ts-expect-error
         useContextMenu(e, { nodes: contextMenuSelectorNodes }, true)
       },
     }),
@@ -301,7 +361,7 @@ export function follower(config: FollowerConfig) {
           }),
           followers.subscribe(state => {
             if (state.message == 'reset') {
-              branchOutHost()
+              branch()
             }
             // don't invalidate the state
             state.message = ''
@@ -312,8 +372,20 @@ export function follower(config: FollowerConfig) {
     styleHost() {
       getSelector().styleHost?.(hostStack.ref, rect.peek())
     },
-    mount(host?: Element) {
-      branchOutHost(host)
+    trySwitchHost(target?: Targets) {
+      const potential = config.selectors[target as any]?.selector.target
+      if (!potential) return
+      const newHost = document.querySelector(potential)
+      if (!newHost) return
+      branch(newHost)
+      return true
+    },
+    mount(host?: Element | Targets) {
+      if (typeof host === 'string') {
+        this.trySwitchHost(host)
+      } else {
+        branch(host as any)
+      }
 
       return cleanSubscribers(
         selection.clean,

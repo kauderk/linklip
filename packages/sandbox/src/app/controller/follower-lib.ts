@@ -1,5 +1,6 @@
 import { createContext } from '$lib/create-context'
 import type { PreSignal } from '$lib/pre-signal'
+import type { StageSignal } from '../follower/store'
 import type { follower } from './follower'
 export type FollowerConfig = Omit<Config, 'aspectRatio'>
 export type Config = {
@@ -8,7 +9,12 @@ export type Config = {
   selectors: Record<
     string,
     {
-      selector: string
+      selector: {
+        target: string
+        outline?: string
+        pointer?: boolean
+        panicToLast?: boolean
+      }
       observerSelectors?: {
         resize?: string
         scroll?: string
@@ -16,10 +22,18 @@ export type Config = {
       }
       followerCycle: FollowerCycle
       styleHost?: (hostRef?: HTMLElement, rect?: Rect) => void
-      panicToLastHost?: boolean
-      tryFindHost?: (hostRef: HTMLElement) => Element | null | undefined
+      stageSignal?: StageSignal
+      preBranch?: (payload: {
+        current?: string
+        next: string
+        selected: boolean
+      }) => void | Promise<void>
+      postBranch?: () => void
     }
   >
+  hostLess?: {
+    postBranch?: () => void
+  }
   pictureInPicture?: boolean
   rect: PreSignal<Rect>
   dragging?: PreSignal<boolean>
@@ -33,7 +47,7 @@ export type Stage = PreSignal<{
 export type El = HTMLElement | undefined
 type Send = ReturnType<typeof follower>['sendType']
 export type FollowerCycle = {
-  update: (hostRef: HTMLElement, initRect: Rect) => Send
+  update: (hostRef: HTMLElement, initRect: Rect, initRectSignal: PreSignal<Rect>) => Send
   resize?: (
     followerRef: El,
     entry: IntersectionObserverEntry,

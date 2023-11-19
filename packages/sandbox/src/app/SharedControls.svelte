@@ -1,25 +1,31 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { type FollowerConfig, follower as setSharedControlsContext } from './controller/follower'
+  import { follower as setSharedControlsContext } from './controller/follower'
+  import type { FollowerConfig } from './controller/follower-lib'
   import { cleanSubscribers } from '$lib/stores'
-  import SVG from './SVG.svelte'
   import { preSignal } from '$lib/pre-signal'
   import { defaultCornerFollowerCycle, observerSelectors } from './follower/corner'
   import Controls from './Controls.svelte'
+  import { createDefaultStage, getStagesContext } from './follower/store'
+  import { selectorsFuncs } from './follower/selectors'
 
   const width = 600
   const height = 70
   const config = {
     selectors: {
       notionPage: {
-        selector: '.notion-page-content',
+        selector: {
+          target: '.notion-page-content',
+          panicToLast: true,
+        },
         observerSelectors,
-        panicToLastHost: true,
         followerCycle: defaultCornerFollowerCycle,
       },
       notionTopBar: {
-        selector: '.notion-topbar > div',
-        panicToLastHost: true,
+        selector: {
+          target: '.notion-topbar > div',
+          panicToLast: true,
+        },
         followerCycle: {
           // prettier-ignore
           update(hostRef, initRect) {
@@ -43,22 +49,15 @@
         },
       },
       notionMainScroller: {
-        selector: '.notion-scroller main',
-        panicToLastHost: true,
+        selector: {
+          target: '.notion-scroller main',
+          panicToLast: true,
+        },
         followerCycle: {
           update(hostRef, initRect) {
             return {
               value() {
-                const hostRect = hostRef.getBoundingClientRect()
-                const height = 50
-                const width = Math.min(1000, hostRect.width)
-                // center it vertically, max width 1000 and 50 height at the bottom
-                return {
-                  x: window.innerWidth / 2 - width / 2,
-                  y: window.innerHeight - height,
-                  width,
-                  height,
-                }
+                return selectorsFuncs.notionMainScroller.update(hostRef)
               },
             }
           },
@@ -72,30 +71,42 @@
       width,
       height,
     }),
+    stage: createDefaultStage(),
   } satisfies FollowerConfig
 
   const follower = setSharedControlsContext(config)
+  const stages = getStagesContext()
   const { registerFollower } = follower
 
   onMount(() =>
     cleanSubscribers(
-      follower.mount(document.querySelector(config.selectors.notionMainScroller.selector)!)
+      follower.mount('notionMainScroller'),
+      config.stage.subscribe(stage => {
+        stages.sharedControls.set(stage)
+      })
     )
   )
 </script>
 
 <div class="shared-controls" hidden use:registerFollower>
-  <Controls dragThreshold={follower.dragThreshold} />
+  <div class="wrapper">
+    <Controls dragThreshold={follower.dragThreshold} />
+  </div>
 </div>
 
 <style lang="scss">
   .shared-controls:global(:not([data-follower='notionPage'])) {
     z-index: 102;
   }
-  .shared-controls {
+  .wrapper {
     background-color: #272727;
     border: 3px solid #202020;
     border-radius: 10px;
+
+    max-width: 500px;
+    margin-inline-start: auto;
+  }
+  .shared-controls {
     // padding: 0.5em;
     position: fixed;
     z-index: 100;

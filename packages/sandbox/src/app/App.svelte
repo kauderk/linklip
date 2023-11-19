@@ -22,7 +22,7 @@
 				height,
 			}),
       resizing: preSignal(false),
-      stage: preSignal({ mode: 'free' }) as Exclude<Config['stage'], undefined>,
+      stage: createDefaultStage(),
       resizeMode: 'inlineBlock' as ResizeConfig['resizeMode'],
     }
   }
@@ -55,7 +55,6 @@
   import {
     setFollowerContext,
     toggleStyle,
-    type Config,
     type FollowerConfig,
     type FollowerCycle,
   } from './controller/follower'
@@ -63,6 +62,8 @@
   import { cornerFollowerCycle, observerSelectors } from './follower/corner'
   import { getPlayerContext } from './timeline/context'
   import { setTimelineContext } from './timeline/controller'
+  import { createDefaultStage, getStagesContext } from './follower/store'
+  import { selectorsFuncs } from './follower/selectors'
 
   const followerCycle = {
     update(hostRef, initRect) {
@@ -104,29 +105,57 @@
     },
   } satisfies FollowerCycle
 
-  const cornerOffset = {
+  export let player = getPlayerContext()
+  const stages = getStagesContext()
+
+  let cornerOffset = {
     y: 70,
     x: 20,
   }
+  const originalCornerOffset = { ...cornerOffset }
   const config = {
     ...createConfig(),
     selectors: {
       notionLink: {
-        selector: `[href*="youtu"]>span`,
+        selector: {
+          target: `[href*="youtu"]>span`,
+          pointer: true,
+        },
         observerSelectors,
         styleHost,
         followerCycle,
+        postBranch() {
+          config.resizeMode = 'inlineBlock'
+        },
+      },
+      theater: {
+        selector: {
+          target: `.theater_content`,
+        },
+        followerCycle: {
+          update: followerCycle.update,
+        },
+        styleHost,
+        preBranch(payload) {
+          const gallery = document.querySelector('.theater_content')
+          // @ts-expect-error
+          return gallery?.branch(null, payload.selected) // Promise
+        },
       },
       sharedControls: {
-        selector: '.shared-controls *',
-        observerSelectors,
-        tryFindHost(preHostRef: HTMLElement) {
-          return document.querySelector('.notion-page-content')
+        selector: {
+          target: '.shared-controls *',
+          outline: '.shared-controls',
+          pointer: true,
         },
+        observerSelectors,
+        stageSignal: stages.sharedControls,
         followerCycle,
       },
       notionPage: {
-        selector: '.notion-page-content',
+        selector: {
+          target: '.notion-page-content',
+        },
         observerSelectors,
         followerCycle: cornerFollowerCycle({
           update: r => ({
@@ -143,7 +172,9 @@
         }),
       },
       notionTopBar: {
-        selector: '.notion-topbar > div',
+        selector: {
+          target: '.notion-topbar > div',
+        },
         followerCycle: {
           update(hostRef) {
             return {
@@ -178,45 +209,56 @@
         },
       },
       notionMainScroller: {
-        selector: '.notion-scroller main',
-        followerCycle: cornerFollowerCycle({
-          update: (r, i) => {
-            // console.log('update', arguments)
+        selector: {
+          target: '.notion-scroller main',
+        },
+        followerCycle: {
+          update(hostRef, _, signal) {
             return {
-              ...i,
-              x: r.x - cornerOffset.x,
-              y: r.y - cornerOffset.y,
+              value() {
+                const crr = signal.peek()
+                const v = selectorsFuncs.notionMainScroller.update(hostRef)
+                return {
+                  ...crr,
+                  x: v.x + v.width - crr.width - cornerOffset.x,
+                  y: window.innerHeight - crr.height - cornerOffset.y,
+                }
+              },
             }
           },
-          resize: (r, i, e) => {
-            // console.log('resize', arguments)
-            return {
-              ...i,
-              x: window.innerWidth - i.width - cornerOffset.x,
-              y: window.innerHeight - i.height - cornerOffset.y,
-            }
-          },
-        }),
+        },
+        postBranch() {
+          config.resizeMode = 'inlineBlockReversed'
+        },
       },
       leftGallery: {
-        selector: '.left .item.block',
+        selector: {
+          target: '.left .item.block',
+        },
         followerCycle,
+        preBranch,
         observerSelectors: {
           scroll: '.gallery .left .items',
           resize: '.gallery .left .items',
         },
       },
       rightGallery: {
-        selector: '.right .item.block',
+        selector: {
+          target: '.right .item.block',
+        },
         followerCycle,
+        preBranch,
         observerSelectors: {
           scroll: '.gallery .right .items',
           resize: '.gallery .right .items',
         },
       },
       topGallery: {
-        selector: '.top .item.block',
+        selector: {
+          target: '.top .item.block',
+        },
         followerCycle,
+        preBranch,
         observerSelectors: {
           scroll: '.gallery .top .items',
           resize: '.gallery .top .items',
@@ -224,10 +266,21 @@
         },
       },
     },
+    hostLess: {
+      postBranch() {
+        config.resizeMode = 'pictureInPicture'
+      },
+    },
     pictureInPicture: true,
   } satisfies FollowerConfig
+  function preBranch(payload: { selected: boolean }) {
+    // @ts-expect-error
+    const direction = this.selector.target.split(' ')[0].slice(1)
+    const gallery = document.querySelector('.gallery-' + direction)
+    // @ts-expect-error
+    return gallery?.branch('[href*="youtu"]>span', payload.selected) // Promise
+  }
 
-  export let player = getPlayerContext()
   const { paused, fullScreen, time } = player
   export let timeline = setTimelineContext({ controlsMinHeight: 38 })
   const { resizeRect } = timeline.context
@@ -235,19 +288,15 @@
   const { rect } = config
   const { registerFollower } = follower
 
-  export let host: Element | undefined = undefined
+  export let host: Element | undefined | string = undefined
+  const bottom = ['notionPage', 'notionMainScroller']
+  const top = ['notionTopBar']
   onMount(() =>
     cleanSubscribers(
       follower.mount(host),
       timeline.context.mount(),
       player.mount(),
       config.stage.subscribe(stage => {
-        config.resizeMode =
-          stage.mode === 'host'
-            ? ['notionPage', 'notionMainScroller'].includes(stage.selector!)
-              ? 'inlineBlockReversed'
-              : 'inlineBlock'
-            : 'pictureInPicture'
         const old = config.rect.peek()
         config.rect.set({
           ...old,
@@ -257,6 +306,19 @@
       config.resizing.subscribe(resizing => {
         if (!resizing) {
           follower.styleHost()
+        }
+      }),
+      stages.sharedControls.subscribe(stage => {
+        const self = config.stage.peek()
+        if (stage.mode != 'host' || self.mode == 'free') return
+
+        // FIXME: no side effects
+        cornerOffset = {
+          ...originalCornerOffset,
+          y: !bottom.includes(stage.selector!) ? 10 : originalCornerOffset.y,
+        }
+        if ([...bottom, ...top].includes(self.selector!)) {
+          follower.trySwitchHost(stage.selector)
         }
       })
     )

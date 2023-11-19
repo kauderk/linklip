@@ -8,11 +8,13 @@
   import Resize from './Resize.svelte'
   import { player, storyboard } from './timeline/context'
   import Gallery from './gallery/GalleryController.svelte'
+  import { stages } from './follower/store'
+  import Theater from './gallery/Theater.svelte'
 
   onMount(() => {
     const FirstUpperCase = (str: string) => str[0].toUpperCase() + str.slice(1)
     const context = new Map(
-      Object.entries({ player, storyboard }).map(e => [FirstUpperCase(e[0]), e[1]()])
+      Object.entries({ player, storyboard, stages }).map(e => [FirstUpperCase(e[0]), e[1]()])
     )
 
     // document.body.classList.add('debug')
@@ -24,10 +26,13 @@
       new Gallery({
         target: document.body,
       }).$destroy,
+      new Theater({
+        target: document.body,
+      }).$destroy,
       new App({
         target: document.body,
         props: {
-          host: document.querySelector('.notion-scroller main')!,
+          host: undefined,
         },
         context,
       }).$destroy,
@@ -57,6 +62,9 @@
     .follower-outline {
       outline: 1px solid red;
       opacity: 0.6;
+    }
+    .notion-help-button {
+      display: none !important;
     }
   </style>
 </svelte:head>

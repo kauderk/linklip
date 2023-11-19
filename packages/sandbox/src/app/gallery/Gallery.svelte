@@ -1,6 +1,6 @@
 <script lang="ts">
   import { preSignal } from '$lib/pre-signal'
-  import { onMount } from 'svelte'
+  import { onMount, tick } from 'svelte'
   import { resize, type ResizeConfig } from '../Resize.svelte'
   import { createMouseTrack } from '../controller/mouse-track'
   import { createDebouncedListener } from '$lib/resize'
@@ -69,7 +69,7 @@
   export let type: 'side' | 'top' = 'side'
   export let direction: 'left' | 'right' = 'left'
 
-  export let size = 20
+  export let size = 0
   export let w = 300
   export let rows = 1
   export let fixed = true
@@ -132,6 +132,17 @@
 
   const updateRect = isTop ? updateTopRect : updateSideRect
   onMount(() => createDebouncedListener(window, 'resize', updateRect))
+
+  function branch(target: HTMLElement) {
+    const gl = 'gallery-' + (isTop ? 'top' : direction)
+    target.classList.add(gl)
+    // @ts-expect-error
+    target.branch = (id, add) => {
+      if (size === 0 && !add) return
+      size = size + (add ? 1 : -1)
+      return tick()
+    }
+  }
 </script>
 
 {#if type == 'side'}
@@ -141,8 +152,9 @@
     style:--itemWidth={lookRect.itemWidth}
     class:fixed
     class:absolute={!fixed}
-    class="gallery z-10 h-full w-auto select-none opacity-30 {type}"
+    class="gallery z-10 h-auto w-auto select-none opacity-30 {type}"
     style="{direction}: 0;"
+    use:branch
     hidden
     use:portal
   >
@@ -165,6 +177,7 @@
     style:--itemWidth={lookRect.itemWidth}
     class="gallery {type}"
     use:topBarPortal
+    use:branch
     hidden
   >
     <div
