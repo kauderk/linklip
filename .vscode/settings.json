@@ -5,6 +5,7 @@
 		"**/.gitignore": true,
 		//
 		"**/.svelte-kit": true,
+		"**/.marko-run": true,
 		"**/node_modules": true,
 		"**/patches": true,
 		"**/dist": true,

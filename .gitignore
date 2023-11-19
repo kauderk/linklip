@@ -150,3 +150,6 @@ __pycache__/
 venv
 # packages
 .deta
+
+# Marko
+.marko-run

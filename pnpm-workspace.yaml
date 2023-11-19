@@ -2,3 +2,5 @@ prefer-workspace-packages: true
 packages:
   - 'apps/*'
   - 'packages/**'
+  # exclude marko packages
+  - '!packages/yt-clone'

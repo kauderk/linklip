@@ -5,3 +5,7 @@
 - todo
 	- remove ui in mini mode, add floating controls when interacting with the mini player
 	- when there is no available follower, default to the url mode
+
+/packages/yt-clone
+- bugs
+	- remove the package from "workspaces" since marko-run doesn't support pnpm

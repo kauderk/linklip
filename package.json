@@ -10,7 +10,8 @@
   "license": "MIT",
   "workspaces": [
     "apps/*",
-    "packages/**"
+    "packages/**",
+    "!packages/yt-clone"
   ],
   "scripts": {
     "preview": "turbo run preview",
