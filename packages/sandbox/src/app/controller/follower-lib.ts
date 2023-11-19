@@ -28,6 +28,7 @@ export type Config = {
         next: string
         selected: boolean
       }) => void | Promise<void>
+      postBranch?: () => void
     }
   >
   pictureInPicture?: boolean

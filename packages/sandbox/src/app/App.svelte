@@ -124,6 +124,9 @@
         observerSelectors,
         styleHost,
         followerCycle,
+        postBranch() {
+          config.resizeMode = 'inlineBlock'
+        },
       },
       theater: {
         selector: {
@@ -224,6 +227,9 @@
             }
           },
         },
+        postBranch() {
+          config.resizeMode = 'inlineBlockReversed'
+        },
       },
       leftGallery: {
         selector: {
@@ -286,7 +292,6 @@
       timeline.context.mount(),
       player.mount(),
       config.stage.subscribe(stage => {
-        config.resizeMode = 'center'
         const old = config.rect.peek()
         config.rect.set({
           ...old,
