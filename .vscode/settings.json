@@ -57,7 +57,11 @@
 	},
 	//  change if else color for javascript and typescript
 
+	"tailwindCSS.includeLanguages": {
+    "marko": "html"
+	},
 	"editor.tabSize": 2,
+	"editor.insertSpaces": true,
 	"editor.detectIndentation": false,
 	"search.exclude": {
 		"package-lock.json": true
