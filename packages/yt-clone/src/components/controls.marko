@@ -1,0 +1,88 @@
+import {twCva} from '../utils/twCva'
+let/handleClick=(
+  function handleClick_() {
+    console.log('Clicked!')
+  }
+)
+let/ctx={
+  centered: true,
+  togglePlay() {
+    handleClick()
+  },
+  volumeLevel: 'high' as 'high',
+  volume: 0.5,
+  changeVolume() {
+    handleClick()
+  },
+  time: {
+    current: 0,
+    total: 0,
+  },
+  speed: 1,
+  changePlaybackSpeed() {
+    handleClick()
+  },
+  theater: false,
+  fullScreen: {
+    enabled: false,
+    toggle() {
+      handleClick()
+    },
+  },
+  toggleTheaterMode() {
+    handleClick()
+  },
+  toggleMute() {
+    handleClick()
+  },
+  paused: true,
+}
+let/f=twCva("text-current p-0 h-7 w-7 cursor-pointer opacity-85 transition-opacity duration-150 ease-in-out hover:opacity-100", {
+  defaultVariants: {
+    variant: null,
+  },
+  variants: {
+    variant: {
+      error: "alert-error",
+      info: "alert-info",
+      success: "alert-success",
+      warning: "alert-warning",
+    },
+  },
+});
+//
+
+
+
+
+
+div class='controls bg-blue flex gap-2 p-1 items-center justify-center'
+  button class='playPauseBtn bg-none border-none text-current p-0 h-7 w-7 text-lg cursor-pointer opacity-85 transition-opacity duration-150 ease-in-out hover:opacity-100' onClick=ctx.togglePlay
+    SVG icon=(ctx.paused ? 'play' : 'pause')
+  div class='volume-container flex items-center'
+    button class='muteBtn text-current p-0 h-7 w-7 cursor-pointer opacity-85 transition-opacity duration-150 ease-in-out hover:opacity-100' onClick=ctx.toggleMute
+      SVG icon=ctx.volumeLevel
+    input [
+      class='volume-slider w-0 transform-origin-left transform scaleX-0 transition-width duration-150 ease-in-out transition-transform duration-150 ease-in-out appearance-auto hover:w-20 focus-within:w-20'
+      type='range'
+      min=0
+      max=1
+      step='any'
+      value=ctx.volume
+      onInput=ctx.changeVolume
+    ]
+  div class='duration-container flex items-center gap-1 flex-grow-1'
+    span.currentTime -- ${ctx.time.current}
+    -- /
+    span.totalTime -- ${ctx.time.total}
+  button class='captionsBtn ' onClick=ctx.toggleCaptions
+    SVG icon='captions'
+  button.playbackSpeedBtn -- ${ctx.speed}x
+  button.miniPlayerBtn
+    SVG icon='mini'
+  button.theaterBtn onClick=ctx.toggleTheaterMode
+    SVG icon=(ctx.theater ? 'tall' : 'wide')
+  button.fullScreenBtn onClick=(ctx.fullScreen.toggle)
+    SVG icon=(ctx.fullScreen.enabled ? 'open' : 'close')
+//
+
