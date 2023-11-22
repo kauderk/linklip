@@ -64,7 +64,6 @@ div.controls.bg-blue.flex.gap-2.p-1.items-center.justify-center
     SVG icon=(ctx.paused ? 'play' : 'pause')
   let/isHover=false
   let/isFocus=false
-  let/volume=.2
 
   div.volume-container.flex.items-center [
     onMouseOut() { isHover = false }
@@ -81,9 +80,9 @@ div.controls.bg-blue.flex.gap-2.p-1.items-center.justify-center
       min=0
       max=1
       step='any'
-      value=volume
-      onChange(e){volume = Number(e.srcElement.value)}
-      onInput(e){volume = Number(e.srcElement.value)}
+      value=ctx.volume
+      onChange(e){ctx.volume = Number(e.srcElement.value)}
+      onInput(e){ctx.volume = Number(e.srcElement.value)}
     ]
   div.duration-container.flex.items-center.gap-1.flex-grow
     span.currentTime -- ${ctx.time.current}
