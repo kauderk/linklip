@@ -4,7 +4,7 @@ import { properMapIDSuffix } from '$v3/lib/utils'
 import { Flow } from './flow'
 import { GetUidResultObj } from './query'
 
-async function URLResults(el: El) {
+export async function URLResults(el: El) {
   const { key, uidResults } = GetUidResultObj(el)
 
   if (!key) {
