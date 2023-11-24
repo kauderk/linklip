@@ -1,6 +1,15 @@
+import { YTGIF_Config } from '$v3/lib/types/config'
 import type { DeepPartial } from '$lib/types/utilities'
+import { mutationTargets } from '$v3/init/observer/formatter/filter'
 import { mergeDeep } from '$lib/utils'
 import type { ParagraphBlockObjectResponse } from '@notionhq/client/build/src/api-endpoints'
+
+export function notionMutationTargets(mutationsList: MutationRecord[], selectors: string[]) {
+  const sel = selectors[0]
+  return mutationTargets(mutationsList, sel).filter(
+    v => v.classList.contains(sel) && YTGIF_Config.guardClause((v as any).href)
+  )
+}
 
 /**
  * Blocks where the a block is referenced by a unique id
