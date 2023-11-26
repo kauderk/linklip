@@ -2,7 +2,6 @@
   import SharedControls from './SharedControls.svelte'
   import { onMount } from 'svelte'
   import '../app.css'
-  import App from './App.svelte'
   import { cleanSubscribers } from '$lib/stores'
   import { createContextMenu } from '../context-menu/fullscreen'
   import Resize from './Resize.svelte'
@@ -11,11 +10,28 @@
   import { stages } from './follower/store'
   import Theater from './gallery/Theater.svelte'
 
-  onMount(() => {
+	export let ObserveSpans_DeployUrlButtons = (s: string[]) => Promise.resolve(null as any)
+	export let Announcer: any
+
+  onMount(async() => {
     const FirstUpperCase = (str: string) => str[0].toUpperCase() + str.slice(1)
     const context = new Map(
       Object.entries({ player, storyboard, stages }).map(e => [FirstUpperCase(e[0]), e[1]()])
     )
+		
+		const announcers = (
+			await Promise.all([
+				ObserveSpans_DeployUrlButtons(['bp3-icon-video']),
+			])
+		).map(system => {
+			if (!system) return () => {}
+			const announcer = new Announcer({
+				target: document.body,
+				props: { system },
+			})
+			return announcer.$destroy
+		})
+		
 
     // document.body.classList.add('debug')
     return cleanSubscribers(
@@ -29,13 +45,7 @@
       new Theater({
         target: document.body,
       }).$destroy,
-      new App({
-        target: document.body,
-        props: {
-          host: undefined,
-        },
-        context,
-      }).$destroy,
+      ...announcers,
       new Resize({
         target: document.body,
       }).$destroy,

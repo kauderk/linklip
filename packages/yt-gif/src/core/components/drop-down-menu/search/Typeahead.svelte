@@ -43,7 +43,7 @@
    */
   export let limit: number = Infinity
 
-  import fuzzy from 'fuzzy'
+  import fuzzy from './fuzzy'
   import Search from './Search.svelte'
   import { tick, createEventDispatcher, afterUpdate } from 'svelte'
   import { destroyEvents } from './actions'
