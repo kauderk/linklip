@@ -4,7 +4,7 @@ import { createObserverAndDeployOnIntersection } from '../system/system'
 
 export async function ObserveSpans_DeployUrlButtons(
   targetSelectors: string[],
-  appCb: (...args: any) => Function | Promise<any>
+  appCb: (...args: any) => any
 ) {
   return createObserverAndDeployOnIntersection(targetSelectors, {
     mutationTargets(mutationsList, selectors) {
@@ -29,11 +29,20 @@ export async function ObserveSpans_DeployUrlButtons(
 
         console.log('clicked', e.target.href)
       }
-      const style = createNotionHrefStyle(containerID)
 
       // notionHref is a React Node, so it rerenders all the time
       // this is an expensive operation, so we need to memoize it
-      await appCb(notionHref.href, notionHref)
+      const app = appCb(notionHref.href, notionHref)
+
+      const maxWidth = notionHref?.closest(`.notranslate`)?.clientWidth || 350
+      const width = app.rect.peek().width
+      const rect = {
+        width,
+        maxWidth,
+        height: width / (16 / 9),
+        maxHeight: maxWidth / (16 / 9),
+      }
+      const style = createNotionHrefStyle(containerID, rect)
 
       return function onRemoved() {
         style.destroy()
@@ -43,9 +52,10 @@ export async function ObserveSpans_DeployUrlButtons(
   })
 }
 
-function createNotionHrefStyle(containerID: any) {
+function createNotionHrefStyle(containerID: any, _rect: any) {
   const styleID = `linklip-follower-portal`
   const style = document.getElementById(styleID) ?? document.createElement('style')
+
   // style the target to accommodate the portal
   style.innerHTML = `
 				[data-block-id="${containerID}"] 
@@ -55,8 +65,10 @@ function createNotionHrefStyle(containerID: any) {
 					/* pointer-events: none; */
 					/* text-wrap: nowrap; */
 
-					/* height: auto; */
-					/* width: 390px; */
+					height: ${_rect.height}px; 
+					width: ${_rect.width}px;
+					max-width: ${_rect.maxWidth}px;
+					max-height: ${_rect.maxHeight}px;
 					/* aspect-ratio: 16 / 9; */
 					
 					outline: 1px solid black;

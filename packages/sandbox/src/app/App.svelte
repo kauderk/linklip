@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script lang="ts" context="module">
   const _Config = {
     width: 350,
@@ -289,7 +291,7 @@
   export let timeline = setTimelineContext({ controlsMinHeight: 38 })
   const { resizeRect } = timeline.context
   export let follower = setFollowerContext(config)
-  const { rect } = config
+  export let { rect } = config
   const { registerFollower } = follower
 
   export let host: Element | undefined | string = undefined

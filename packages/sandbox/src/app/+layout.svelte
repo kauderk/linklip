@@ -37,23 +37,24 @@
           context,
         })
         // set
-        if (!timeout) {
-          urlToSvelteMap.set(key, app)
-        } else {
-          setTimeout(() => urlToSvelteMap.set(key, app), timeout)
-        }
+        // if (!timeout) {
+        urlToSvelteMap.set(key, app)
+        // } else {
+        //   setTimeout(() => urlToSvelteMap.set(key, app), timeout)
+        // }
       } else {
         // update
         if (document.contains(host)) {
-          if (!timeout) {
-            urlToSvelteMap.get(key).$set({ host })
-          } else {
-            setTimeout(() => urlToSvelteMap.get(key).$set({ host }), timeout)
-          }
+          // if (!timeout) {
+          urlToSvelteMap.get(key).$set({ host })
+          // } else {
+          // setTimeout(() => urlToSvelteMap.get(key).$set({ host }), timeout)
+          // }
         } else {
           console.log('host is not in document')
         }
       }
+      return urlToSvelteMap.get(key)
     }
 
     const announcers = (
