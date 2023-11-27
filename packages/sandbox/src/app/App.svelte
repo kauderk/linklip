@@ -31,11 +31,12 @@
     const on = !!rect
     const maxWidth = hostRef?.closest(`.notranslate`)?.clientWidth || _Config.width
     const _rect = rect || ({} as any) // if falsy, it will be removed
+    console.log('styleHost')
     toggleStyle('width', `${_rect.width}px`, on, hostRef)
     toggleStyle('max-width', `${maxWidth}px`, on, hostRef)
     toggleStyle('height', `${_rect.height}px`, on, hostRef)
     toggleStyle('max-height', `${maxWidth / (16 / 9)}px`, on, hostRef)
-    toggleStyle('display', '-webkit-inline-box', on, hostRef)
+    // toggleStyle('display', '-webkit-inline-box', on, hostRef)
     toggleStyle('background', 'black', on, hostRef)
     toggleStyle('opacity', '1', on, hostRef)
   }
@@ -81,6 +82,8 @@
       }
     },
     clean(followerRef) {
+      console.log('styleHost remove offset')
+
       followerRef?.style.removeProperty('--topOffset')
       followerRef?.style.removeProperty('--leftOffset')
     },
@@ -91,6 +94,7 @@
       }
       const topOffset = entry.boundingClientRect.top - entry.intersectionRect.top
       const leftOffset = entry.boundingClientRect.left - entry.intersectionRect.left
+      console.log('styleHost add   offset')
       followerRef?.style.setProperty('--topOffset', topOffset + 'px')
       followerRef?.style.setProperty('--leftOffset', leftOffset + 'px')
 
@@ -118,7 +122,7 @@
     selectors: {
       notionLink: {
         selector: {
-          target: `[href*="youtu"]>span`,
+          target: `[href*="youtu"]`,
           pointer: true,
         },
         observerSelectors,
@@ -291,9 +295,13 @@
   export let host: Element | undefined | string = undefined
   const bottom = ['notionPage', 'notionMainScroller']
   const top = ['notionTopBar']
+
+  $: follower.changeHost(host)
+
   onMount(() =>
     cleanSubscribers(
-      follower.mount(host),
+      follower.mount(),
+
       timeline.context.mount(),
       player.mount(),
       config.stage.subscribe(stage => {

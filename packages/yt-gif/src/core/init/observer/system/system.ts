@@ -18,7 +18,7 @@ export async function createObserverAndDeployOnIntersection(
 		async trackFoundEntry(data) {
 			if (!data.params.target.parentElement) return
 			const tracks = {
-				target: data.params.target.parentElement,
+				target: data.params.target,
 				onRemoved: await this.deploy(data),
 			}
 			if (Object.values(tracks).every(v => !!v)) {
@@ -41,12 +41,13 @@ export async function createObserverAndDeployOnIntersection(
 
 	// observe and deploy on intersection
 	const observer = new MutationObserver(async mutationsList => {
-		await deployOnIntersection(
-			cb.mutationTargets(mutationsList, targetSelectors)
-		)
 		// https://stackoverflow.com/a/15995992
 		cb.found = cb.found.filter(
 			params => !removedTargets(mutationsList, params)
+		)
+
+		await deployOnIntersection(
+			cb.mutationTargets(mutationsList, targetSelectors)
 		)
 	})
 

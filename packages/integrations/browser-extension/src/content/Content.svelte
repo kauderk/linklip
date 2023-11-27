@@ -9,9 +9,7 @@
   // import CommandPalette from '@packages/yt-gif/src/core/components/drop-down-menu/Dropdown/CommandPalette.svelte'
   // import { YTApiPromise } from '@packages/yt-gif/src/core/api-ready/gate'
 
-	import { ObserveSpans_DeployUrlButtons } from '@packages/yt-gif/src/core/init/observer/formatter'
-	import Announcer from '@packages/yt-gif/src/core/components/announcer/App/Announcer.svelte'
-
+  import { ObserveSpans_DeployUrlButtons } from '@packages/yt-gif/src/core/init/observer/formatter'
 
   function load() {
     const url = chrome.runtime.getURL('src/shared/widgetapi.js')
@@ -29,5 +27,5 @@
 <DropdownMenu /> -->
 
 {#await load() then _}
-  <Layout {ObserveSpans_DeployUrlButtons} {Announcer}/>
+  <Layout {ObserveSpans_DeployUrlButtons} />
 {/await}

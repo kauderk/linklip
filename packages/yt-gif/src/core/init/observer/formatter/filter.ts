@@ -22,7 +22,7 @@ function NodesRecord(Nodes: NodeList, sel: s) {
 
   return (Array.from(Nodes) as HTMLElement[])
     .map(x => {
-      if (!!x.tagName) return
+      if (!x.tagName) return
       if (x.matches(sel)) return x
       else return Array.from(x.querySelectorAll(sel))
     })
