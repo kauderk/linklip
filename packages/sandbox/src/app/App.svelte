@@ -296,12 +296,12 @@
   const bottom = ['notionPage', 'notionMainScroller']
   const top = ['notionTopBar']
 
-  $: follower.changeHost(host)
+  let annoying = false
+  $: annoying && follower.changeHost(host)
 
   onMount(() =>
     cleanSubscribers(
-      follower.mount(),
-
+      follower.mount(host),
       timeline.context.mount(),
       player.mount(),
       config.stage.subscribe(stage => {
@@ -328,7 +328,11 @@
         if ([...bottom, ...top].includes(self.selector!)) {
           follower.trySwitchHost(stage.selector)
         }
-      })
+      }),
+      (() => {
+        annoying = true
+        return () => {}
+      })()
     )
   )
   const tiny = computed(() => config.rect.value.width <= 80)

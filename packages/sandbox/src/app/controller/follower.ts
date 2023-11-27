@@ -202,7 +202,7 @@ export function follower<F extends FollowerConfig>(config: F) {
     })
   }
   function branch(host?: Element | (() => Element | undefined), key?: string) {
-    return preBranch(key).then(() => branchOutHost(typeof host === 'function' ? host() : host))
+    return branchOutHost(typeof host === 'function' ? host() : host)
   }
 
   const observer = new IntersectionObserver(
@@ -386,7 +386,7 @@ export function follower<F extends FollowerConfig>(config: F) {
     changeHost(host?: Element | Targets) {
       if (typeof host === 'string') {
         this.trySwitchHost(host)
-      } else {
+      } else if (host) {
         branch(host as any)
       }
     },

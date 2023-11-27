@@ -24,8 +24,10 @@
 
     const urlToSvelteMap = new Map<string, any>()
 
-    let timeout = 1000
     function getOrCreateApp(key: string, host: HTMLElement) {
+      // @ts-ignore
+      let timeout = window.renderAppDelay ?? 50
+
       if (!urlToSvelteMap.has(key)) {
         const app = new App({
           target: document.body,
@@ -35,11 +37,19 @@
           context,
         })
         // set
-        setTimeout(() => urlToSvelteMap.set(key, app), timeout)
+        if (!timeout) {
+          urlToSvelteMap.set(key, app)
+        } else {
+          setTimeout(() => urlToSvelteMap.set(key, app), timeout)
+        }
       } else {
         // update
         if (document.contains(host)) {
-          setTimeout(() => urlToSvelteMap.get(key).$set({ host }), timeout)
+          if (!timeout) {
+            urlToSvelteMap.get(key).$set({ host })
+          } else {
+            setTimeout(() => urlToSvelteMap.get(key).$set({ host }), timeout)
+          }
         } else {
           console.log('host is not in document')
         }
