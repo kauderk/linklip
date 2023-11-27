@@ -32,7 +32,7 @@ export function createElementIntersectionCycle(
 
 export function validTemplates(el: HTMLElement): el is HTMLElement {
   //AvoidAllZoomChildren
-  const trace = !isRendered(el) || !el.closest('.rm-block-main') || !isNotZoomPath(el) || el.hidden
+  const trace = !isRendered(el) || el.hidden
   return !trace
 }
 export function processUnknownTargets(targets: HTMLElement[]) {

@@ -23,8 +23,8 @@ function NodesRecord(Nodes: NodeList, sel: s) {
   return (Array.from(Nodes) as HTMLElement[])
     .map(x => {
       if (!!x.tagName) return
-      if (x.classList.contains(sel)) return x
-      else return Array.from(x.querySelectorAll(`.${sel}`))
+      if (x.matches(sel)) return x
+      else return Array.from(x.querySelectorAll(sel))
     })
     .flat(Infinity)
     .filter((node: any, i, a) => {

@@ -10,28 +10,29 @@
   import { stages } from './follower/store'
   import Theater from './gallery/Theater.svelte'
 
-	export let ObserveSpans_DeployUrlButtons = (s: string[]) => Promise.resolve(null as any)
-	export let Announcer: any
+  export let ObserveSpans_DeployUrlButtons = (s: string[]) => Promise.resolve(null as any)
+  export let Announcer: any
 
-  onMount(async() => {
+  onMount(async () => {
     const FirstUpperCase = (str: string) => str[0].toUpperCase() + str.slice(1)
     const context = new Map(
       Object.entries({ player, storyboard, stages }).map(e => [FirstUpperCase(e[0]), e[1]()])
     )
-		
-		const announcers = (
-			await Promise.all([
-				ObserveSpans_DeployUrlButtons(['bp3-icon-video']),
-			])
-		).map(system => {
-			if (!system) return () => {}
-			const announcer = new Announcer({
-				target: document.body,
-				props: { system },
-			})
-			return announcer.$destroy
-		})
-		
+
+    const announcers = (
+      await Promise.all([
+        ObserveSpans_DeployUrlButtons([
+          'a.notion-link-token.notion-focusable-token.notion-enable-hover',
+        ]),
+      ])
+    ).map(system => {
+      if (!system) return () => {}
+      const announcer = new Announcer({
+        target: document.body,
+        props: { system },
+      })
+      return announcer.$destroy
+    })
 
     // document.body.classList.add('debug')
     return cleanSubscribers(

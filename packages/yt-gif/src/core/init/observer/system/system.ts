@@ -9,7 +9,7 @@ import type { MutationObj, ObserverCallbacks, FuncProcessTarget } from './types'
 
 type Assign = Pick<ObserverCallbacks, 'deploy'> & MutationObj
 export async function createObserverAndDeployOnIntersection(
-	targetClasses: s[],
+	targetSelectors: s[],
 	assign: Assign
 ) {
 	// set up all visible YT GIFs
@@ -34,15 +34,15 @@ export async function createObserverAndDeployOnIntersection(
 
 	// deploy existing elements
 	await deployOnIntersection(
-		targetClasses
-			.map(c => document.queryAllasArr('.' + c))
+		targetSelectors
+			.map(s => document.queryAllasArr(s))
 			.flat() as HTMLElement[]
 	)
 
 	// observe and deploy on intersection
 	const observer = new MutationObserver(async mutationsList => {
 		await deployOnIntersection(
-			cb.mutationTargets(mutationsList, targetClasses)
+			cb.mutationTargets(mutationsList, targetSelectors)
 		)
 		// https://stackoverflow.com/a/15995992
 		cb.found = cb.found.filter(
@@ -70,7 +70,7 @@ export async function createObserverAndDeployOnIntersection(
 					params: {
 						target: process.target,
 						message: 'mutation entry',
-						targetClass: targetClasses[0],
+						targetClass: targetSelectors[0],
 					},
 				})
 			)

@@ -10,7 +10,7 @@ export async function create_ObserveTarget_DeployComponent<
   T = unknown
 >(
   component: ConstructorOfATypedSvelteComponent,
-  targetClass: string[],
+  targetSelectors: string[],
   config: {
     getEntry: FuncPayload<
       Promise<
@@ -39,25 +39,25 @@ export async function create_ObserveTarget_DeployComponent<
     targetEntryMap.update(o => o)
   }
 
-  const observer = await createObserverAndDeployOnIntersection(targetClass, {
+  const observer = await createObserverAndDeployOnIntersection(targetSelectors, {
     mutationTargets: config.mutationTargets,
     processFoundTargets: config.processFoundTargets,
 
     async deploy(data) {
-      data.params.target.hidden = true
+      // data.params.target.hidden = true
 
       // @ts-expect-error
       const entry = await config.getEntry(data).catch()
 
       if (!entry) {
-        data.params.target.hidden = false
+        // data.params.target.hidden = false
         return
       }
 
       updateTargetProps(map => map.set(data.params.target, entry))
 
       return function onRemoved() {
-        data.params.target.hidden = false
+        // data.params.target.hidden = false
         updateTargetProps(map => map.delete(data.params.target))
         entry.onRemoved?.()
       }
