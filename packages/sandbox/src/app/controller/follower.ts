@@ -52,7 +52,7 @@ export function follower<F extends FollowerConfig>(config: F) {
   }
   const selection = {
     clean(reset = true) {
-      hostStack.ref?.style.removeProperty('--selector')
+      // hostStack.ref?.style.removeProperty('--selector')
       delete follower.ref.dataset.follower
       reset && stage.mod({ mode: 'free' })
     },
@@ -61,7 +61,7 @@ export function follower<F extends FollowerConfig>(config: F) {
         isSelector(hostRef, sel)
       )![0]
       // console.log('selection tryDock', selector)
-      hostRef.style.setProperty('--selector', selector) // React won't remove it
+      // hostRef.style.setProperty('--selector', selector) // React won't remove it
       follower.ref.dataset.follower = selector
       return selector
     },

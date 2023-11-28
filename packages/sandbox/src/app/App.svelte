@@ -267,7 +267,16 @@
     hostLess: {
       postBranch() {
         config.resizeMode = 'pictureInPicture'
+
         follower.styleHost(false)
+
+        // if it was "affected" by the intersection observer
+        // restore its full size when in free mode
+        const old = config.rect.peek()
+        config.rect.set({
+          ...old,
+          height: old.width / config.aspectRatio.value,
+        })
       },
     },
     pictureInPicture: true,
@@ -301,13 +310,6 @@
       follower.mount(host),
       timeline.context.mount(),
       player.mount(),
-      config.stage.subscribe(stage => {
-        const old = config.rect.peek()
-        config.rect.set({
-          ...old,
-          height: old.width / config.aspectRatio.value,
-        })
-      }),
       config.resizing.subscribe(resizing => {
         if (!resizing && config.stage.peek().mode != 'free') {
           follower.styleHost()
