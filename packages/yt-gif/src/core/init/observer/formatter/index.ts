@@ -50,13 +50,16 @@ export async function ObserveSpans_DeployUrlButtons(
           }
           createNotionHrefStyle(containerID, rect)
         } else {
-          destroyNotionHrefStyle()
+          getNotionHrefStyle().innerHTML = ''
         }
       })
 
       return function onRemoved() {
         unStage()
-        destroyNotionHrefStyle()
+        if (!document.querySelector(`.notion-text-block[data-block-id="${containerID}"]`)) {
+          // notion gave the block a new ID, so we need to destroy the old style
+          getNotionHrefStyle().innerHTML = ''
+        }
         console.log('destroying app')
       }
     },
@@ -64,9 +67,13 @@ export async function ObserveSpans_DeployUrlButtons(
 }
 
 const styleID = `linklip-follower-portal`
-function createNotionHrefStyle(containerID: any, _rect: any) {
-  const style = document.getElementById(styleID) ?? document.createElement('style')
+function createNotionHrefStyle(containerID: string, _rect: any) {
+  const style = getNotionHrefStyle()
 
+  if (_rect.height < 50 || _rect.width < 50) {
+    console.log('Abort host styling', _rect)
+    return
+  }
   // style the target to accommodate the portal
   style.innerHTML = `
 		[data-block-id="${containerID}"] 
@@ -86,8 +93,8 @@ function createNotionHrefStyle(containerID: any, _rect: any) {
 	`
   document.head.appendChild(style)
   style.id = styleID
+  style.dataset.notionBlockId = containerID
 }
-function destroyNotionHrefStyle() {
-  const style = document.getElementById(styleID) ?? document.createElement('style')
-  style.innerHTML = ''
+function getNotionHrefStyle() {
+  return document.getElementById(styleID) ?? document.createElement('style')
 }

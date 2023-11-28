@@ -271,7 +271,7 @@ export function follower<F extends FollowerConfig>(config: F) {
         togglePointerTarget(false, pointer.ref)
         pointer.ref = e.target as any
         const preSelector = selectors.find(sel =>
-          pointer.ref?.matches(sel.selector.pointerTarget ?? sel.selector.target)
+          pointer.ref?.matches?.(sel.selector.pointerTarget ?? sel.selector.target)
         )?.selector
         if (preSelector && preSelector.pointer) {
           pointer.ref = preSelector.outline

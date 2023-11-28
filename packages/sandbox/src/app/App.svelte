@@ -302,8 +302,10 @@
   const bottom = ['notionPage', 'notionMainScroller']
   const top = ['notionTopBar']
 
-  let annoying = false
-  $: annoying && follower.changeHost(host)
+  $: if (host && stage.peek().mode != 'free') {
+    // avoid infinite loop
+    follower.changeHost(host)
+  }
 
   onMount(() =>
     cleanSubscribers(
@@ -334,11 +336,7 @@
         if ([...bottom, ...top].includes(self.selector!)) {
           follower.trySwitchHost(stage.selector)
         }
-      }),
-      (() => {
-        annoying = true
-        return () => {}
-      })()
+      })
     )
   )
   const tiny = computed(() => config.rect.value.width <= 80)
