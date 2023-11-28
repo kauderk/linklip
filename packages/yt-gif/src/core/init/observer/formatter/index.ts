@@ -1,12 +1,10 @@
 import { YTGIF_Config } from '$v3/lib/types/config'
 import { mutationTargets } from '$v3/init/observer/formatter/filter'
 import { createObserverAndDeployOnIntersection } from '../system/system'
-import { isRendered } from '$lib/utils'
 
 export async function ObserveSpans_DeployUrlButtons(
   targetSelectors: string[],
-  appCb: (...args: any) => any,
-  config: any
+  appCb: (...args: any) => any
 ) {
   return createObserverAndDeployOnIntersection(targetSelectors, {
     mutationTargets(mutationsList, selectors) {
@@ -35,67 +33,7 @@ export async function ObserveSpans_DeployUrlButtons(
         console.log('clicked', e.target.href)
       }
 
-      // notionHref is a React Node, so it rerenders all the time
-      // this is an expensive operation, so we need to memoize it
-
-      const unStage = config.stage.subscribe((stage: any) => {
-        if (stage.mode == 'host' && isRendered(notionHref)) {
-          const maxWidth = notionHref?.closest(`.notranslate`)?.clientWidth || 350
-          const width = config.rect.peek().width
-          const rect = {
-            width,
-            maxWidth,
-            height: width / (16 / 9),
-            maxHeight: maxWidth / (16 / 9),
-          }
-          createNotionHrefStyle(containerID, rect)
-        } else {
-          getNotionHrefStyle().innerHTML = ''
-        }
-      })
-      appCb(notionHref.href, notionHref)
-
-      return function onRemoved() {
-        unStage()
-        if (!document.querySelector(`.notion-text-block[data-block-id="${containerID}"]`)) {
-          // notion gave the block a new ID, so we need to destroy the old style
-          getNotionHrefStyle().innerHTML = ''
-        }
-        console.log('destroying app')
-      }
+      return appCb(notionHref)
     },
   })
-}
-
-const styleID = `linklip-follower-portal`
-function createNotionHrefStyle(containerID: string, _rect: any) {
-  const style = getNotionHrefStyle()
-
-  if (_rect.height < 50 || _rect.width < 50) {
-    console.log('Abort host styling', _rect)
-    return
-  }
-  // style the target to accommodate the portal
-  style.innerHTML = `
-		[data-block-id="${containerID}"] 
-		a.notion-link-token.notion-focusable-token.notion-enable-hover {
-			all: unset;
-
-			height: ${_rect.height}px; 
-			width: ${_rect.width}px;
-			max-width: ${_rect.maxWidth}px;
-			max-height: ${_rect.maxHeight}px;
-
-			outline: 1px solid black;
-			border-radius: .2em;
-
-			display: block;
-		}
-	`
-  document.head.appendChild(style)
-  style.id = styleID
-  style.dataset.notionBlockId = containerID
-}
-function getNotionHrefStyle() {
-  return document.getElementById(styleID) ?? document.createElement('style')
 }

@@ -12,51 +12,16 @@
   import { stages } from './follower/store'
   // @ts-ignore
   import Theater from './gallery/Theater.svelte'
-  import { isRendered } from '$lib/utils'
 
-  export let ObserveSpans_DeployUrlButtons = (s: string[], todoFn: any, config: any) =>
-    Promise.resolve(null as any)
+  export let ObserveLinks_DeployLinklip = (context: any) => Promise.resolve(null as any)
 
   onMount(async () => {
     const FirstUpperCase = (str: string) => str[0].toUpperCase() + str.slice(1)
     const context = new Map(
       Object.entries({ player, storyboard, stages }).map(e => [FirstUpperCase(e[0]), e[1]()])
     )
-    const baseConfig = createConfig()
 
-    const urlToSvelteMap = new Map<string, any>()
-
-    function getOrCreateApp(key: string, host: HTMLElement) {
-      if (!urlToSvelteMap.has(key)) {
-        const app = new App({
-          target: document.body,
-          props: {
-            host,
-            baseConfig,
-          },
-          context,
-        })
-
-        urlToSvelteMap.set(key, app)
-      } else {
-        // update
-        if (isRendered(host)) {
-          urlToSvelteMap.get(key).$set({ host })
-        } else {
-          console.log('host is not in document')
-        }
-      }
-    }
-
-    const announcers = (
-      await Promise.all([
-        ObserveSpans_DeployUrlButtons(
-          ['a.notion-link-token.notion-focusable-token.notion-enable-hover'],
-          getOrCreateApp,
-          baseConfig
-        ),
-      ])
-    ).map(observer => {
+    const announcers = (await Promise.all([ObserveLinks_DeployLinklip(context)])).map(observer => {
       if (!observer) return () => {}
 
       observer.observe(document.body, {

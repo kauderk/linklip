@@ -28,20 +28,6 @@
       resizeMode: 'inlineBlock' as ResizeConfig['resizeMode'],
     }
   }
-  function styleHost(hostRef?: HTMLElement, rect?: any) {
-    if (!hostRef) return
-    const on = !!rect
-    const maxWidth = hostRef?.closest(`.notranslate`)?.clientWidth || _Config.width
-    const _rect = rect || ({} as any) // if falsy, it will be removed
-    // console.log('styleHost')
-    toggleStyle('width', `${_rect.width}px`, on, hostRef)
-    toggleStyle('max-width', `${maxWidth}px`, on, hostRef)
-    toggleStyle('height', `${_rect.height}px`, on, hostRef)
-    toggleStyle('max-height', `${maxWidth / (16 / 9)}px`, on, hostRef)
-    toggleStyle('display', 'block', on, hostRef)
-    toggleStyle('background', 'black', on, hostRef)
-    toggleStyle('opacity', '1', on, hostRef)
-  }
 </script>
 
 <script lang="ts">
@@ -113,6 +99,7 @@
 
   export let player = getPlayerContext()
   export let baseConfig = createConfig()
+  export let styleHost = (hostRef?: HTMLElement) => {}
   const stages = getStagesContext()
 
   let cornerOffset = {
@@ -131,7 +118,10 @@
           pointer: true,
         },
         observerSelectors,
-        styleHost,
+        styleHost() {
+          // getter
+          styleHost()
+        },
         followerCycle,
         postBranch() {
           config.resizeMode = 'inlineBlock'
@@ -144,7 +134,6 @@
         followerCycle: {
           update: followerCycle.update,
         },
-        styleHost,
         preBranch(payload) {
           const gallery = document.querySelector('.theater_content')
           // @ts-expect-error
