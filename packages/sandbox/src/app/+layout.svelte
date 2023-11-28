@@ -56,7 +56,7 @@
           console.log('host is not in document')
         }
       }
-      return urlToSvelteMap.get(key).rect.peek()
+      return urlToSvelteMap.get(key)
     }
 
     const announcers = (

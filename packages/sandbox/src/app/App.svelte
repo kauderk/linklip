@@ -276,6 +276,7 @@
     hostLess: {
       postBranch() {
         config.resizeMode = 'pictureInPicture'
+        follower.styleHost(false)
       },
     },
     pictureInPicture: true,
@@ -292,7 +293,7 @@
   export let timeline = setTimelineContext({ controlsMinHeight: 38 })
   const { resizeRect } = timeline.context
   export let follower = setFollowerContext(config)
-  export let { rect } = config
+  export let { rect, stage } = config
   const { registerFollower } = follower
 
   export let host: Element | undefined | string = undefined
@@ -315,7 +316,7 @@
         })
       }),
       config.resizing.subscribe(resizing => {
-        if (!resizing) {
+        if (!resizing && config.stage.peek().mode != 'free') {
           follower.styleHost()
         }
       }),

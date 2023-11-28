@@ -1,6 +1,7 @@
 import { YTGIF_Config } from '$v3/lib/types/config'
 import { mutationTargets } from '$v3/init/observer/formatter/filter'
 import { createObserverAndDeployOnIntersection } from '../system/system'
+import { isRendered } from '$lib/utils'
 
 export async function ObserveSpans_DeployUrlButtons(
   targetSelectors: string[],
@@ -35,58 +36,58 @@ export async function ObserveSpans_DeployUrlButtons(
 
       // notionHref is a React Node, so it rerenders all the time
       // this is an expensive operation, so we need to memoize it
-      const _rect = appCb(notionHref.href, notionHref)
-      const maxWidth = notionHref?.closest(`.notranslate`)?.clientWidth || 350
-      const width = _rect.width
-      const rect = {
-        width,
-        maxWidth,
-        height: width / (16 / 9),
-        maxHeight: maxWidth / (16 / 9),
-      }
-      const style = createNotionHrefStyle(containerID, rect)
+      const app = appCb(notionHref.href, notionHref)
+
+      const unStage = app.stage.subscribe((stage: any) => {
+        if (stage.mode == 'host' && isRendered(notionHref)) {
+          const maxWidth = notionHref?.closest(`.notranslate`)?.clientWidth || 350
+          const width = app.rect.peek().width
+          const rect = {
+            width,
+            maxWidth,
+            height: width / (16 / 9),
+            maxHeight: maxWidth / (16 / 9),
+          }
+          createNotionHrefStyle(containerID, rect)
+        } else {
+          destroyNotionHrefStyle()
+        }
+      })
 
       return function onRemoved() {
-        style.destroy()
+        unStage()
+        destroyNotionHrefStyle()
         console.log('destroying app')
       }
     },
   })
 }
 
+const styleID = `linklip-follower-portal`
 function createNotionHrefStyle(containerID: any, _rect: any) {
-  const styleID = `linklip-follower-portal`
   const style = document.getElementById(styleID) ?? document.createElement('style')
 
   // style the target to accommodate the portal
   style.innerHTML = `
-				[data-block-id="${containerID}"] 
-				a.notion-link-token.notion-focusable-token.notion-enable-hover {
-					all: unset;
+		[data-block-id="${containerID}"] 
+		a.notion-link-token.notion-focusable-token.notion-enable-hover {
+			all: unset;
 
-					/* pointer-events: none; */
-					/* text-wrap: nowrap; */
+			height: ${_rect.height}px; 
+			width: ${_rect.width}px;
+			max-width: ${_rect.maxWidth}px;
+			max-height: ${_rect.maxHeight}px;
 
-					height: ${_rect.height}px; 
-					width: ${_rect.width}px;
-					max-width: ${_rect.maxWidth}px;
-					max-height: ${_rect.maxHeight}px;
-					/* aspect-ratio: 16 / 9; */
-					
-					outline: 1px solid black;
-					border-radius: .2em;
+			outline: 1px solid black;
+			border-radius: .2em;
 
-					display: block;
-					background-image: url("https://dummyimage.com/600x400/000/fff.png&text=10:20");
-					background-size:     cover;
-					background-position: center center;
-				}
-			`
+			display: block;
+		}
+	`
   document.head.appendChild(style)
   style.id = styleID
-  return {
-    destroy() {
-      style.innerHTML = ''
-    },
-  }
+}
+function destroyNotionHrefStyle() {
+  const style = document.getElementById(styleID) ?? document.createElement('style')
+  style.innerHTML = ''
 }

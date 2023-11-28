@@ -202,7 +202,7 @@ export function follower<F extends FollowerConfig>(config: F) {
     })
   }
   function branch(host?: Element | (() => Element | undefined), key?: string) {
-    return branchOutHost(typeof host === 'function' ? host() : host)
+    return preBranch(key).then(() => branchOutHost(typeof host === 'function' ? host() : host))
   }
 
   const observer = new IntersectionObserver(
@@ -372,8 +372,8 @@ export function follower<F extends FollowerConfig>(config: F) {
         ),
       }
     },
-    styleHost() {
-      getSelector().styleHost?.(hostStack.ref, rect.peek())
+    styleHost(addStyles = true) {
+      getSelector().styleHost?.(hostStack.ref, addStyles ? rect.peek() : undefined)
     },
     trySwitchHost(target?: Targets) {
       const potential = config.selectors[target as any]?.selector.target
