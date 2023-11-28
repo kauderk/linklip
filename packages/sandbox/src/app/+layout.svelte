@@ -14,7 +14,7 @@
   import Theater from './gallery/Theater.svelte'
   import { isRendered } from '$lib/utils'
 
-  export let ObserveSpans_DeployUrlButtons = (s: string[], todoFn: any) =>
+  export let ObserveSpans_DeployUrlButtons = (s: string[], todoFn: any, config: any) =>
     Promise.resolve(null as any)
 
   onMount(async () => {
@@ -46,14 +46,14 @@
           console.log('host is not in document')
         }
       }
-      return urlToSvelteMap.get(key)
     }
 
     const announcers = (
       await Promise.all([
         ObserveSpans_DeployUrlButtons(
           ['a.notion-link-token.notion-focusable-token.notion-enable-hover'],
-          getOrCreateApp
+          getOrCreateApp,
+          baseConfig
         ),
       ])
     ).map(observer => {

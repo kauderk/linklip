@@ -51,10 +51,10 @@ export function follower<F extends FollowerConfig>(config: F) {
     },
   }
   const selection = {
-    clean() {
+    clean(reset = true) {
       hostStack.ref?.style.removeProperty('--selector')
       delete follower.ref.dataset.follower
-      stage.mod({ mode: 'free' })
+      reset && stage.mod({ mode: 'free' })
     },
     tryDock(hostRef: HTMLElement) {
       const selector = Object.entries(config.selectors).find(([_, sel]) =>
@@ -158,7 +158,7 @@ export function follower<F extends FollowerConfig>(config: F) {
     observer.disconnect()
 
     const tryHost = maybeIsHost(host) ?? maybePanicToRef()
-    selection.clean()
+    selection.clean(false)
     getSelector().followerCycle?.clean?.(follower.ref)
     destroyRectObserver()
 

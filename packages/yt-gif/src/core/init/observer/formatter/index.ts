@@ -5,7 +5,8 @@ import { isRendered } from '$lib/utils'
 
 export async function ObserveSpans_DeployUrlButtons(
   targetSelectors: string[],
-  appCb: (...args: any) => any
+  appCb: (...args: any) => any,
+  config: any
 ) {
   return createObserverAndDeployOnIntersection(targetSelectors, {
     mutationTargets(mutationsList, selectors) {
@@ -36,12 +37,11 @@ export async function ObserveSpans_DeployUrlButtons(
 
       // notionHref is a React Node, so it rerenders all the time
       // this is an expensive operation, so we need to memoize it
-      const app = appCb(notionHref.href, notionHref)
 
-      const unStage = app.stage.subscribe((stage: any) => {
+      const unStage = config.stage.subscribe((stage: any) => {
         if (stage.mode == 'host' && isRendered(notionHref)) {
           const maxWidth = notionHref?.closest(`.notranslate`)?.clientWidth || 350
-          const width = app.rect.peek().width
+          const width = config.rect.peek().width
           const rect = {
             width,
             maxWidth,
@@ -53,6 +53,7 @@ export async function ObserveSpans_DeployUrlButtons(
           getNotionHrefStyle().innerHTML = ''
         }
       })
+      appCb(notionHref.href, notionHref)
 
       return function onRemoved() {
         unStage()
