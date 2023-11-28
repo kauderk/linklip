@@ -38,13 +38,13 @@ export function follower<F extends FollowerConfig>(config: F) {
   //#region branch cycle
   const overlay = {
     clean() {
-      console.log('overlay clean')
+      // console.log('overlay clean')
       follower.ref.style.removeProperty('opacity')
       follower.ref.style.removeProperty('pointer-events')
     },
     tryHide(hidden: boolean) {
       if (dragging.peek()) return
-      console.log('overlay tryHide', hidden)
+      // console.log('overlay tryHide', hidden)
       follower.ref?.style.setProperty('opacity', hidden ? '0' : '1')
       follower.ref?.style.setProperty('pointer-events', hidden ? 'none' : 'unset')
     },
@@ -59,7 +59,7 @@ export function follower<F extends FollowerConfig>(config: F) {
       const selector = Object.entries(config.selectors).find(([_, sel]) =>
         isSelector(hostRef, sel)
       )![0]
-      console.log('selection tryDock', selector)
+      // console.log('selection tryDock', selector)
       hostRef.style.setProperty('--selector', selector) // React won't remove it
       follower.ref.dataset.follower = selector
       return selector

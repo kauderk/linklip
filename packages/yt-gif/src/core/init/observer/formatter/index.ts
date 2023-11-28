@@ -14,8 +14,11 @@ export async function ObserveSpans_DeployUrlButtons(
         .filter(v => YTGIF_Config.guardClause((v as any).href))
     },
     async deploy(payload) {
-      console.log('deploying', payload)
       const notionHref = payload.params.target as any
+      if (!document.contains(notionHref)) {
+        return
+      }
+      console.log('deploying', payload)
       // followerPortal must follow target
       const containerID = notionHref.closest('[data-block-id]')?.dataset?.blockId
       if (!containerID) {
@@ -32,10 +35,9 @@ export async function ObserveSpans_DeployUrlButtons(
 
       // notionHref is a React Node, so it rerenders all the time
       // this is an expensive operation, so we need to memoize it
-      const app = appCb(notionHref.href, notionHref)
-
+      const _rect = appCb(notionHref.href, notionHref)
       const maxWidth = notionHref?.closest(`.notranslate`)?.clientWidth || 350
-      const width = app.rect.peek().width
+      const width = _rect.width
       const rect = {
         width,
         maxWidth,

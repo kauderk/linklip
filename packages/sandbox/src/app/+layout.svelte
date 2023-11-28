@@ -2,7 +2,7 @@
   // import SharedControls from './SharedControls.svelte'
   import { onMount } from 'svelte'
   import '../app.css'
-  import App from './App.svelte'
+  import App, { createConfig } from './App.svelte'
   import { cleanSubscribers } from '$lib/stores'
   import { createContextMenu } from '../context-menu/fullscreen'
   // @ts-ignore
@@ -21,6 +21,7 @@
     const context = new Map(
       Object.entries({ player, storyboard, stages }).map(e => [FirstUpperCase(e[0]), e[1]()])
     )
+    const baseConfig = createConfig()
 
     const urlToSvelteMap = new Map<string, any>()
 
@@ -33,6 +34,7 @@
           target: document.body,
           props: {
             host,
+            baseConfig,
           },
           context,
         })
@@ -54,7 +56,7 @@
           console.log('host is not in document')
         }
       }
-      return urlToSvelteMap.get(key)
+      return urlToSvelteMap.get(key).rect.peek()
     }
 
     const announcers = (

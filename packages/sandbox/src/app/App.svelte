@@ -6,7 +6,7 @@
     minWidth: 300,
     aspectRatio: [16, 9] as [number, number],
   }
-  function createConfig(config?: Partial<typeof _Config>) {
+  export function createConfig(config?: Partial<typeof _Config>) {
     const _config = { ..._Config, ...config }
     const width = _config.width
     const aspectRatio = aspectRatioFrom([..._config.aspectRatio])
@@ -33,12 +33,12 @@
     const on = !!rect
     const maxWidth = hostRef?.closest(`.notranslate`)?.clientWidth || _Config.width
     const _rect = rect || ({} as any) // if falsy, it will be removed
-    console.log('styleHost')
+    // console.log('styleHost')
     toggleStyle('width', `${_rect.width}px`, on, hostRef)
     toggleStyle('max-width', `${maxWidth}px`, on, hostRef)
     toggleStyle('height', `${_rect.height}px`, on, hostRef)
     toggleStyle('max-height', `${maxWidth / (16 / 9)}px`, on, hostRef)
-    // toggleStyle('display', '-webkit-inline-box', on, hostRef)
+    toggleStyle('display', 'block', on, hostRef)
     toggleStyle('background', 'black', on, hostRef)
     toggleStyle('opacity', '1', on, hostRef)
   }
@@ -84,7 +84,7 @@
       }
     },
     clean(followerRef) {
-      console.log('styleHost remove offset')
+      // console.log('styleHost remove offset')
 
       followerRef?.style.removeProperty('--topOffset')
       followerRef?.style.removeProperty('--leftOffset')
@@ -96,7 +96,7 @@
       }
       const topOffset = entry.boundingClientRect.top - entry.intersectionRect.top
       const leftOffset = entry.boundingClientRect.left - entry.intersectionRect.left
-      console.log('styleHost add   offset')
+      // console.log('styleHost add   offset')
       followerRef?.style.setProperty('--topOffset', topOffset + 'px')
       followerRef?.style.setProperty('--leftOffset', leftOffset + 'px')
 
@@ -112,6 +112,7 @@
   } satisfies FollowerCycle
 
   export let player = getPlayerContext()
+  export let baseConfig = createConfig()
   const stages = getStagesContext()
 
   let cornerOffset = {
@@ -120,7 +121,7 @@
   }
   const originalCornerOffset = { ...cornerOffset }
   const config = {
-    ...createConfig(),
+    ...baseConfig,
     selectors: {
       notionLink: {
         selector: {
