@@ -10,6 +10,7 @@ import { createMouseTrack } from './mouse-track'
 import { fitToTarget, mapRange, type FollowerConfig, type Rect, togglePointerTarget, type Stage, animationFrameInterval, type El, camelCaseToTitleCase } from './follower-lib'
 import { createListeners } from '$lib/event-life-cycle'
 import { createDefaultStage } from '../follower/store'
+import { isRendered } from '$lib/utils'
 
 export const followers = preSignal({ message: '' as 'reset' | '' })
 export function follower<F extends FollowerConfig>(config: F) {
@@ -204,10 +205,14 @@ export function follower<F extends FollowerConfig>(config: F) {
   function branch(host?: Element | (() => Element | undefined), key?: string) {
     return preBranch(key).then(() => branchOutHost(typeof host === 'function' ? host() : host))
   }
+  // FIXME: extract the logic for when it's visible or not
+  // performance should increase then
 
   const observer = new IntersectionObserver(
     entries => {
-      if (stage.peek().mode !== 'host') return
+      if (stage.peek().mode !== 'host' || !isRendered(hostStack.ref!)) {
+        return
+      }
       const selector = getSelector()
       if (!selector.followerCycle.resize) {
         hostStack.fn()

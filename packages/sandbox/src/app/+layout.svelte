@@ -12,6 +12,7 @@
   import { stages } from './follower/store'
   // @ts-ignore
   import Theater from './gallery/Theater.svelte'
+  import { isRendered } from '$lib/utils'
 
   export let ObserveSpans_DeployUrlButtons = (s: string[], todoFn: any) =>
     Promise.resolve(null as any)
@@ -26,9 +27,6 @@
     const urlToSvelteMap = new Map<string, any>()
 
     function getOrCreateApp(key: string, host: HTMLElement) {
-      // @ts-ignore
-      let timeout = window.renderAppDelay ?? 50
-
       if (!urlToSvelteMap.has(key)) {
         const app = new App({
           target: document.body,
@@ -38,20 +36,12 @@
           },
           context,
         })
-        // set
-        // if (!timeout) {
+
         urlToSvelteMap.set(key, app)
-        // } else {
-        //   setTimeout(() => urlToSvelteMap.set(key, app), timeout)
-        // }
       } else {
         // update
-        if (document.contains(host)) {
-          // if (!timeout) {
+        if (isRendered(host)) {
           urlToSvelteMap.get(key).$set({ host })
-          // } else {
-          // setTimeout(() => urlToSvelteMap.get(key).$set({ host }), timeout)
-          // }
         } else {
           console.log('host is not in document')
         }
