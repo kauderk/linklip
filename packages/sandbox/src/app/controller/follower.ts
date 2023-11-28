@@ -139,7 +139,7 @@ export function follower<F extends FollowerConfig>(config: F) {
     const potentialObservers = [
       selectors?.window !== false ? createDebouncedListener(window, 'resize', debounced) : null,
       scroll ? createDebouncedListener(scroll, 'scroll', debounced) : null,
-      resize ? createDebouncedObserver(resize, debounced) : null,
+      resize ? createDebouncedObserver(resize, debounced, 300, true) : null,
     ]
     destroyRectObserver = cleanSubscribers(
       // @ts-expect-error

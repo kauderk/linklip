@@ -114,6 +114,7 @@ export function animationFrameInterval(callback: () => any) {
     framing = interval = undefined
   }
 
+  // args type is a mutation observer parameters
   function debounced(on: boolean, ...args: any) {
     if (on && interval === undefined) {
       interval = setInterval(() => {
