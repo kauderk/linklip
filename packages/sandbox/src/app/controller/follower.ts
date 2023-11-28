@@ -270,7 +270,9 @@ export function follower<F extends FollowerConfig>(config: F) {
       if (e.target !== pointer.ref) {
         togglePointerTarget(false, pointer.ref)
         pointer.ref = e.target as any
-        const preSelector = findSelector(pointer.ref)?.selector
+        const preSelector = selectors.find(sel =>
+          pointer.ref?.matches(sel.selector.pointerTarget ?? sel.selector.target)
+        )?.selector
         if (preSelector && preSelector.pointer) {
           pointer.ref = preSelector.outline
             ? document.querySelector(preSelector.outline) ?? pointer.ref
@@ -283,10 +285,11 @@ export function follower<F extends FollowerConfig>(config: F) {
     mouseup(e) {
       // offPointer up
       togglePointerTarget(false, pointer.ref)
-      pointer.ref = undefined
       follower.ref.classList.remove('pointer')
 
-      const maybeHost = maybeUsePointer(e.target) ?? maybePanicToRef()
+      const maybeHost = maybeUsePointer(pointer.ref) ?? maybePanicToRef()
+      pointer.ref = undefined
+
       branch(maybeHost)
 
       dragging.value = false

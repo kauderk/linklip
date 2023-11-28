@@ -11,6 +11,7 @@ export type Config = {
     {
       selector: {
         target: string
+        pointerTarget?: string
         outline?: string
         pointer?: boolean
         panicToLast?: boolean

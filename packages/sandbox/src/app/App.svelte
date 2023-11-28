@@ -126,6 +126,8 @@
       notionLink: {
         selector: {
           target: `[href*="youtu"]`,
+          pointerTarget: `[href*="youtu"]>span`,
+          outline: `[href*="youtu"]`,
           pointer: true,
         },
         observerSelectors,
