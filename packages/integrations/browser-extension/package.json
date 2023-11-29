@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:extension": "set NODE_ENV=development && vite build -c vite.extension.config.ts --watch",
     "preview": "vite preview"
   },
   "devDependencies": {

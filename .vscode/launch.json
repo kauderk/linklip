@@ -5,11 +5,11 @@
       "name": "Launch Microsoft Edge",
       "request": "launch",
       "runtimeArgs": ["--remote-debugging-port=9222"],
-      "url": "https://roamresearch.com/#/app/Neuronal_Firing",
+      "url": "https://www.notion.so/Timeline-f5526f9d8987452b8d4e1952b7a4a90e",
       "presentation": {
         "hidden": true
       },
-      "webRoot": "${workspaceFolder}/packages/yt-gif/dist",
+      "webRoot": "${workspaceFolder}/packages/integrations/browser-extension",
       "internalConsoleOptions": "openOnFirstSessionStart",
       "postDebugTask": "StopBuild_LiveServer"
     },
@@ -18,22 +18,22 @@
       "name": "Launch Microsoft Edge in headless mode",
       "request": "launch",
       "runtimeArgs": ["--headless", "--remote-debugging-port=9222"],
-      "url": "https://roamresearch.com/#/app/Neuronal_Firing",
+      "url": "https://www.notion.so/Timeline-f5526f9d8987452b8d4e1952b7a4a90e",
       "presentation": {
         "hidden": true
       },
-      "webRoot": "${workspaceFolder}/packages/yt-gif/dist",
+      "webRoot": "${workspaceFolder}/packages/integrations/browser-extension",
       "postDebugTask": "StopBuild_LiveServer"
     },
     {
       "type": "vscode-edge-devtools.debug",
       "name": "Open Edge DevTools",
       "request": "attach",
-      "url": "https://roamresearch.com/#/app/Neuronal_Firing",
+      "url": "https://www.notion.so/Timeline-f5526f9d8987452b8d4e1952b7a4a90e",
       "presentation": {
         "hidden": true
       },
-      "webRoot": "${workspaceFolder}/packages/yt-gif/dist",
+      "webRoot": "${workspaceFolder}/packages/integrations/browser-extension",
       "preLaunchTask": "WatchBuild_LiveServer"
     }
   ],

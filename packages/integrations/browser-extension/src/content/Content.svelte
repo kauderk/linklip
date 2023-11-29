@@ -11,7 +11,10 @@
   // import { YTApiPromise } from '@packages/yt-gif/src/core/api-ready/gate'
 
   function load() {
-    const url = chrome.runtime.getURL('src/shared/widgetapi.js')
+    const c = typeof chrome != 'undefined' ? chrome : (undefined as any)
+    const url =
+      c?.runtime?.getURL?.('src/shared/widgetapi.js') ??
+      'https://127.0.0.1:5500/packages/integrations/browser-extension/src/shared/widgetapi.js'
     return import(
       /* @vite-ignore */
       url
