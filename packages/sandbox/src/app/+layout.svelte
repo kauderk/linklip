@@ -1,27 +1,16 @@
 <script lang="ts">
-  // import SharedControls from './SharedControls.svelte'
   import { onMount } from 'svelte'
   import '../app.css'
-  import App, { createConfig } from './App.svelte'
   import { cleanSubscribers } from '$lib/stores'
-  import { createContextMenu } from '../context-menu/fullscreen'
   // @ts-ignore
   import Resize from './Resize.svelte'
-  import { player, storyboard } from './timeline/context'
-  // import Gallery from './gallery/GalleryController.svelte'
-  import { stages } from './follower/store'
   // @ts-ignore
   import Theater from './gallery/Theater.svelte'
 
-  export let ObserveLinks_DeployLinklip = (context: any) => Promise.resolve(null as any)
+  export let ObserveLinks_DeployLinklip = () => Promise.resolve(null as any)
 
   onMount(async () => {
-    const FirstUpperCase = (str: string) => str[0].toUpperCase() + str.slice(1)
-    const context = new Map(
-      Object.entries({ player, storyboard, stages }).map(e => [FirstUpperCase(e[0]), e[1]()])
-    )
-
-    const announcers = (await Promise.all([ObserveLinks_DeployLinklip(context)])).map(observer => {
+    const announcers = (await Promise.all([ObserveLinks_DeployLinklip()])).map(observer => {
       if (!observer) return () => {}
 
       observer.observe(document.body, {

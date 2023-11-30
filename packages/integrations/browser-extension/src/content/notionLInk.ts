@@ -2,10 +2,18 @@ import { YTGIF_Config } from '@packages/yt-gif/src/core/lib/types/config'
 import { mutationTargets } from '@packages/yt-gif/src/core/init/observer/formatter/filter'
 import { createObserverAndDeployOnIntersection } from '@packages/yt-gif/src/core/init/observer/system/system'
 import Linklip, { createConfig } from '@packages/sandbox/src/app/App.svelte'
+import { player, storyboard } from '@packages/sandbox/src/app/timeline/context'
+import { stages } from '@packages/sandbox/src/app/follower/store'
 
-export async function ObserveLinks_DeployLinklip(context: any) {
-  const config = createConfig()
-  const urlToSvelteMap = new Map<string, any>()
+export async function ObserveLinks_DeployLinklip() {
+  const urlToSvelteMap = new Map<
+    string,
+    {
+      Linklip: Linklip
+      config: ReturnType<typeof createConfig>
+    }
+  >()
+  const stageCtx = ['Stages', stages()]
 
   return createObserverAndDeployOnIntersection(
     ['a.notion-link-token.notion-focusable-token.notion-enable-hover'],
@@ -36,9 +44,16 @@ export async function ObserveLinks_DeployLinklip(context: any) {
           // console.log('clicked', e.target.href)
         }
 
+        const key = notionHref.href + containerID
+
         function styleHost() {
+          // FIXME: this function is called too often
+          // by the Followers's branch function and the stage signal
+
+          const config = urlToSvelteMap.get(key)!.config
+          // FIXME: find a new way to abstract this, the styles are changing all over the place
           if (config.stage.peek().mode == 'host' && isRendered(notionHref)) {
-            const maxWidth = notionHref?.closest(`.notranslate`)?.clientWidth || 350
+            const maxWidth = notionHref.closest('.notranslate')?.clientWidth || 350
             const width = config.rect.peek().width
             const rect = {
               width,
@@ -48,14 +63,18 @@ export async function ObserveLinks_DeployLinklip(context: any) {
             }
             createNotionHrefStyle(containerID, rect)
           } else {
-            getNotionHrefStyle().innerHTML = ''
+            removeNotionHrefStyle(containerID)
           }
         }
-
-        const unStage = config.stage.subscribe(styleHost)
-
-        const key = notionHref.href
         if (!urlToSvelteMap.has(key)) {
+          const context = new Map([
+            ['Player', player()],
+            ['Storyboard', storyboard()],
+            stageCtx,
+          ] as any)
+
+          const config = createConfig()
+
           const app = new Linklip({
             target: document.body,
             props: {
@@ -66,21 +85,28 @@ export async function ObserveLinks_DeployLinklip(context: any) {
             context,
           })
 
-          urlToSvelteMap.set(key, app)
+          urlToSvelteMap.set(key, {
+            Linklip: app,
+            config,
+          })
         } else {
           // update
           if (isRendered(notionHref)) {
-            urlToSvelteMap.get(key).$set({ host: notionHref, styleHost })
+            urlToSvelteMap.get(key)!.Linklip.$set({ host: notionHref, styleHost })
           } else {
-            console.log('host is not in document')
+            console.warn('host is not in document')
+            return
           }
         }
+
+        // FIXME: run before deploy, so the FollowerPortal can be created acurately
+        const unStage = urlToSvelteMap.get(key)!.config.stage.subscribe(styleHost)
 
         return function onRemoved() {
           unStage()
           if (!document.querySelector(`.notion-text-block[data-block-id="${containerID}"]`)) {
             // notion gave the block a new ID, so we need to destroy the old style
-            getNotionHrefStyle().innerHTML = ''
+            removeNotionHrefStyle(containerID)
           }
           console.log('destroying')
         }
@@ -89,7 +115,7 @@ export async function ObserveLinks_DeployLinklip(context: any) {
   )
 }
 function createNotionHrefStyle(containerID: string, _rect: any) {
-  const style = getNotionHrefStyle()
+  const style = getNotionHrefStyle(containerID)
 
   if (_rect.height < 50 || _rect.width < 50) {
     console.log('Abort host styling', _rect)
@@ -113,12 +139,14 @@ function createNotionHrefStyle(containerID: string, _rect: any) {
 		}
 	`.trim()
   document.head.appendChild(style)
-  style.id = styleID
-  style.dataset.notionBlockId = containerID
+  style.id = styleID + containerID
 }
 const styleID = `linklip-follower-portal`
-function getNotionHrefStyle() {
-  return document.getElementById(styleID) ?? document.createElement('style')
+function getNotionHrefStyle(containerID: string) {
+  return document.getElementById(styleID + containerID) ?? document.createElement('style')
+}
+function removeNotionHrefStyle(containerID: string) {
+  getNotionHrefStyle(containerID).innerHTML = ''
 }
 export function isRendered(el?: Element): el is HTMLElement {
   return document.contains(el!)
