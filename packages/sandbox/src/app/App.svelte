@@ -28,6 +28,44 @@
       resizeMode: 'inlineBlock' as ResizeConfig['resizeMode'],
     }
   }
+  const followerCycle = {
+    update(hostRef, initRect) {
+      return () => {
+        // https://stackoverflow.com/q/39417566
+        const rect = hostRef.getBoundingClientRect()
+        return {
+          x: rect.x,
+          y: rect.y,
+          width: rect.width,
+          height: rect.height,
+        }
+      }
+    },
+    clean(followerRef) {
+      // console.log('styleHost remove offset')
+
+      followerRef?.style.removeProperty('--topOffset')
+      followerRef?.style.removeProperty('--leftOffset')
+    },
+    resize(followerRef, entry, initRect, isFull) {
+      if (isFull) {
+        this.clean!(followerRef)
+        return
+      }
+      const topOffset = entry.boundingClientRect.top - entry.intersectionRect.top
+      const leftOffset = entry.boundingClientRect.left - entry.intersectionRect.left
+      // console.log('styleHost add   offset')
+      followerRef?.style.setProperty('--topOffset', topOffset + 'px')
+      followerRef?.style.setProperty('--leftOffset', leftOffset + 'px')
+
+      return {
+        x: entry.intersectionRect.x,
+        y: entry.intersectionRect.y,
+        width: entry.intersectionRect.width,
+        height: entry.intersectionRect.height,
+      }
+    },
+  } satisfies FollowerCycle
 </script>
 
 <script lang="ts">
@@ -54,58 +92,11 @@
   import { createDefaultStage, getStagesContext } from './follower/store'
   import { selectorsFuncs } from './follower/selectors'
 
-  const followerCycle = {
-    update(hostRef, initRect) {
-      return {
-        value() {
-          // https://stackoverflow.com/q/39417566
-          const rect = hostRef.getBoundingClientRect()
-          return {
-            x: rect.x,
-            y: rect.y,
-            width: rect.width,
-            height: rect.height,
-          }
-        },
-      }
-    },
-    clean(followerRef) {
-      // console.log('styleHost remove offset')
-
-      followerRef?.style.removeProperty('--topOffset')
-      followerRef?.style.removeProperty('--leftOffset')
-    },
-    resize(followerRef, entry, initRect, isFull) {
-      if (isFull) {
-        this.clean!(followerRef)
-        return
-      }
-      const topOffset = entry.boundingClientRect.top - entry.intersectionRect.top
-      const leftOffset = entry.boundingClientRect.left - entry.intersectionRect.left
-      // console.log('styleHost add   offset')
-      followerRef?.style.setProperty('--topOffset', topOffset + 'px')
-      followerRef?.style.setProperty('--leftOffset', leftOffset + 'px')
-
-      return {
-        value: {
-          x: entry.intersectionRect.x,
-          y: entry.intersectionRect.y,
-          width: entry.intersectionRect.width,
-          height: entry.intersectionRect.height,
-        },
-      }
-    },
-  } satisfies FollowerCycle
-
-  export let player = getPlayerContext()
   export let baseConfig = createConfig()
   export let styleHost = (hostRef?: HTMLElement) => {}
   const stages = getStagesContext()
 
-  let cornerOffset = {
-    y: 70,
-    x: 20,
-  }
+  let cornerOffset = { y: 70, x: 20 }
   const originalCornerOffset = { ...cornerOffset }
   const config = {
     ...baseConfig,
@@ -175,29 +166,27 @@
         },
         followerCycle: {
           update(hostRef) {
-            return {
-              value() {
-                // prettier-ignore
-                const startFrom = hostRef.querySelector('div.notranslate.shadow-cursor-breadcrumb')!.getBoundingClientRect()
-                const hostRect = hostRef.getBoundingClientRect()
-                // if the hostRect is at x:0, y: 0, width: 100, height: 30
-                // return at x: 20%, y: 0, width: 60%, height: 30
-                const xPadding = 15
-                const height = hostRect.height
-                const width = height * (16 / 9)
-                return {
-                  x: startFrom.right + xPadding,
-                  y: hostRect.top,
-                  width,
-                  height,
-                }
-              },
+            return () => {
+              // prettier-ignore
+              const startFrom = hostRef.querySelector('div.notranslate.shadow-cursor-breadcrumb')!.getBoundingClientRect()
+              const hostRect = hostRef.getBoundingClientRect()
+              // if the hostRect is at x:0, y: 0, width: 100, height: 30
+              // return at x: 20%, y: 0, width: 60%, height: 30
+              const xPadding = 15
+              const height = hostRect.height
+              const width = height * (16 / 9)
+              return {
+                x: startFrom.right + xPadding,
+                y: hostRect.top,
+                width,
+                height,
+              }
             }
           },
           // TODO: should provide the rect
           clean(followerRef) {
             if (!followerRef) return
-            const width = _Config.minWidth + 1
+            const width = 350 + 1 // TODO: _Config.width
             config.rect.set({
               ...config.rect.peek(),
               width,
@@ -212,16 +201,14 @@
         },
         followerCycle: {
           update(hostRef, _, signal) {
-            return {
-              value() {
-                const crr = signal.peek()
-                const v = selectorsFuncs.notionMainScroller.update(hostRef)
-                return {
-                  ...crr,
-                  x: v.x + v.width - crr.width - cornerOffset.x,
-                  y: window.innerHeight - crr.height - cornerOffset.y,
-                }
-              },
+            return () => {
+              const crr = signal.peek()
+              const v = selectorsFuncs.notionMainScroller.update(hostRef)
+              return {
+                ...crr,
+                x: v.x + v.width - crr.width - cornerOffset.x,
+                y: window.innerHeight - crr.height - cornerOffset.y,
+              }
             }
           },
         },
@@ -289,22 +276,13 @@
     return gallery?.branch('[href*="youtu"]>span', payload.selected) // Promise
   }
 
-  const { paused, fullScreen, time } = player
+  export let player = getPlayerContext()
   export let timeline = setTimelineContext({ controlsMinHeight: 38 })
-  const { resizeRect } = timeline.context
   export let follower = setFollowerContext(config)
-  export let { rect, stage } = config
-  const { registerFollower } = follower
-
   export let host: Element | undefined | string = undefined
+
   const bottom = ['notionPage', 'notionMainScroller']
   const top = ['notionTopBar']
-
-  $: if (host && stage.peek().mode != 'free') {
-    // avoid infinite loop
-    follower.changeHost(host)
-  }
-
   onMount(() =>
     cleanSubscribers(
       follower.mount(host),
@@ -330,25 +308,32 @@
       })
     )
   )
+  $: if (host && config.stage.peek().mode != 'free') {
+    // avoid infinite loop
+    follower.changeHost(host)
+  }
+
+  // ---
+
+  const { paused, fullScreen, time } = player
+  const { resizeRect } = timeline.context
+  export let { rect } = config
+  const { registerFollower } = follower
+
   const tiny = computed(() => config.rect.value.width <= 80)
   $: normal = $fullScreen || $rect.width > config.minWidth
   let any = '' as any
 
+  const scrubbing = preSignal(false)
   // Because the follower hides the overflow
   // make the .progress-bar .scrubber-container visible
   const nudgeHeight = (nudge = 0) => {
     scrubbing.value = nudge != 0
-    // const old = rect.peek()
-    // rect.set({
-    // 	...old,
-    // 	height: old.width / config.aspectRatio.value + nudge,
-    // })
   }
   const timelineTracker = createHoverTrack({
     mouseenter: () => nudgeHeight(5),
     mouseleave: () => nudgeHeight(),
   })
-  const scrubbing = preSignal(false)
   const { progress } = timeline.progressBar
 </script>
 
@@ -388,7 +373,7 @@
 				<Controls dragThreshold={follower.dragThreshold} />
 			</div>
 		{:else}
-			<div class="miniPlayer" class:inactive={$progress.scrubbing || $scrubbing || !paused} class:tiny={$tiny}>
+			<div class="miniPlayer" class:inactive={$progress.scrubbing || $scrubbing || !$paused} class:tiny={$tiny}>
 				<div class="controls">
 					<button class="maximize"><SVG icon="maximize" /></button>
 					<button class="playPause max"><SVG icon="pause" /></button>

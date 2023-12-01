@@ -25,8 +25,8 @@ export function follower<F extends FollowerConfig>(config: F) {
   let follower = { ref: <HTMLElement>{} }
 
   //#region methods
-  function send(props: { value: (() => Rect) | Rect }) {
-    const { value } = props
+  function send(value: (() => Rect) | Rect) {
+    
     const newRect = () => (typeof value === 'function' ? value() : value)
 
     if (typeof value === 'function') {
@@ -177,13 +177,11 @@ export function follower<F extends FollowerConfig>(config: F) {
       overlay.clean()
       config.hostLess?.postBranch?.()
 
-      send({
-        value: () => ({
-          ...rect.peek(),
-          x: freezeRect.x,
-          y: freezeRect.y,
-        }),
-      })
+      send(() => ({
+				...rect.peek(),
+				x: freezeRect.x,
+				y: freezeRect.y,
+			}))
     }
     selection.mode(!!tryHost)
   }
@@ -262,14 +260,12 @@ export function follower<F extends FollowerConfig>(config: F) {
 
     mousemove(e) {
       const old = rect.peek()
-      send({
-        value: fitToTarget({
-          width: old.width,
-          height: old.height,
-          x: e.clientX - delta.x,
-          y: e.clientY - delta.y,
-        }),
-      })
+      send(fitToTarget({
+				width: old.width,
+				height: old.height,
+				x: e.clientX - delta.x,
+				y: e.clientY - delta.y,
+			}))
 
       // offPointer update
       if (e.target !== pointer.ref) {
