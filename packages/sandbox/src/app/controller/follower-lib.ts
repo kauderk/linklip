@@ -2,10 +2,15 @@ import { createContext } from '$lib/create-context'
 import type { PreSignal } from '$lib/pre-signal'
 import type { StageSignal } from '../follower/store'
 import type { follower } from './follower'
-export type FollowerConfig = Omit<Config, 'aspectRatio'>
-export type Config = {
+export type FollowerConfig = Config
+export type PlayerConfig = {
   width: number
   aspectRatio: [number, number]
+  rect: PreSignal<Rect>
+  dragging?: PreSignal<boolean>
+  stage?: Stage
+}
+export type Config = {
   selectors: Record<
     string,
     {
@@ -36,9 +41,6 @@ export type Config = {
     postBranch?: () => void
   }
   pictureInPicture?: boolean
-  rect: PreSignal<Rect>
-  dragging?: PreSignal<boolean>
-  stage?: Stage
 }
 export type Stage = PreSignal<{
   mode: 'host' | 'free' | 'theater' | 'panic'

@@ -3,17 +3,18 @@ import { preSignal } from '$lib/pre-signal'
 import { createDebouncedListener, createDebouncedObserver, createTimeout } from '$lib/resize'
 import { useClass } from '$lib/solid/useDirective'
 import { cleanSubscribers } from '$lib/stores'
-import { useContextMenu } from 'src/context-menu/ContextMenu.svelte'
+import { useContextMenu } from '../../context-menu/ContextMenu.svelte'
 import { createTrackMouseHold } from './click-track'
 import { createMouseTrack } from './mouse-track'
 // prettier-ignore
-import { fitToTarget, mapRange, type FollowerConfig, type Rect, togglePointerTarget, type Stage, animationFrameInterval, type El, camelCaseToTitleCase } from './follower-lib'
+import { fitToTarget, mapRange, type FollowerConfig, type PlayerConfig, type Rect, togglePointerTarget, type Stage, animationFrameInterval, type El, camelCaseToTitleCase } from './follower-lib'
 import { createListeners } from '$lib/event-life-cycle'
 import { createDefaultStage } from '../follower/store'
 import { isRendered } from '$lib/utils'
 
 export const followers = preSignal({ message: '' as 'reset' | '' })
-export function follower<F extends FollowerConfig>(config: F) {
+type Props = Pick<PlayerConfig, 'rect' | 'dragging' | 'stage'> & FollowerConfig
+export function follower<F extends Props>(config: Props) {
   const rect = config.rect
   let hostStack = {
     fn: () => {},
@@ -26,7 +27,6 @@ export function follower<F extends FollowerConfig>(config: F) {
 
   //#region methods
   function send(value: (() => Rect) | Rect) {
-    
     const newRect = () => (typeof value === 'function' ? value() : value)
 
     if (typeof value === 'function') {
@@ -107,19 +107,20 @@ export function follower<F extends FollowerConfig>(config: F) {
   }
   function tryFindHost(host: HTMLElement) {
     hostStack.selectorKey = selection.tryDock(host)
-    const selector = getSelector()
-    if (selector.stageSignal) {
-      let pre = tryHost(selector.stageSignal.peek().selector)
-      pre = maybeIsHost(pre)
-      if (pre) {
-        hostStack.selectorKey = selection.tryDock(pre)
-        return pre
-      } else {
-        return host
-      }
-    } else {
-      return host
-    }
+    // FIXME: abstract stageSignal¿
+    // const selector = getSelector()
+    // if (selector.stageSignal) {
+    //   let pre = tryHost(selector.stageSignal.peek().selector)
+    //   pre = maybeIsHost(pre)
+    //   if (pre) {
+    //     hostStack.selectorKey = selection.tryDock(pre)
+    //     return pre
+    //   } else {
+    //     return host
+    //   }
+    // } else {
+    return host
+    // }
   }
   //#endregion
 
@@ -178,10 +179,10 @@ export function follower<F extends FollowerConfig>(config: F) {
       config.hostLess?.postBranch?.()
 
       send(() => ({
-				...rect.peek(),
-				x: freezeRect.x,
-				y: freezeRect.y,
-			}))
+        ...rect.peek(),
+        x: freezeRect.x,
+        y: freezeRect.y,
+      }))
     }
     selection.mode(!!tryHost)
   }
@@ -260,12 +261,14 @@ export function follower<F extends FollowerConfig>(config: F) {
 
     mousemove(e) {
       const old = rect.peek()
-      send(fitToTarget({
-				width: old.width,
-				height: old.height,
-				x: e.clientX - delta.x,
-				y: e.clientY - delta.y,
-			}))
+      send(
+        fitToTarget({
+          width: old.width,
+          height: old.height,
+          x: e.clientX - delta.x,
+          y: e.clientY - delta.y,
+        })
+      )
 
       // offPointer update
       if (e.target !== pointer.ref) {
@@ -298,9 +301,10 @@ export function follower<F extends FollowerConfig>(config: F) {
   })
 
   //#region context menu
-  const sharedStages = Object.values(config.selectors)
-    .map(val => val.stageSignal?.shared ?? [])
-    .flat()
+  const sharedStages = Object.keys(config.selectors)
+  // FIXME: abstract stageSignal
+  // .map(val => val.stageSignal?.shared ?? [])
+  // .flat()
   const contextMenuSelectorNodes = Object.entries(config.selectors)
     .map(([key, value]) => {
       if (sharedStages.includes(key)) return
