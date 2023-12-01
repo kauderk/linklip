@@ -7,6 +7,7 @@ import { createConfig } from '@packages/sandbox/src/app/integrations/followerCyc
 import { player, storyboard } from '@packages/sandbox/src/app/timeline/context'
 import { stages as createStagesCtx } from '@packages/sandbox/src/app/follower/store'
 import { follower as createFollower } from '@packages/sandbox/src/app/controller/follower'
+import { follower_DragThreshold_ContextMenu } from '@packages/sandbox/src/app/integrations/follower_DragThreshold_ContextMenu'
 import { createSelectorsConfig } from '@packages/sandbox/src/app/integrations/selectorsConfig'
 import { cleanSubscribers } from '@packages/sandbox/src/lib/stores'
 
@@ -91,6 +92,7 @@ export async function ObserveLinks_DeployLinklip() {
             props: {
               config: baseConfig,
               follower,
+              dragThreshold: follower_DragThreshold_ContextMenu(followerConfig, follower, true),
               mount() {
                 // >.<
                 return cleanSubscribers(follower.mount(notionHref), unSharedFollower)

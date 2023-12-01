@@ -22,6 +22,7 @@
   export let timeline = setTimelineContext({ controlsMinHeight: 38 })
   export let follower: ReturnType<typeof getFollowerContext>
   export let mount = () => () => {}
+  export let dragThreshold = (e: MouseEvent) => {}
 
   onMount(() =>
     cleanSubscribers(
@@ -84,12 +85,12 @@
 		bind:this={player.refs.videoContainer}
 		use:resizeRect
 	>
-		<Video on:mousedown={follower.dragThreshold} />
+		<Video on:mousedown={dragThreshold} />
 
 		{#if normal}
 			<div class="video-controls-container bottom">
 				<!-- <Timeline /> -->
-				<Controls dragThreshold={follower.dragThreshold} />
+				<Controls dragThreshold={dragThreshold} />
 			</div>
 		{:else}
 			<div class="miniPlayer" class:inactive={$progress.scrubbing || $scrubbing || !$paused} class:tiny={$tiny}>

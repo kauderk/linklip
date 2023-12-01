@@ -300,58 +300,15 @@ export function follower<F extends Props>(config: Props) {
     },
   })
 
-  //#region context menu
-  const sharedStages = Object.keys(config.selectors)
-  // FIXME: abstract stageSignal
-  // .map(val => val.stageSignal?.shared ?? [])
-  // .flat()
-  const contextMenuSelectorNodes = Object.entries(config.selectors)
-    .map(([key, value]) => {
-      if (sharedStages.includes(key)) return
-      return {
-        content: camelCaseToTitleCase(key),
-        async callback() {
-          await preBranch(key)
-          const newHost = document.querySelector(value.selector.target)
-          if (!newHost) return
-          branchOutHost(newHost)
-        },
-        action(ref: HTMLElement) {
-          const hover = (toggle: boolean) => () =>
-            document
-              .querySelector(value.selector.target)
-              ?.classList.toggle('follower-outline', toggle)
-
-          return {
-            destroy: cleanSubscribers(
-              createListeners(ref, {
-                mouseenter: hover(true),
-                mouseleave: hover(false),
-              }),
-              hover(false)
-            ),
-          }
-        },
-      }
-    })
-    .filter(Boolean)
-  if (config.pictureInPicture) {
-    contextMenuSelectorNodes.unshift(<any>{
-      content: 'Picture In Picture',
-      callback: branch,
-    })
-  }
-  //#endregion
-
   type Targets = keyof F['selectors']
   return {
-    dragThreshold: createTrackMouseHold({
-      threshold: trackPointer,
-      hold(e) {
-        // @ts-expect-error
-        useContextMenu(e, { nodes: contextMenuSelectorNodes }, true)
-      },
-    }),
+    innerApi: {
+      trackPointer,
+      preBranch,
+      branchOutHost,
+      branch,
+      resolveSelector,
+    },
     registerFollower(ref: HTMLElement) {
       follower.ref = ref
       return {
