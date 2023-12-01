@@ -1,45 +1,46 @@
 <script lang="ts">
-  import SharedControls from './SharedControls.svelte'
   import { onMount } from 'svelte'
   import '../app.css'
-  import App from './App.svelte'
   import { cleanSubscribers } from '$lib/stores'
-  import { createContextMenu } from '../context-menu/fullscreen'
+  // @ts-ignore
   import Resize from './Resize.svelte'
-  import { player, storyboard } from './timeline/context'
-  import Gallery from './gallery/GalleryController.svelte'
-  import { stages } from './follower/store'
+  // @ts-ignore
   import Theater from './gallery/Theater.svelte'
 
-  onMount(() => {
-    const FirstUpperCase = (str: string) => str[0].toUpperCase() + str.slice(1)
-    const context = new Map(
-      Object.entries({ player, storyboard, stages }).map(e => [FirstUpperCase(e[0]), e[1]()])
-    )
+  export let ObserveLinks_DeployLinklip = () => Promise.resolve(null as any)
+
+  onMount(async () => {
+    const announcers = (await Promise.all([ObserveLinks_DeployLinklip()])).map(observer => {
+      if (!observer) return () => {}
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      })
+
+      return () => {
+        observer.takeRecords()
+        observer.disconnect()
+      }
+    })
 
     // document.body.classList.add('debug')
     return cleanSubscribers(
-      new SharedControls({
-        target: document.body,
-        context,
-      }).$destroy,
-      new Gallery({
-        target: document.body,
-      }).$destroy,
+      // new SharedControls({
+      //   target: document.body,
+      //   context,
+      // }).$destroy,
+      // new Gallery({
+      //   target: document.body,
+      // }).$destroy,
       new Theater({
         target: document.body,
       }).$destroy,
-      new App({
-        target: document.body,
-        props: {
-          host: undefined,
-        },
-        context,
-      }).$destroy,
+      ...announcers,
       new Resize({
         target: document.body,
       }).$destroy,
-      createContextMenu(),
+      // createContextMenu(),
       () => document.body.classList.remove('debug')
     )
   })

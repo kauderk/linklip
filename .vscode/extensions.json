@@ -1,11 +1,10 @@
 {
   "recommendations": [
-    "dbaeumer.vscode-eslint",
+    "svelte.svelte-vscode",
+    "ritwickdey.LiveServer",
     "esbenp.prettier-vscode",
-    "mikestead.dotenv",
-    "bradlc.vscode-tailwindcss",
     "mhutchie.git-graph",
-    "svelte.svelte-vscode"
+    "amodio.toggle-excluded-files"
   ],
   "unwantedRecommendations": []
 }

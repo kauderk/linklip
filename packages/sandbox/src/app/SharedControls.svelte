@@ -29,22 +29,20 @@
         followerCycle: {
           // prettier-ignore
           update(hostRef, initRect) {
-            return {
-              value() {
-                const startFrom = hostRef.querySelector('div.notranslate.shadow-cursor-breadcrumb')!.getBoundingClientRect()
-                const endAt = hostRef.querySelector('div.notion-topbar-action-buttons')!.getBoundingClientRect()
-                const hostRect = hostRef.getBoundingClientRect()
-                // if the hostRect is at x:0, y: 0, width: 100, height: 30
-                // return at x: 20%, y: 0, width: 60%, height: 30
-                const xPadding = 15
-                return {
-                  x: startFrom.right + xPadding,
-                  y: hostRect.top,
-                  width: Math.max(0, endAt.left - startFrom.right - xPadding),
-                  height: hostRect.height,
-                }
-              },
-            }
+            return () => {
+							const startFrom = hostRef.querySelector('div.notranslate.shadow-cursor-breadcrumb')!.getBoundingClientRect()
+							const endAt = hostRef.querySelector('div.notion-topbar-action-buttons')!.getBoundingClientRect()
+							const hostRect = hostRef.getBoundingClientRect()
+							// if the hostRect is at x:0, y: 0, width: 100, height: 30
+							// return at x: 20%, y: 0, width: 60%, height: 30
+							const xPadding = 15
+							return {
+								x: startFrom.right + xPadding,
+								y: hostRect.top,
+								width: Math.max(0, endAt.left - startFrom.right - xPadding),
+								height: hostRect.height,
+							}
+						}
           },
         },
       },
@@ -55,11 +53,7 @@
         },
         followerCycle: {
           update(hostRef, initRect) {
-            return {
-              value() {
-                return selectorsFuncs.notionMainScroller.update(hostRef)
-              },
-            }
+            return () => selectorsFuncs.notionMainScroller.update(hostRef)
           },
         },
       },

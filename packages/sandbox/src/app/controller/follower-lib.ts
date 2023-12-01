@@ -11,6 +11,7 @@ export type Config = {
     {
       selector: {
         target: string
+        pointerTarget?: string
         outline?: string
         pointer?: boolean
         panicToLast?: boolean
@@ -113,6 +114,7 @@ export function animationFrameInterval(callback: () => any) {
     framing = interval = undefined
   }
 
+  // args type is a mutation observer parameters
   function debounced(on: boolean, ...args: any) {
     if (on && interval === undefined) {
       interval = setInterval(() => {

@@ -14,6 +14,6 @@ type PlayerParams = CreateParams & {
 }
 
 export type StaticPlayerParams = ReturnType<typeof staticPlayerParams>
-function staticPlayerParams(params: PlayerParams) {
+export function staticPlayerParams(params: PlayerParams) {
   return <const>{ ...Omit(params, ['target']) }
 }

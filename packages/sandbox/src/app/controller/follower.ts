@@ -10,6 +10,7 @@ import { createMouseTrack } from './mouse-track'
 import { fitToTarget, mapRange, type FollowerConfig, type Rect, togglePointerTarget, type Stage, animationFrameInterval, type El, camelCaseToTitleCase } from './follower-lib'
 import { createListeners } from '$lib/event-life-cycle'
 import { createDefaultStage } from '../follower/store'
+import { isRendered } from '$lib/utils'
 
 export const followers = preSignal({ message: '' as 'reset' | '' })
 export function follower<F extends FollowerConfig>(config: F) {
@@ -24,8 +25,8 @@ export function follower<F extends FollowerConfig>(config: F) {
   let follower = { ref: <HTMLElement>{} }
 
   //#region methods
-  function send(props: { value: (() => Rect) | Rect }) {
-    const { value } = props
+  function send(value: (() => Rect) | Rect) {
+    
     const newRect = () => (typeof value === 'function' ? value() : value)
 
     if (typeof value === 'function') {
@@ -38,26 +39,29 @@ export function follower<F extends FollowerConfig>(config: F) {
   //#region branch cycle
   const overlay = {
     clean() {
+      // console.log('overlay clean')
       follower.ref.style.removeProperty('opacity')
       follower.ref.style.removeProperty('pointer-events')
     },
     tryHide(hidden: boolean) {
       if (dragging.peek()) return
+      // console.log('overlay tryHide', hidden)
       follower.ref?.style.setProperty('opacity', hidden ? '0' : '1')
       follower.ref?.style.setProperty('pointer-events', hidden ? 'none' : 'unset')
     },
   }
   const selection = {
-    clean() {
-      hostStack.ref?.style.removeProperty('--selector')
+    clean(reset = true) {
+      // hostStack.ref?.style.removeProperty('--selector')
       delete follower.ref.dataset.follower
-      stage.mod({ mode: 'free' })
+      reset && stage.mod({ mode: 'free' })
     },
     tryDock(hostRef: HTMLElement) {
       const selector = Object.entries(config.selectors).find(([_, sel]) =>
         isSelector(hostRef, sel)
       )![0]
-      hostRef.style.setProperty('--selector', selector) // React won't remove it
+      // console.log('selection tryDock', selector)
+      // hostRef.style.setProperty('--selector', selector) // React won't remove it
       follower.ref.dataset.follower = selector
       return selector
     },
@@ -136,7 +140,7 @@ export function follower<F extends FollowerConfig>(config: F) {
     const potentialObservers = [
       selectors?.window !== false ? createDebouncedListener(window, 'resize', debounced) : null,
       scroll ? createDebouncedListener(scroll, 'scroll', debounced) : null,
-      resize ? createDebouncedObserver(resize, debounced) : null,
+      resize ? createDebouncedObserver(resize, debounced, 300, true) : null,
     ]
     destroyRectObserver = cleanSubscribers(
       // @ts-expect-error
@@ -154,7 +158,7 @@ export function follower<F extends FollowerConfig>(config: F) {
     observer.disconnect()
 
     const tryHost = maybeIsHost(host) ?? maybePanicToRef()
-    selection.clean()
+    selection.clean(false)
     getSelector().followerCycle?.clean?.(follower.ref)
     destroyRectObserver()
 
@@ -173,13 +177,11 @@ export function follower<F extends FollowerConfig>(config: F) {
       overlay.clean()
       config.hostLess?.postBranch?.()
 
-      send({
-        value: () => ({
-          ...rect.peek(),
-          x: freezeRect.x,
-          y: freezeRect.y,
-        }),
-      })
+      send(() => ({
+				...rect.peek(),
+				x: freezeRect.x,
+				y: freezeRect.y,
+			}))
     }
     selection.mode(!!tryHost)
   }
@@ -201,10 +203,14 @@ export function follower<F extends FollowerConfig>(config: F) {
   function branch(host?: Element | (() => Element | undefined), key?: string) {
     return preBranch(key).then(() => branchOutHost(typeof host === 'function' ? host() : host))
   }
+  // FIXME: extract the logic for when it's visible or not
+  // performance should increase then
 
   const observer = new IntersectionObserver(
     entries => {
-      if (stage.peek().mode !== 'host') return
+      if (stage.peek().mode !== 'host' || !isRendered(hostStack.ref!)) {
+        return
+      }
       const selector = getSelector()
       if (!selector.followerCycle.resize) {
         hostStack.fn()
@@ -254,20 +260,20 @@ export function follower<F extends FollowerConfig>(config: F) {
 
     mousemove(e) {
       const old = rect.peek()
-      send({
-        value: fitToTarget({
-          width: old.width,
-          height: old.height,
-          x: e.clientX - delta.x,
-          y: e.clientY - delta.y,
-        }),
-      })
+      send(fitToTarget({
+				width: old.width,
+				height: old.height,
+				x: e.clientX - delta.x,
+				y: e.clientY - delta.y,
+			}))
 
       // offPointer update
       if (e.target !== pointer.ref) {
         togglePointerTarget(false, pointer.ref)
         pointer.ref = e.target as any
-        const preSelector = findSelector(pointer.ref)?.selector
+        const preSelector = selectors.find(sel =>
+          pointer.ref?.matches?.(sel.selector.pointerTarget ?? sel.selector.target)
+        )?.selector
         if (preSelector && preSelector.pointer) {
           pointer.ref = preSelector.outline
             ? document.querySelector(preSelector.outline) ?? pointer.ref
@@ -280,10 +286,11 @@ export function follower<F extends FollowerConfig>(config: F) {
     mouseup(e) {
       // offPointer up
       togglePointerTarget(false, pointer.ref)
-      pointer.ref = undefined
       follower.ref.classList.remove('pointer')
 
-      const maybeHost = maybeUsePointer(e.target) ?? maybePanicToRef()
+      const maybeHost = maybeUsePointer(pointer.ref) ?? maybePanicToRef()
+      pointer.ref = undefined
+
       branch(maybeHost)
 
       dragging.value = false
@@ -369,8 +376,8 @@ export function follower<F extends FollowerConfig>(config: F) {
         ),
       }
     },
-    styleHost() {
-      getSelector().styleHost?.(hostStack.ref, rect.peek())
+    styleHost(addStyles = true) {
+      getSelector().styleHost?.(hostStack.ref, addStyles ? rect.peek() : undefined)
     },
     trySwitchHost(target?: Targets) {
       const potential = config.selectors[target as any]?.selector.target
@@ -380,12 +387,15 @@ export function follower<F extends FollowerConfig>(config: F) {
       branch(newHost)
       return true
     },
-    mount(host?: Element | Targets) {
+    changeHost(host?: Element | Targets) {
       if (typeof host === 'string') {
         this.trySwitchHost(host)
-      } else {
+      } else if (host) {
         branch(host as any)
       }
+    },
+    mount(host?: Element | Targets) {
+      this.changeHost(host)
 
       return cleanSubscribers(
         selection.clean,

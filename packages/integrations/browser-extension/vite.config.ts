@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     build: {
-      emptyOutDir: true,
+      emptyOutDir: false,
       outDir: 'build',
       rollupOptions: {
         output: {

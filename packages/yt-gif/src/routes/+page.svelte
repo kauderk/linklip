@@ -5,6 +5,7 @@
   } from '$v3/components/drop-down-menu/App/DropDownMenu.svelte'
   import CommandPalette from '$v3/components/drop-down-menu/Dropdown/CommandPalette.svelte'
   import Ytgif from '$v3/components/yt-gif/App/Tutorial.svelte'
+  import { ObserveSpans_DeployUrlButtons } from '$v3/init/observer/formatter'
 
   let grandParentBlock: HTMLElement
   let url: string
@@ -15,6 +16,7 @@
       url = 'https://youtu.be/vKL7vyiQuns'
     })
   }
+  console.log(ObserveSpans_DeployUrlButtons)
   //
 </script>
 

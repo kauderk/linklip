@@ -15,7 +15,7 @@
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
 
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "svelte"],
 
     /**
 			svelte-preprocess cannot figure out whether you have a value or a type, so tell TypeScript

@@ -7,19 +7,17 @@ type x = {
 export const cornerFollowerCycle = (pre: x) => {
   return {
     update(hostRef, initRect) {
-      return {
-        value() {
-          const rect = hostRef.getBoundingClientRect()
-          return pre.update(
-            {
-              x: rect.x,
-              width: rect.width,
-              y: rect.bottom - initRect.height,
-              height: initRect.height,
-            },
-            initRect
-          )
-        },
+      return () => {
+        const rect = hostRef.getBoundingClientRect()
+        return pre.update(
+          {
+            x: rect.x,
+            width: rect.width,
+            y: rect.bottom - initRect.height,
+            height: initRect.height,
+          },
+          initRect
+        )
       }
     },
     resize(followerRef, entry, initRect, isFull) {
@@ -30,15 +28,12 @@ export const cornerFollowerCycle = (pre: x) => {
       const bottomOffset = entry.boundingClientRect.bottom - entry.intersectionRect.bottom
 
       // prettier-ignore
-      return {
-				value: pre.resize({
-					x: entry.intersectionRect.x,
-					width: entry.intersectionRect.width,
-					y: (entry.boundingClientRect.bottom - initRect.height) + bottomOffset,
-					height: initRect.height,
-				}, initRect, entry.intersectionRect),
-				
-			}
+      return pre.resize({
+				x: entry.intersectionRect.x,
+				width: entry.intersectionRect.width,
+				y: (entry.boundingClientRect.bottom - initRect.height) + bottomOffset,
+				height: initRect.height,
+			}, initRect, entry.intersectionRect)
     },
   } satisfies FollowerCycle
 }

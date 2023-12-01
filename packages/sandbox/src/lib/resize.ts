@@ -127,7 +127,7 @@ export function createDebouncedObserver(
 const debounceOnOff = <On extends (state: boolean, ...args: any) => void>(
   on: On,
   delay?: n,
-  call?: boolean
+  avoidFirstCall?: boolean
 ) => {
   let timer: NodeJS.Timeout
 
@@ -137,9 +137,11 @@ const debounceOnOff = <On extends (state: boolean, ...args: any) => void>(
 		T['length'] extends 0 ? undefined :
 		(((...b: T) => void) extends (a:any, ...b: infer I) => void ? I : [])
 
+  // "avoidFirstCall" makes sense for the caller
+  // but here it's used to track the debounce cycles
   return {
     destroy() {
-      call = true
+      avoidFirstCall = true
       clearTimeout(timer)
     },
     fn: function () {
@@ -148,12 +150,12 @@ const debounceOnOff = <On extends (state: boolean, ...args: any) => void>(
       const context = this
       const args = arguments
 
-      if (!call) {
+      if (!avoidFirstCall) {
         on.apply(context, [true, ...args])
       }
-      call = true
+      avoidFirstCall = true
       timer = setTimeout(() => {
-        call = false
+        avoidFirstCall = false
         on.apply(context, [false, ...args])
       }, delay || 300)
       // @ts-expect-error

@@ -1,6 +1,6 @@
 import { tick } from 'svelte'
 
-const INJECT = (target: HTMLElement, portal: HTMLElement) => {
+export const INJECT = (target: HTMLElement, portal: HTMLElement) => {
   target.appendChild(portal)
 }
 type Props = {
