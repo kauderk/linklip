@@ -55,7 +55,7 @@ export async function ObserveLinks_DeployLinklip() {
         if (!urlToSvelteMap.has(key)) {
           const baseConfig = createConfig()
 
-          const followerConfig = createSelectorsConfig({
+          const { followerConfig, followerUpdate } = createSelectorsConfig({
             aspectRatio: baseConfig.aspectRatio,
             rect: baseConfig.rect,
             stage: baseConfig.stage,
@@ -79,7 +79,7 @@ export async function ObserveLinks_DeployLinklip() {
             if (stage.mode != 'host' || self.mode == 'free') return
 
             // FIXME: no side effects
-            followerConfig.offset((_, original) => ({
+            followerUpdate.offset((_, original) => ({
               y: !bottom.includes(stage.selector!) ? 10 : original.y,
             }))
             if ([...bottom, ...top].includes(self.selector!)) {
@@ -109,7 +109,7 @@ export async function ObserveLinks_DeployLinklip() {
           urlToSvelteMap.set(key, {
             update({ notionHref, containerID }) {
               // FIXME: requires cyclic update
-              followerConfig.notionRef = () => ({
+              followerUpdate.notionRef = () => ({
                 notionHref,
                 containerID,
               })
@@ -123,7 +123,7 @@ export async function ObserveLinks_DeployLinklip() {
 
               return function onRemoved() {
                 unStage()
-                followerConfig.notionCleanUp(containerID)
+                followerUpdate.notionCleanUp(containerID)
                 console.log('destroying')
               }
             },

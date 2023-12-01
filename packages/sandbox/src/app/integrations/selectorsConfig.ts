@@ -18,7 +18,8 @@ export function createSelectorsConfig(
   let cornerOffset = { y: 70, x: 20 }
   const originalCornerOffset = { ...cornerOffset }
 
-  const FollowerConfig = {
+  // FIXME: should unify object
+  const followerUpdate = {
     // FIXME: requires cyclic update
     notionRef: playerConfig.notionRef,
     notionCleanUp(containerID: string) {
@@ -27,23 +28,31 @@ export function createSelectorsConfig(
         removeNotionHrefStyle(containerID)
       }
     },
-    offset(delta) {
+    offset(delta: (tick: XY, original: XY) => Partial<XY>) {
       cornerOffset = {
         ...cornerOffset,
         ...delta(cornerOffset, originalCornerOffset),
       }
     },
+  }
+  function baseSelector(selector = '') {
+    return () => {
+      const id = followerUpdate.notionRef().containerID
+      return `.notion-text-block[data-block-id="${id}"] [href*="youtu"]${selector}`
+    }
+  }
+  const followerConfig = {
     selectors: {
       notionLink: {
         selector: {
-          target: `[href*="youtu"]`,
-          pointerTarget: `[href*="youtu"]>span`,
-          outline: `[href*="youtu"]`,
+          target: baseSelector(),
+          pointerTarget: baseSelector('>span'),
+          outline: baseSelector(),
           pointer: true,
         },
         observerSelectors,
         styleHost() {
-          const { notionHref, containerID } = FollowerConfig.notionRef()
+          const { notionHref, containerID } = followerUpdate.notionRef()
           if (playerConfig.stage.peek().mode == 'host' && isRendered(notionHref)) {
             const maxWidth = notionHref.closest('.notranslate')?.clientWidth || 350
             const width = playerConfig.rect.peek().width
@@ -213,12 +222,7 @@ export function createSelectorsConfig(
         })
       },
     },
-    pictureInPicture: true,
-  } satisfies FollowerConfig & {
-    offset: (delta: (tick: XY, original: XY) => Partial<XY>) => void
-    notionRef: () => { notionHref: HTMLElement; containerID: string }
-    notionCleanUp: (containerID: string) => void
-  }
+  } satisfies FollowerConfig
   function preBranch(payload: { selected: boolean }) {
     // @ts-expect-error
     const direction = this.selector.target.split(' ')[0].slice(1)
@@ -227,7 +231,7 @@ export function createSelectorsConfig(
     return gallery?.branch('[href*="youtu"]>span', payload.selected) // Promise
   }
 
-  return FollowerConfig
+  return { followerConfig, followerUpdate }
 }
 
 function createNotionHrefStyle(containerID: string, _rect: any) {

@@ -39,10 +39,10 @@
 
   const { paused, fullScreen, time } = player
   const { resizeRect } = timeline.context
-  export let { rect } = config
+  const { rect } = config
   const { registerFollower } = follower
 
-  const tiny = computed(() => config.rect.value.width <= 80)
+  const tiny = computed(() => rect.value.width <= 80)
   $: normal = $fullScreen || $rect.width > config.minWidth
   let any = '' as any
 
