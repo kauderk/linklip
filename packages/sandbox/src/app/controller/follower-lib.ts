@@ -1,8 +1,7 @@
-import { createContext } from '$lib/create-context'
 import type { PreSignal } from '$lib/pre-signal'
 import type { StageSignal } from '../follower/store'
 import type { follower } from './follower'
-export type FollowerConfig = Config
+
 export type PlayerConfig = {
   width: number
   aspectRatio: [number, number]
@@ -10,14 +9,19 @@ export type PlayerConfig = {
   dragging?: PreSignal<boolean>
   stage?: Stage
 }
-export type Config = {
+export type Selector =
+  | string
+  | (() => string | undefined)
+  | (() => HTMLElement | undefined)
+  | HTMLElement
+export type FollowerConfig = {
   selectors: Record<
     string,
     {
       selector: {
-        target: string
-        pointerTarget?: string
-        outline?: string
+        target: Selector
+        pointerTarget?: Selector
+        outline?: Selector
         pointer?: boolean
         panicToLast?: boolean
       }
@@ -40,7 +44,6 @@ export type Config = {
   hostLess?: {
     postBranch?: () => void
   }
-  pictureInPicture?: boolean
 }
 export type Stage = PreSignal<{
   mode: 'host' | 'free' | 'theater' | 'panic'

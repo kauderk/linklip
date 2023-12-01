@@ -3,17 +3,15 @@ import { preSignal } from '$lib/pre-signal'
 import { createDebouncedListener, createDebouncedObserver, createTimeout } from '$lib/resize'
 import { useClass } from '$lib/solid/useDirective'
 import { cleanSubscribers } from '$lib/stores'
-import { useContextMenu } from '../../context-menu/ContextMenu.svelte'
-import { createTrackMouseHold } from './click-track'
 import { createMouseTrack } from './mouse-track'
 // prettier-ignore
-import { fitToTarget, mapRange, type FollowerConfig, type PlayerConfig, type Rect, togglePointerTarget, type Stage, animationFrameInterval, type El, camelCaseToTitleCase } from './follower-lib'
-import { createListeners } from '$lib/event-life-cycle'
+import { fitToTarget, mapRange, type FollowerConfig, type PlayerConfig, type Rect, type Selector, togglePointerTarget, animationFrameInterval, type El } from './follower-lib'
 import { createDefaultStage } from '../follower/store'
 import { isRendered } from '$lib/utils'
 
 export const followers = preSignal({ message: '' as 'reset' | '' })
 type Props = Pick<PlayerConfig, 'rect' | 'dragging' | 'stage'> & FollowerConfig
+
 export function follower<F extends Props>(config: Props) {
   const rect = config.rect
   let hostStack = {
@@ -58,7 +56,7 @@ export function follower<F extends Props>(config: Props) {
     },
     tryDock(hostRef: HTMLElement) {
       const selector = Object.entries(config.selectors).find(([_, sel]) =>
-        isSelector(hostRef, sel)
+        matchesSelector(hostRef, sel.selector.target)
       )![0]
       // console.log('selection tryDock', selector)
       // hostRef.style.setProperty('--selector', selector) // React won't remove it
@@ -79,13 +77,21 @@ export function follower<F extends Props>(config: Props) {
     return config.selectors[hostStack.selectorKey] ?? {}
   }
   const selectors = Object.values(config.selectors)
-  type Sel = FollowerConfig['selectors'][string] | string
-  const parseSelector = (sel: Sel): string => (typeof sel == 'string' ? sel : sel.selector.target)
-  function isSelector(el: Element | undefined, sel: Sel) {
-    return el?.matches(parseSelector(sel))
+
+  function resolveSelector(selector?: Selector) {
+    if (typeof selector === 'function') {
+      return resolveSelector(selector())
+    } else if (typeof selector === 'string') {
+      return document.querySelector(selector) as HTMLElement
+    } else if (selector instanceof HTMLElement) {
+      return selector
+    }
+  }
+  function matchesSelector(against?: HTMLElement, selector?: Selector) {
+    return against === resolveSelector(selector)
   }
   function findSelector(el: any) {
-    return selectors.find(sel => isSelector(el, sel))
+    return selectors.find(sel => matchesSelector(el, sel.selector.target))
   }
   function maybeIsHost(el?: Element) {
     return findSelector(el) ? <HTMLElement>el : undefined
@@ -101,7 +107,7 @@ export function follower<F extends Props>(config: Props) {
   function tryHost(target?: string) {
     const potential = config.selectors[target as any]?.selector.target
     if (!potential) return
-    const newHost = document.querySelector(potential) as HTMLElement
+    const newHost = resolveSelector(potential)
     if (!newHost) return
     return newHost
   }
@@ -275,11 +281,11 @@ export function follower<F extends Props>(config: Props) {
         togglePointerTarget(false, pointer.ref)
         pointer.ref = e.target as any
         const preSelector = selectors.find(sel =>
-          pointer.ref?.matches?.(sel.selector.pointerTarget ?? sel.selector.target)
+          matchesSelector(pointer.ref, sel.selector.pointerTarget ?? sel.selector.target)
         )?.selector
         if (preSelector && preSelector.pointer) {
           pointer.ref = preSelector.outline
-            ? document.querySelector(preSelector.outline) ?? pointer.ref
+            ? resolveSelector(preSelector.outline) ?? pointer.ref
             : (pointer.ref as any)
           togglePointerTarget(true, pointer.ref)
         }
@@ -341,9 +347,7 @@ export function follower<F extends Props>(config: Props) {
       getSelector().styleHost?.(hostStack.ref, addStyles ? rect.peek() : undefined)
     },
     trySwitchHost(target?: Targets) {
-      const potential = config.selectors[target as any]?.selector.target
-      if (!potential) return
-      const newHost = document.querySelector(potential)
+      const newHost = resolveSelector(config.selectors[target as any]?.selector.target)
       if (!newHost) return
       branch(newHost)
       return true
