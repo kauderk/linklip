@@ -1,20 +1,21 @@
 <script lang="ts" context="module">
-  import { preSignal } from '$lib/pre-signal'
+  import { preSignal, type PreSignal } from '$lib/pre-signal'
   import { createMouseTrack } from './controller/mouse-track'
 
   type El = HTMLElement & { direction: string; parentElement: HTMLElement }
 
+  export type resizeMode =
+    | 'inlineBlock'
+    | 'inlineBlockReversed'
+    | 'pictureInPicture'
+    | 'right'
+    | 'left'
+    | 'bottom'
+    | 'top'
+    | 'center'
   const config = {
     aspectRatio: aspectRatioFrom([16, 9]),
-    resizeMode: 'inlineBlock' as
-      | 'inlineBlock'
-      | 'inlineBlockReversed'
-      | 'pictureInPicture'
-      | 'right'
-      | 'left'
-      | 'bottom'
-      | 'top'
-      | 'center',
+    resizeMode: 'inlineBlock' as resizeMode | PreSignal<resizeMode>,
     bounds: 'mouse' as 'mouse' | 'rect' | 'none',
     hide: false,
     minWidth: 300,
@@ -32,6 +33,7 @@
   }
 
   export function resize(element: HTMLElement, Config?: ResizeConfig) {
+    // TODO: possible memory leak
     const _config = { ...config, ...Config }
     const { rect } = _config
     let grabbers = createGrabbers()
@@ -112,8 +114,9 @@
 
         const _rect = { ...rect.value }
         const aspectRatio = _config.aspectRatio.value
+        const resizeMode = resolveResizeMode()
 
-        if (_config.resizeMode == 'pictureInPicture') {
+        if (resizeMode == 'pictureInPicture') {
           /**
            * imitate the browser's picture-in-picture mode
            */
@@ -136,7 +139,7 @@
           if (direction == 'bottom') {
             _rect.width = (initialRect.height + deltaY) * aspectRatio
           }
-        } else if (_config.resizeMode == 'inlineBlockReversed') {
+        } else if (resizeMode == 'inlineBlockReversed') {
           let delta = 0
           if (direction.match(/left|right/)) {
             delta = direction.match(/left/)
@@ -149,7 +152,7 @@
           _rect.x = initialRect.left - delta
           _rect.width = initialRect.width + delta
           _rect.y = initialRect.top - delta / aspectRatio
-        } else if (_config.resizeMode == 'inlineBlock') {
+        } else if (resizeMode == 'inlineBlock') {
           if (direction === 'right' || direction === 'left') {
             inlineBlock(widthDir, true)
           } else {
@@ -165,7 +168,7 @@
             const b = a == wR ? hR : wR
             _rect[on ? 'height' : 'width'] = (size / a) * b
           }
-        } else if (_config.resizeMode == 'center') {
+        } else if (resizeMode == 'center') {
           const sideways = direction.match(/right|left/)
           let delta = sideways ? deltaX : deltaY
           delta = direction.match(/left|top/) ? delta * -1 : delta
@@ -177,7 +180,6 @@
           _rect.x = initialRect.left - pivot
           _rect.y = initialRect.top - pivot / aspectRatio
         } else {
-          const resizeMode = _config.resizeMode
           // right|left|top|bottom
           const sideways = direction.match(/right|left/)
           let delta = sideways ? deltaX : deltaY
@@ -194,13 +196,17 @@
           }
         }
         // ugly, FIXME:
-        if (_config.resizeMode.length > 7) {
-          _rect.height = _rect.width / _config.aspectRatio.value
+        if (resizeMode.length > 7) {
+          _rect.height = _rect.width / aspectRatio
         }
         // invalidate the signal!
         rect.set({ ...rect.value, ..._rect })
       },
     })
+    // FIXME: this should be handled by the invoker
+    function resolveResizeMode() {
+      return typeof _config.resizeMode === 'string' ? _config.resizeMode : _config.resizeMode.peek()
+    }
 
     grabbers.forEach(grabber => {
       element.appendChild(grabber)
@@ -209,7 +215,7 @@
 
     function update() {
       // ugly, FIXME:
-      if (_config.resizeMode.length > 7) {
+      if (resolveResizeMode().length > 7) {
         element.style.aspectRatio = _config.aspectRatio.toString()
       }
 
@@ -225,6 +231,7 @@
         grabbers = []
       },
       update(Config: ResizeConfig) {
+        console.log('update - resize', Config)
         Object.assign(_config, Config)
         update()
       },

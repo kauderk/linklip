@@ -1,5 +1,5 @@
 import { preSignal } from '$lib/pre-signal'
-import { aspectRatioFrom, type ResizeConfig } from '../Resize.svelte'
+import { aspectRatioFrom, type resizeMode } from '../Resize.svelte'
 import type { FollowerCycle } from '../controller/follower'
 import { createDefaultStage } from '../follower/store'
 
@@ -27,7 +27,7 @@ export function createConfig(config?: Partial<typeof _Config>) {
 		}),
     resizing: preSignal(false),
     stage: createDefaultStage(),
-    resizeMode: 'inlineBlock' as ResizeConfig['resizeMode'],
+    resizeMode: preSignal('inlineBlock' as resizeMode),
   }
 }
 export const followerCycle = {

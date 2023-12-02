@@ -69,7 +69,7 @@ export function createSelectorsConfig(
         },
         followerCycle,
         postBranch() {
-          playerConfig.resizeMode = 'inlineBlock'
+          playerConfig.resizeMode.value = 'inlineBlock'
         },
       },
       theater: {
@@ -168,7 +168,7 @@ export function createSelectorsConfig(
           },
         },
         postBranch() {
-          playerConfig.resizeMode = 'inlineBlockReversed'
+          playerConfig.resizeMode.value = 'inlineBlockReversed'
         },
       },
       leftGallery: {
@@ -208,7 +208,7 @@ export function createSelectorsConfig(
     },
     hostLess: {
       postBranch() {
-        playerConfig.resizeMode = 'pictureInPicture'
+        playerConfig.resizeMode.value = 'pictureInPicture'
 
         // FIXME: abstract follower
         // props.follower.styleHost(false)
