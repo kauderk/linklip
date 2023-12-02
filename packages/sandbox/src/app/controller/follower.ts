@@ -249,7 +249,7 @@ export function follower<F extends Props>(config: Props) {
     }
   )
 
-  let delta = { x: 0, y: 0 }
+  let delta = { ...rect.peek() }
   let pointer: { ref?: HTMLElement } = {}
   const trackPointer = createMouseTrack({
     mousedown(e) {
@@ -259,18 +259,26 @@ export function follower<F extends Props>(config: Props) {
       // offPointer down
       observer.disconnect()
 
-      const oldRect = follower.ref.getBoundingClientRect()
-      delta.x = e.clientX - oldRect.left
-      delta.y = e.clientY - oldRect.top
+      // order matters
+      const oldRect =
+        stage.peek().mode == 'host' ? hostStack.ref?.getBoundingClientRect() : undefined
+      const _rect = rect.peek()
+      delta = {
+        x: e.clientX - _rect.x,
+        y: e.clientY - _rect.y,
+        width: oldRect?.width || _rect.width,
+        height: oldRect?.height || _rect.height,
+      }
+      // order matters
+      selection.clean()
+
       dragging.value = true
     },
 
     mousemove(e) {
-      const old = rect.peek()
       send(
         fitToTarget({
-          width: old.width,
-          height: old.height,
+          ...delta,
           x: e.clientX - delta.x,
           y: e.clientY - delta.y,
         })
