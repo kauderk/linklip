@@ -6,7 +6,10 @@ import Linklip from '@packages/sandbox/src/app/App.svelte'
 import { createConfig } from '@packages/sandbox/src/app/integrations/followerCycles'
 import { player, storyboard } from '@packages/sandbox/src/app/timeline/context'
 import { stages as createStagesCtx } from '@packages/sandbox/src/app/follower/store'
-import { follower as createFollower } from '@packages/sandbox/src/app/controller/follower'
+import {
+  createCachedDomObserver,
+  follower as createFollower,
+} from '@packages/sandbox/src/app/controller/follower'
 import { follower_DragThreshold_ContextMenu } from '@packages/sandbox/src/app/integrations/follower_DragThreshold_ContextMenu'
 import { createSelectorsConfig } from '@packages/sandbox/src/app/integrations/selectorsConfig'
 import { cleanSubscribers } from '@packages/sandbox/src/lib/stores'
@@ -20,6 +23,7 @@ export async function ObserveLinks_DeployLinklip() {
     }
   >()
   const stagesCtx = ['Stages', createStagesCtx()]
+  const cachedDomObserver = createCachedDomObserver()
 
   return createObserverAndDeployOnIntersection(
     ['a.notion-link-token.notion-focusable-token.notion-enable-hover'],
@@ -69,6 +73,7 @@ export async function ObserveLinks_DeployLinklip() {
             rect: baseConfig.rect,
             stage: baseConfig.stage,
             ...followerConfig,
+            cachedDomObserver,
           })
 
           const stages = stagesCtx[1] as any // the signal types or generics don't work across packages
@@ -93,10 +98,7 @@ export async function ObserveLinks_DeployLinklip() {
               config: baseConfig,
               follower,
               dragThreshold: follower_DragThreshold_ContextMenu(followerConfig, follower, true),
-              mount() {
-                // >.<
-                return cleanSubscribers(follower.mount(notionHref), unSharedFollower)
-              },
+              mount: () => cleanSubscribers(follower.mount(notionHref), unSharedFollower),
             },
             context: new Map([
               ['Player', player()],

@@ -1,16 +1,19 @@
 import { createContext } from '$lib/create-context'
-import { preSignal } from '$lib/pre-signal'
+import { createObservable, preSignal } from '$lib/pre-signal'
 import { createDebouncedListener, createDebouncedObserver, createTimeout } from '$lib/resize'
 import { useClass } from '$lib/solid/useDirective'
 import { cleanSubscribers } from '$lib/stores'
 import { createMouseTrack } from './mouse-track'
 // prettier-ignore
-import { fitToTarget, mapRange, type FollowerConfig, type PlayerConfig, type Rect, type Selector, togglePointerTarget, animationFrameInterval, type El } from './follower-lib'
+import { fitToTarget, mapRange, type FollowerConfig, type PlayerConfig, type Rect, type Selector, togglePointerTarget, animationFrameInterval, type El, createCachedDomObserver } from './follower-lib'
 import { createDefaultStage } from '../follower/store'
 import { isRendered } from '$lib/utils'
 
 export const followers = preSignal({ message: '' as 'reset' | '' })
-type Props = Pick<PlayerConfig, 'rect' | 'dragging' | 'stage'> & FollowerConfig
+type Props = Pick<PlayerConfig, 'rect' | 'dragging' | 'stage'> &
+  FollowerConfig & {
+    cachedDomObserver: ReturnType<typeof createCachedDomObserver>
+  }
 
 export function follower<F extends Props>(config: Props) {
   const rect = config.rect
@@ -132,59 +135,28 @@ export function follower<F extends Props>(config: Props) {
 
   //#region createRectObserver & createFitToWindow
 
-  const animationFrame = animationFrameInterval(() => {
-    observer.disconnect()
-    if (!hostStack.ref) return
-    observer.observe(hostStack.ref)
-  })
-  let destroyRectObserver = () => {}
-  const createRectObserver = () => {
-    const selectors = getSelector().observerSelectors ?? {}
-    const debounced = animationFrame.debounced
-
-    const potentialObservers = [
-      selectors?.window !== false ? createDebouncedListener(window, 'resize', debounced) : null,
-      [selectors.scroll ?? []].flat().map(s => {
-        const el = document.querySelector(s) as HTMLElement
-        if (el) createDebouncedListener(el, 'scroll', debounced)
-      }),
-      [selectors.resize ?? []].flat().map(s => {
-        const el = document.querySelector(s) as HTMLElement
-        if (el) createDebouncedObserver(el, debounced, 300, true)
-      }),
-    ]
-      .flat()
-      .filter(Boolean)
-
-    destroyRectObserver = cleanSubscribers(
-      // @ts-expect-error
-      ...potentialObservers
-    )
-  }
-
   // ----
-  const fitRectToWindowFrame = animationFrameInterval(() => {
-    observer.disconnect()
-    send(fitToTarget({ ...rect.peek() }))
-  })
   let destroyFitToWindowFrame = () => {}
   const createFitToWindow = () => {
-    const selectors = getSelector().observerSelectors
-
-    const debounced = fitRectToWindowFrame.debounced
-    const potentialObservers = [
-      selectors?.window !== false ? createDebouncedListener(window, 'resize', debounced) : null,
-    ].filter(Boolean)
-
-    destroyFitToWindowFrame = cleanSubscribers(
-      // @ts-expect-error
-      ...potentialObservers
-    )
+    destroyFitToWindowFrame = config.cachedDomObserver.tick.$ubscribe(function () {
+      observer.disconnect()
+      send(fitToTarget({ ...rect.peek() }))
+    })
+    config.cachedDomObserver.register({ window: true })
   }
   //#endregion
 
   //#endregion
 
+  let destroyRectObserver = () => {}
+  const createRectObserver = () => {
+    destroyRectObserver = config.cachedDomObserver.tick.$ubscribe(function () {
+      observer.disconnect()
+      if (!hostStack.ref) return
+      observer.observe(hostStack.ref)
+    })
+    config.cachedDomObserver.register(getSelector().observerSelectors)
+  }
   /**
    * Main Logic
    */
@@ -408,7 +380,6 @@ export function follower<F extends Props>(config: Props) {
         overlay.clean,
         observer.disconnect.bind(observer),
         createTimeout(() => (follower.ref.hidden = false)),
-        animationFrame.clearTimers,
         destroyRectObserver,
         destroyFitToWindowFrame,
         () => {
