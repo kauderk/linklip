@@ -113,7 +113,9 @@ export async function ObserveLinks_DeployLinklip() {
                 notionHref,
                 containerID,
               })
-              follower.changeHost(notionHref)
+              if (baseConfig.stage.peek().mode == 'host') {
+                follower.changeHost(notionHref)
+              }
             },
             cleanUp(containerID) {
               // FIXME: handle other selectors
