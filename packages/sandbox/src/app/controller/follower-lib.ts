@@ -1,6 +1,9 @@
 import type { PreSignal } from '$lib/pre-signal'
 import type { StageSignal } from '../follower/store'
 import type { follower } from './follower'
+import { createObservable } from '$lib/pre-signal'
+import { createDebouncedListener, createDebouncedObserver } from '$lib/resize'
+import { cleanSubscribers } from '$lib/stores'
 
 export type PlayerConfig = {
   width: number
@@ -142,4 +145,70 @@ export function animationFrameInterval<Args extends Array<any>>(
 
 export function camelCaseToTitleCase(camel: string) {
   return camel.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())
+}
+
+const cache = {
+  resize: [] as HTMLElement[],
+  scroll: [] as HTMLElement[],
+}
+
+export function createCachedDomObserver(options?: { cache?: typeof cache }) {
+  const tick = createObservable()
+  const animationFrame = animationFrameInterval(tick.notify, 0)
+  let potentialObservers: (() => void)[] = []
+  let _cache = options?.cache ?? cache
+
+  return {
+    tick,
+    destroy() {
+      animationFrame.clearTimers()
+      cleanSubscribers(...potentialObservers)()
+    },
+    register(observerSelectors?: FollowerConfig['selectors'][string]['observerSelectors']) {
+      if (!observerSelectors) return
+
+      const selectors = observerSelectors ?? {}
+      const switchAnim = animationFrame.switchAnimation
+
+      if (selectors?.window !== false) {
+        tryRegisterListener(
+          'resize',
+          _ => createDebouncedListener(window, 'resize', switchAnim),
+          window as any
+        )
+      }
+
+      annoyingAbstraction('scroll', el => createDebouncedListener(el, 'scroll', switchAnim))
+      annoyingAbstraction('resize', el => createDebouncedObserver(el, switchAnim, 300, true))
+
+      function tryRegisterListener(accessor: A, listenerCb: F, el: HTMLElement) {
+        const elementWasRegistered = _cache?.[accessor].includes(el)
+
+        if (!elementWasRegistered) {
+          const stopListening = listenerCb(el)
+
+          _cache = {
+            ..._cache,
+            // push the element
+            [accessor]: [_cache?.[accessor] ?? [], el].flat(),
+          }
+
+          potentialObservers.push(stopListening)
+        }
+      }
+
+      //#region annoyingAbstraction
+      type F = (el: HTMLElement) => () => void
+      type A = 'resize' | 'scroll'
+      function annoyingAbstraction(accessor: A, listenerCb: F) {
+        ;[selectors[accessor] ?? []].flat().map(s => {
+          const el = document.querySelector(s) as HTMLElement
+          if (!el) return
+
+          tryRegisterListener(accessor, listenerCb, el)
+        })
+      }
+      //#endregion
+    },
+  }
 }
