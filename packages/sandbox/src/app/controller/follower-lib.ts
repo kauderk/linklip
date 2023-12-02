@@ -111,27 +111,31 @@ export function toggleStyle(key: string, value: string, add: boolean, el?: HTMLE
   }
 }
 
-export function animationFrameInterval(callback: () => any) {
+export function animationFrameInterval<Args extends Array<any>>(
+  callback: (on: boolean, ...args: Args) => void,
+  Interval = 0
+) {
   let framing: any, interval: any
   const clearTimers = () => {
     clearInterval(interval)
     cancelAnimationFrame(framing)
-    framing = interval = undefined
   }
 
-  // args type is a mutation observer parameters
-  function debounced(on: boolean, ...args: any) {
+  function switchAnimation(on: boolean, ...args: Args) {
+    clearTimers()
+    const Args = [on, ...args] as any
     if (on && interval === undefined) {
+      callback.apply(null, Args)
       interval = setInterval(() => {
-        framing = requestAnimationFrame(callback)
-      }, 0)
+        framing = requestAnimationFrame(() => callback.apply(null, Args))
+      }, Interval)
     } else {
-      callback()
-      clearTimers()
+      callback.apply(null, Args)
+      interval = undefined
     }
   }
   return {
-    debounced,
+    switchAnimation,
     clearTimers,
   }
 }
