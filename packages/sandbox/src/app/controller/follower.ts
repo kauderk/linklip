@@ -130,7 +130,8 @@ export function follower<F extends Props>(config: Props) {
   }
   //#endregion
 
-  //#region createRectObserver
+  //#region createRectObserver & createFitToWindow
+
   const animationFrame = animationFrameInterval(() => {
     observer.disconnect()
     if (!hostStack.ref) return
@@ -154,6 +155,26 @@ export function follower<F extends Props>(config: Props) {
       ...potentialObservers.filter(Boolean)
     )
   }
+
+  // ----
+  const fitRectToWindowFrame = animationFrameInterval(() => {
+    observer.disconnect()
+    send(fitToTarget({ ...rect.peek() }))
+  })
+  let destroyFitToWindowFrame = () => {}
+  // prettier-ignore
+  const createFitToWindow = () => {
+    const selectors = getSelector().observerSelectors
+
+		const debounced = fitRectToWindowFrame.debounced
+    const potentialObservers = [
+      selectors?.window !== false ? createDebouncedListener(window, 'resize', debounced) : null,
+    ]
+    destroyFitToWindowFrame = cleanSubscribers(
+      // @ts-expect-error
+      ...potentialObservers.filter(Boolean)
+    )
+  }
   //#endregion
 
   //#endregion
@@ -167,7 +188,9 @@ export function follower<F extends Props>(config: Props) {
     const tryHost = maybeIsHost(host) ?? maybePanicToRef()
     selection.clean(false)
     getSelector().followerCycle?.clean?.(follower.ref)
+
     destroyRectObserver()
+    destroyFitToWindowFrame()
 
     if (tryHost) {
       getSelector().styleHost?.(hostStack.ref)
@@ -183,6 +206,7 @@ export function follower<F extends Props>(config: Props) {
       const freezeRect = follower.ref.getBoundingClientRect()
       overlay.clean()
       config.hostLess?.postBranch?.()
+      createFitToWindow()
 
       send(() => ({
         ...rect.peek(),
@@ -271,6 +295,9 @@ export function follower<F extends Props>(config: Props) {
       }
       // order matters
       selection.clean()
+      if (oldRect) {
+        getSelector().followerCycle?.clean?.(follower.ref)
+      }
 
       dragging.value = true
     },
