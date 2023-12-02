@@ -138,21 +138,27 @@ export function follower<F extends Props>(config: Props) {
     observer.observe(hostStack.ref)
   })
   let destroyRectObserver = () => {}
-  // prettier-ignore
   const createRectObserver = () => {
-    const selectors = getSelector().observerSelectors
-    const resize = selectors?.resize ? document.querySelector(selectors.resize) : (null as any)
-    const scroll = selectors?.scroll ? document.querySelector(selectors.scroll) : (null as any)
+    const selectors = getSelector().observerSelectors ?? {}
+    const debounced = animationFrame.debounced
 
-		const debounced = animationFrame.debounced
     const potentialObservers = [
       selectors?.window !== false ? createDebouncedListener(window, 'resize', debounced) : null,
-      scroll ? createDebouncedListener(scroll, 'scroll', debounced) : null,
-      resize ? createDebouncedObserver(resize, debounced, 300, true) : null,
+      [selectors.scroll ?? []].flat().map(s => {
+        const el = document.querySelector(s) as HTMLElement
+        if (el) createDebouncedListener(el, 'scroll', debounced)
+      }),
+      [selectors.resize ?? []].flat().map(s => {
+        const el = document.querySelector(s) as HTMLElement
+        if (el) createDebouncedObserver(el, debounced, 300, true)
+      }),
     ]
+      .flat()
+      .filter(Boolean)
+
     destroyRectObserver = cleanSubscribers(
       // @ts-expect-error
-      ...potentialObservers.filter(Boolean)
+      ...potentialObservers
     )
   }
 
@@ -162,17 +168,17 @@ export function follower<F extends Props>(config: Props) {
     send(fitToTarget({ ...rect.peek() }))
   })
   let destroyFitToWindowFrame = () => {}
-  // prettier-ignore
   const createFitToWindow = () => {
     const selectors = getSelector().observerSelectors
 
-		const debounced = fitRectToWindowFrame.debounced
+    const debounced = fitRectToWindowFrame.debounced
     const potentialObservers = [
       selectors?.window !== false ? createDebouncedListener(window, 'resize', debounced) : null,
-    ]
+    ].filter(Boolean)
+
     destroyFitToWindowFrame = cleanSubscribers(
       // @ts-expect-error
-      ...potentialObservers.filter(Boolean)
+      ...potentialObservers
     )
   }
   //#endregion
@@ -404,6 +410,7 @@ export function follower<F extends Props>(config: Props) {
         createTimeout(() => (follower.ref.hidden = false)),
         animationFrame.clearTimers,
         destroyRectObserver,
+        destroyFitToWindowFrame,
         () => {
           // prettier-ignore
           getSelector().styleHost?.(hostStack.ref)

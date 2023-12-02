@@ -26,8 +26,8 @@ export type FollowerConfig = {
         panicToLast?: boolean
       }
       observerSelectors?: {
-        resize?: string
-        scroll?: string
+        resize?: string | string[]
+        scroll?: string | string[]
         window?: boolean
       }
       followerCycle: FollowerCycle

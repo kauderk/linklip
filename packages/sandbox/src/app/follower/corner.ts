@@ -45,5 +45,5 @@ export const defaultCornerFollowerCycle = cornerFollowerCycle({
 
 export const observerSelectors = {
   scroll: '.notion-frame .notion-scroller',
-  resize: '.notion-page-content',
-} as const
+  resize: ['.notion-page-content', '.notion-frame .notion-scroller'],
+}
