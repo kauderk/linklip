@@ -59,8 +59,8 @@
         // @ts-expect-error
         const direction = original.direction as string
 
-        let deltaX = event.pageX - initialPos.x
-        let deltaY = event.pageY - initialPos.y
+        const deltaX = event.pageX - initialPos.x
+        const deltaY = event.pageY - initialPos.y
 
         // exit if the size is too small
         const widthDir = initialRect.width + findDeltaDirection()
@@ -128,6 +128,7 @@
           if (direction == 'bottom') {
             _rect.width = (initialRect.height + deltaY) * aspectRatio
           }
+          if (isOutOfBounds()) return
           if (constrained()) {
             _rect.y = _ogRect.y
             _rect.x = _ogRect.x
@@ -136,14 +137,20 @@
         } else if (resizeMode == 'inlineBlockReversed') {
           let delta = 0
           if (direction.match(/left|right/)) {
-            delta = direction.match(/left/)
+            delta = direction.match(/left/) //
               ? initialPos.x - event.pageX
-              : event.pageX - initialPos.x
+              : deltaX
           } else {
-            delta = direction.match(/top/) ? initialPos.y - event.pageY : event.pageY - initialPos.y
+            delta = direction.match(/top/) //
+              ? initialPos.y - event.pageY
+              : deltaY
+          }
+          if (outOfBounds && delta == 0) {
+            delta = Math.sign(findDeltaDirection())
           }
 
           _rect.width = initialRect.width + delta
+          if (isOutOfBounds()) return
           if (constrained()) break rectChange
 
           _rect.x = initialRect.left - delta
@@ -181,9 +188,7 @@
           _rect.y = initialRect.top - pivot / aspectRatio
         } else {
           // right|left|top|bottom
-          const sideways = direction.match(/right|left/)
-          let delta = sideways ? deltaX : deltaY
-          delta = direction.match(/left|top/) ? delta * -1 : delta
+          const delta = findDeltaDirection()
 
           if (resizeMode.match(/right|left/)) {
             _rect.width = initialRect.width + delta * (resizeMode.match(/left/) ? -1 : 1)
@@ -217,9 +222,8 @@
 
         function findDeltaDirection() {
           const sideways = direction.match(/right|left/)
-          let delta = sideways ? deltaX : deltaY
-          delta = direction.match(/left|top/) ? delta * -1 : delta
-          return delta
+          const delta = sideways ? deltaX : deltaY
+          return direction.match(/left|top/) ? delta * -1 : delta
         }
 
         function constrained() {
