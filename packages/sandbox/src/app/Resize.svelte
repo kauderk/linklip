@@ -43,19 +43,8 @@
 
     const tracker = createMouseTrack({
       mousedown(event, original) {
-        const domRect = element.getBoundingClientRect()
-        const parent = document.body.getBoundingClientRect()
+        assignInitialRects(event)
 
-        // @ts-expect-error
-        initialRect = {
-          width: domRect.width,
-          height: domRect.height,
-          left: domRect.left - parent.left,
-          right: parent.right - domRect.right,
-          top: domRect.top - parent.top,
-          bottom: parent.bottom - domRect.bottom,
-        }
-        initialPos = { x: event.pageX, y: event.pageY }
         original.classList.add('selected')
         _config.resizing.value = true
       },
@@ -72,29 +61,14 @@
 
         let deltaX = event.pageX - initialPos.x
         let deltaY = event.pageY - initialPos.y
-        const [wR, hR] = _config.aspectRatio.tuple
 
         // exit if the size is too small
-        const sideways = direction.match(/right|left/)
-        let delta = sideways ? deltaX : deltaY
-        delta = direction.match(/left|top/) ? delta * -1 : delta
-        const widthDir = initialRect.width + delta
+        const widthDir = initialRect.width + findDeltaDirection()
         if (_config.minWidth >= widthDir) {
-          const domRect = element.getBoundingClientRect()
-          const parent = document.body.getBoundingClientRect()
-
-          initialRect = {
-            ...initialRect,
-            width: domRect.width,
-            height: domRect.height,
-            left: domRect.left - parent.left,
-            right: parent.right - domRect.right,
-            top: domRect.top - parent.top,
-            bottom: parent.bottom - domRect.bottom,
-          }
-          initialPos = { x: event.pageX, y: event.pageY }
+          assignInitialRects(event)
           return
         }
+
         let outOfBounds = false
         const domRect = element.getBoundingClientRect()
         const padding = _config.padding
@@ -106,16 +80,7 @@
             domRect.top - padding < 0 ||
             domRect.bottom + padding > window.innerHeight
           ) {
-            // if the next move is trying to move it back to the screen, then allow it
-            // prettier-ignore
-            if (
-								direction.match('left') && event.pageX < padding
-							|| direction.match('right') && event.pageX > window.innerWidth - padding
-							|| direction.match('top') && event.pageY < padding
-							|| direction.match('bottom') && event.pageY > window.innerHeight - padding
-						) {
-							return
-						}
+            if (isOverflowing()) return
           }
         } else if (_config.bounds == 'rect') {
           const parent = document.body.getBoundingClientRect()
@@ -127,27 +92,9 @@
           ) {
             outOfBounds = true
 
-            initialRect = {
-              ...initialRect,
-              width: domRect.width,
-              height: domRect.height,
-              left: domRect.left - parent.left,
-              right: parent.right - domRect.right,
-              top: domRect.top - parent.top,
-              bottom: parent.bottom - domRect.bottom,
-            }
-            initialPos = { x: event.pageX, y: event.pageY }
+            assignInitialRects(event)
 
-            // if the next move is trying to move it back to the screen, then allow it
-            // prettier-ignore
-            if (
-								direction.match('left') && event.pageX < padding
-							|| direction.match('right') && event.pageX > window.innerWidth - padding
-							|| direction.match('top') && event.pageY < padding
-							|| direction.match('bottom') && event.pageY > window.innerHeight - padding
-						) {
-							return
-						}
+            if (isOverflowing()) return
           }
         }
 
@@ -210,23 +157,23 @@
             const heightDir = initialRect.height + deltaY * yDir
             inlineBlock(heightDir, false)
           }
+
+          if (isOutOfBounds()) return
+          // is this working here?, inlineBlock's height change seems to be overeaten by the constrained() call
           constrained()
 
           function inlineBlock(size: number, on: boolean) {
             _rect[on ? 'width' : 'height'] = size
-            const a = on ? wR : hR
-            const b = a == wR ? hR : wR
-            _rect[on ? 'height' : 'width'] = (size / a) * b
+            const [wR, hR] = _config.aspectRatio.tuple
+            const widthRatio = on ? wR : hR
+            const heightRatio = widthRatio == wR ? hR : wR
+            _rect[on ? 'height' : 'width'] = (size / widthRatio) * heightRatio
           }
         } else if (resizeMode == 'center') {
-          const sideways = direction.match(/right|left/)
-          let delta = sideways ? deltaX : deltaY
-          delta = direction.match(/left|top/) ? delta * -1 : delta
+          const delta = findDeltaDirection()
 
           _rect.width = initialRect.width + delta
-          if (outOfBounds && _rect.width > _ogRect.width) {
-            return
-          }
+          if (isOutOfBounds()) return
           if (constrained()) break rectChange
 
           const pivot = delta / 2
@@ -252,6 +199,29 @@
         // invalidate the signal!
         rect.set({ ..._ogRect, ..._rect })
 
+        // if the next move is trying to move it back to the screen, then allow it
+        function isOverflowing() {
+          if (
+            (direction.match('left') && event.pageX < padding) ||
+            (direction.match('right') && event.pageX > window.innerWidth - padding) ||
+            (direction.match('top') && event.pageY < padding) ||
+            (direction.match('bottom') && event.pageY > window.innerHeight - padding)
+          ) {
+            return true
+          }
+        }
+
+        function isOutOfBounds() {
+          return outOfBounds && _rect.width > _ogRect.width
+        }
+
+        function findDeltaDirection() {
+          const sideways = direction.match(/right|left/)
+          let delta = sideways ? deltaX : deltaY
+          delta = direction.match(/left|top/) ? delta * -1 : delta
+          return delta
+        }
+
         function constrained() {
           if (constraint.width < _rect.width) {
             _rect.width = constraint.width
@@ -262,6 +232,21 @@
         }
       },
     })
+    function assignInitialRects(event: MouseEvent) {
+      const domRect = element.getBoundingClientRect()
+      const parent = document.body.getBoundingClientRect()
+
+      initialRect = {
+        ...initialRect,
+        width: domRect.width,
+        height: domRect.height,
+        left: domRect.left - parent.left,
+        right: parent.right - domRect.right,
+        top: domRect.top - parent.top,
+        bottom: parent.bottom - domRect.bottom,
+      }
+      initialPos = { x: event.pageX, y: event.pageY }
+    }
     // FIXME: this should be handled by the invoker
     function resolveResizeMode() {
       return typeof _config.resizeMode === 'string' ? _config.resizeMode : _config.resizeMode.peek()
