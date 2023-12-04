@@ -1,14 +1,41 @@
-/packages/sandbox
-- bugs
-	- follower resize on desktop must readjust to the pivot origin
-	- when changing followers, adjust to the minimum size
-- todo
-	- remove ui in mini mode, add floating controls when interacting with the mini player
-	- when there is no available follower, default to the url mode
+- /packages/sandbox
+	- bugs
+		- follower resize on desktop must readjust to the pivot origin
+		- when changing followers, adjust to the minimum size
+	- todo
+		- remove ui in mini mode, add floating controls when interacting with the mini player
+		- when there is no available follower, default to the url mode
 
-/packages/yt-gif x /packages/sandbox follower + observer
-	- locate the target
-	- once it's visible, start the destruction observer
-	- style the target
-	- create the portalFollower and set it follow the target
-	- once the target is destroyed, unlink the portalFollower
+- /packages/yt-gif x /packages/sandbox 
+	- ✔️ follower + observer
+		- locate the target
+		- once it's visible, start the destruction observer
+		- style the target
+		- create the portalFollower and set it follow the target
+		- once the target is destroyed, unlink the portalFollower
+	- bugs
+		- ◻ the follower/resize fails to constrain the to its max/min size
+		- ◻ the last follower pointer target should increase in z-index
+		- the resize stops when the mouse leaves the window
+		- the controls component should listen for keyboard events only when it's active/allowed
+		- when there are two followers on top of each other, it's hard to know the hidden one is there
+		- sometimes the page's scroll wheel is blocked when the mouse is over the follower
+		- there's a lot of white space when two notionLinks/blocks are nested
+		- the follower/target causes a layout shift when it's created if the user is scrolling upwards (the page jumps down)
+		- when placing two notionLinks on the same block/text
+			- the second one doesn't work, plus it looses its pointerTarget function
+			- there's a lot of white space when two notionLinks are on the same block
+			- when they share urls, the second one is kinda useless, but when the urls are different, the first one shrinks to the size of the actual notionLink url font size
+			- when dividing the block into two, it creates a new follower fo the second half but the old one the one that wasn't working is still there
+			- when there's nothing else but the notionLink in a block, it's almost impossible to edit the text
+	- todo
+		- add a button to turn off the follower
+		- the follower pointer should highlight the available target(s)
+		- the follower is jerky when using the mouse wheel but when using the html scroll thumb it's smooth
+		- option for the follower to scale the target appropriately when on resize observers (only when shrinking)
+		- since the follower overlays the target, when the user focuses to edit the block, move the caret to the ends of the target text
+		- find a better way to calculate the follower rect size when overlaying with other dom elements
+			- maybe provide a list of foreground elements to check against
+		- notionLinks apps don't know how to destroy themselves
+		- notionLinks apps should be able to create their own followers
+			- specially if another notion client deletes the block/link element

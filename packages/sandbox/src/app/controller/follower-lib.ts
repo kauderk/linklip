@@ -1,7 +1,7 @@
 import type { PreSignal } from '$lib/pre-signal'
 import type { StageSignal } from '../follower/store'
 import type { follower } from './follower'
-import { createObservable } from '$lib/pre-signal'
+import { createObservable, preSignal } from '$lib/pre-signal'
 import { createDebouncedListener, createDebouncedObserver } from '$lib/resize'
 import { cleanSubscribers } from '$lib/stores'
 
@@ -213,3 +213,5 @@ export function createCachedDomObserver(options?: { cache?: typeof cache }) {
     },
   }
 }
+
+export const zIndex = preSignal(101)

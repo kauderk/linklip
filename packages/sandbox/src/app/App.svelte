@@ -11,7 +11,7 @@
   import SVG from './SVG.svelte'
   import Timeline from './Timeline.svelte'
   import Video from './Video.svelte'
-  import type { getFollowerContext } from './controller/follower'
+  import { type getFollowerContext, zIndex } from './controller/follower'
   import { createHoverTrack } from './controller/hover-tracker'
   import { getPlayerContext } from './timeline/context'
   import { setTimelineContext } from './timeline/controller'
@@ -62,6 +62,10 @@
   use:useClass={{ resizing: config.resizing, fullScreen }}
   hidden
   use:registerFollower
+  on:mouseenter={e => {
+    zIndex.value++
+    e.currentTarget.style.zIndex = zIndex.peek().toString()
+  }}
   style:--video-width="{$rect.width}px"
   style:--video-aspect-ratio={config.aspectRatio.toString()}
 >
