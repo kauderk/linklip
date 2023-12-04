@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
   import { preSignal, type PreSignal } from '$lib/pre-signal'
+  import type { Rect } from './controller/follower-lib'
   import { createMouseTrack } from './controller/mouse-track'
 
   type El = HTMLElement & { direction: string; parentElement: HTMLElement }
@@ -21,7 +22,7 @@
     minWidth: 300,
     resizing: preSignal(false),
     padding: 5,
-    rect: preSignal({
+    rect: preSignal(<Rect>{
       x: 200,
       y: 200,
       width: 600,
@@ -30,6 +31,7 @@
   }
   export type ResizeConfig = Partial<typeof config> & {
     rect?: typeof config.rect
+    constraint?: { constraint: (rect: Rect) => Rect }
   }
 
   export function resize(element: HTMLElement, Config?: ResizeConfig) {
@@ -112,7 +114,9 @@
           }
         }
 
-        const _rect = { ...rect.value }
+        let _rect = { ...rect.peek() }
+        const constraint = _config.constraint?.constraint(_rect) ?? _rect
+
         const aspectRatio = _config.aspectRatio.value
         const resizeMode = resolveResizeMode()
 
@@ -197,6 +201,10 @@
         }
         // ugly, FIXME:
         if (resizeMode.length > 7) {
+          _rect.height = _rect.width / aspectRatio
+        }
+        if (constraint.width < _rect.width) {
+          _rect.width = constraint.width
           _rect.height = _rect.width / aspectRatio
         }
         // invalidate the signal!

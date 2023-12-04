@@ -35,6 +35,7 @@ export type FollowerConfig = {
       }
       followerCycle: FollowerCycle
       styleHost?: (hostRef?: HTMLElement, rect?: Rect) => void
+      constraint?: (hostRef: HTMLElement) => Rect
       stageSignal?: StageSignal
       preBranch?: (payload: {
         current?: string

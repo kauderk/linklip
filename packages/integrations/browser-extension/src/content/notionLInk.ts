@@ -92,13 +92,27 @@ export async function ObserveLinks_DeployLinklip() {
             }
           })
 
+          // FUCK!
+          const unResizeStage = baseConfig.stage.subscribe((stage: any) => {
+            // @ts-expect-error valueContainer
+            const pre = followerConfig.selectors[stage.selector]?.constraint
+            const constraint = pre
+              ? (rect: any) => {
+                  return pre(followerUpdate.notionRef().notionHref, rect)
+                }
+              : undefined
+            // @ts-expect-error valueContainer
+            baseConfig.constraint.constraint = constraint
+          })
+
           const app = new Linklip({
             target: document.body,
             props: {
               config: baseConfig,
               follower,
               dragThreshold: follower_DragThreshold_ContextMenu(followerConfig, follower, true),
-              mount: () => cleanSubscribers(follower.mount(notionHref), unSharedFollower),
+              mount: () =>
+                cleanSubscribers(follower.mount(notionHref), unSharedFollower, unResizeStage),
             },
             context: new Map([
               ['Player', player()],

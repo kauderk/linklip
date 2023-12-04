@@ -25,6 +25,7 @@ export function createConfig(config?: Partial<typeof _Config>) {
 			width,
 			height,
 		}),
+    constraint: {},
     resizing: preSignal(false),
     stage: createDefaultStage(),
     resizeMode: preSignal('inlineBlock' as resizeMode),

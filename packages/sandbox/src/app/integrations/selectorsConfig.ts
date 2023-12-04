@@ -54,17 +54,32 @@ export function createSelectorsConfig(
         styleHost() {
           const { notionHref, containerID } = followerUpdate.notionRef()
           if (playerConfig.stage.peek().mode == 'host' && isRendered(notionHref)) {
-            const maxWidth = notionHref.closest('.notranslate')?.clientWidth || 350
+            // signals callbacks ignore the 'this' context
+            const constraint = followerConfig.selectors.notionLink.constraint?.(notionHref)
             const width = playerConfig.rect.peek().width
             const rect = {
-              width,
-              maxWidth,
-              height: width / playerConfig.aspectRatio.value,
-              maxHeight: maxWidth / playerConfig.aspectRatio.value,
+              width: Math.min(width, constraint.width),
+              height: Math.min(
+                width / playerConfig.aspectRatio.value,
+                constraint.width / playerConfig.aspectRatio.value
+              ),
             }
             createNotionHrefStyle(containerID, rect)
           } else {
             removeNotionHrefStyle(containerID)
+          }
+        },
+        constraint(notionHref) {
+          const parent = notionHref.closest('.notranslate')!
+          if (!parent) {
+            debugger
+            throw new Error('No DOM constraint parent')
+          }
+          return {
+            x: parent.clientLeft,
+            y: parent.clientTop,
+            width: parent?.clientWidth,
+            height: parent?.clientHeight,
           }
         },
         followerCycle,
@@ -129,7 +144,7 @@ export function createSelectorsConfig(
               // return at x: 20%, y: 0, width: 60%, height: 30
               const xPadding = 15
               const height = hostRect.height
-              const width = height * (16 / 9)
+              const width = height * playerConfig.aspectRatio.value
               return {
                 x: startFrom.right + xPadding,
                 y: hostRect.top,
@@ -243,18 +258,14 @@ function createNotionHrefStyle(containerID: string, _rect: any) {
   }
   // style the target to accommodate the portal
   style.innerHTML = `
-		[data-block-id="${containerID}"] 
+		[data-block-id="${containerID}"]>div>div>.notranslate 
 		a.notion-link-token.notion-focusable-token.notion-enable-hover {
 			all: unset;
 
 			height: ${_rect.height}px; 
 			width: ${_rect.width}px;
-			max-width: ${_rect.maxWidth}px;
-			max-height: ${_rect.maxHeight}px;
 
-			outline: 1px solid black;
-			border-radius: .2em;
-
+			opacity: 0;
 			display: block;
 		}
 	`.trim()
