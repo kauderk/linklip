@@ -31,7 +31,7 @@
   }
   export type ResizeConfig = Partial<typeof config> & {
     rect?: typeof config.rect
-    constraint?: { constraint: (rect: Rect) => Rect }
+    constraint?: { constraint?: (rect: Rect) => Rect }
   }
 
   export function resize(element: HTMLElement, Config?: ResizeConfig) {
@@ -114,13 +114,14 @@
           }
         }
 
-        let _rect = { ...rect.peek() }
-        const constraint = _config.constraint?.constraint(_rect) ?? _rect
+        const _ogRect = rect.peek()
+        let _rect = { ..._ogRect }
+        const constraint = _config.constraint?.constraint?.(_rect) ?? _rect
 
         const aspectRatio = _config.aspectRatio.value
         const resizeMode = resolveResizeMode()
 
-        if (resizeMode == 'pictureInPicture') {
+        rectChange: if (resizeMode == 'pictureInPicture') {
           /**
            * imitate the browser's picture-in-picture mode
            */
@@ -143,6 +144,11 @@
           if (direction == 'bottom') {
             _rect.width = (initialRect.height + deltaY) * aspectRatio
           }
+          if (constrained()) {
+            _rect.y = _ogRect.y
+            _rect.x = _ogRect.x
+            break rectChange
+          }
         } else if (resizeMode == 'inlineBlockReversed') {
           let delta = 0
           if (direction.match(/left|right/)) {
@@ -153,8 +159,10 @@
             delta = direction.match(/top/) ? initialPos.y - event.pageY : event.pageY - initialPos.y
           }
 
-          _rect.x = initialRect.left - delta
           _rect.width = initialRect.width + delta
+          if (constrained()) break rectChange
+
+          _rect.x = initialRect.left - delta
           _rect.y = initialRect.top - delta / aspectRatio
         } else if (resizeMode == 'inlineBlock') {
           if (direction === 'right' || direction === 'left') {
@@ -165,6 +173,7 @@
             const heightDir = initialRect.height + deltaY * yDir
             inlineBlock(heightDir, false)
           }
+          constrained()
 
           function inlineBlock(size: number, on: boolean) {
             _rect[on ? 'width' : 'height'] = size
@@ -178,7 +187,7 @@
           delta = direction.match(/left|top/) ? delta * -1 : delta
 
           _rect.width = initialRect.width + delta
-          _rect.height = _rect.width / aspectRatio
+          if (constrained()) break rectChange
 
           const pivot = delta / 2
           _rect.x = initialRect.left - pivot
@@ -195,20 +204,22 @@
             _rect.height = initialRect.height + delta * (resizeMode.match(/top/) ? -1 : 1)
           }
 
-          if (outOfBounds && _rect.height > rect.value.height) {
+          if (outOfBounds && _rect.height > _ogRect.height) {
             return
           }
         }
-        // ugly, FIXME:
-        if (resizeMode.length > 7) {
-          _rect.height = _rect.width / aspectRatio
-        }
-        if (constraint.width < _rect.width) {
-          _rect.width = constraint.width
-          _rect.height = _rect.width / aspectRatio
-        }
+
         // invalidate the signal!
-        rect.set({ ...rect.value, ..._rect })
+        rect.set({ ..._ogRect, ..._rect })
+
+        function constrained() {
+          if (constraint.width < _rect.width) {
+            _rect.width = constraint.width
+            _rect.height = constraint.width / aspectRatio
+            return true
+          }
+          _rect.height = _rect.width / aspectRatio
+        }
       },
     })
     // FIXME: this should be handled by the invoker

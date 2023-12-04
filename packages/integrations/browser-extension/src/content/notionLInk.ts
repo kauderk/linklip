@@ -96,11 +96,12 @@ export async function ObserveLinks_DeployLinklip() {
           const unResizeStage = baseConfig.stage.subscribe((stage: any) => {
             // @ts-expect-error valueContainer
             const pre = followerConfig.selectors[stage.selector]?.constraint
-            const constraint = pre
-              ? (rect: any) => {
-                  return pre(followerUpdate.notionRef().notionHref, rect)
-                }
-              : undefined
+            const constraint =
+              pre && stage.mode != 'free'
+                ? (rect: any) => {
+                    return pre(followerUpdate.notionRef().notionHref, rect)
+                  }
+                : undefined
             // @ts-expect-error valueContainer
             baseConfig.constraint.constraint = constraint
           })
