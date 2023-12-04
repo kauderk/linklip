@@ -17,7 +17,7 @@
   const config = {
     aspectRatio: aspectRatioFrom([16, 9]),
     resizeMode: 'inlineBlock' as resizeMode | PreSignal<resizeMode>,
-    bounds: 'mouse' as 'mouse' | 'rect' | 'none',
+    bounds: 'rect' as 'mouse' | 'rect' | 'none',
     hide: false,
     minWidth: 300,
     resizing: preSignal(false),
@@ -70,14 +70,29 @@
         // @ts-expect-error
         const direction = original.direction as string
 
-        const deltaX = event.pageX - initialPos.x
-        const deltaY = event.pageY - initialPos.y
+        let deltaX = event.pageX - initialPos.x
+        let deltaY = event.pageY - initialPos.y
         const [wR, hR] = _config.aspectRatio.tuple
 
         // exit if the size is too small
-        const xDir = direction.match('left') ? -1 : 1
-        const widthDir = initialRect.width + deltaX * xDir
+        const sideways = direction.match(/right|left/)
+        let delta = sideways ? deltaX : deltaY
+        delta = direction.match(/left|top/) ? delta * -1 : delta
+        const widthDir = initialRect.width + delta
         if (_config.minWidth >= widthDir) {
+          const domRect = element.getBoundingClientRect()
+          const parent = document.body.getBoundingClientRect()
+
+          initialRect = {
+            ...initialRect,
+            width: domRect.width,
+            height: domRect.height,
+            left: domRect.left - parent.left,
+            right: parent.right - domRect.right,
+            top: domRect.top - parent.top,
+            bottom: parent.bottom - domRect.bottom,
+          }
+          initialPos = { x: event.pageX, y: event.pageY }
           return
         }
         let outOfBounds = false
@@ -111,6 +126,28 @@
             domRect.bottom + padding > parent.bottom
           ) {
             outOfBounds = true
+
+            initialRect = {
+              ...initialRect,
+              width: domRect.width,
+              height: domRect.height,
+              left: domRect.left - parent.left,
+              right: parent.right - domRect.right,
+              top: domRect.top - parent.top,
+              bottom: parent.bottom - domRect.bottom,
+            }
+            initialPos = { x: event.pageX, y: event.pageY }
+
+            // if the next move is trying to move it back to the screen, then allow it
+            // prettier-ignore
+            if (
+								direction.match('left') && event.pageX < padding
+							|| direction.match('right') && event.pageX > window.innerWidth - padding
+							|| direction.match('top') && event.pageY < padding
+							|| direction.match('bottom') && event.pageY > window.innerHeight - padding
+						) {
+							return
+						}
           }
         }
 
@@ -187,6 +224,9 @@
           delta = direction.match(/left|top/) ? delta * -1 : delta
 
           _rect.width = initialRect.width + delta
+          if (outOfBounds && _rect.width > _ogRect.width) {
+            return
+          }
           if (constrained()) break rectChange
 
           const pivot = delta / 2
