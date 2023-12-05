@@ -39,14 +39,26 @@ export async function ObserveLinks_DeployLinklip() {
         if (!document.contains(notionHref)) {
           return
         }
-        console.log('deploying', payload)
 
         // followerPortal must follow target
-        const containerID = notionHref.closest('[data-block-id]')?.dataset?.blockId
+        const containerID = notionHref.closest('.notion-page-content [data-block-id]')?.dataset
+          ?.blockId
         if (!containerID) {
-          console.error('containerID not found')
-          return
+          // notion's drag and drop blocks create copies...
+          // if this is the case ignore the "ghost" block
+          if (!notionHref.closest('.notion-overlay-container')) {
+            console.error('containerID not found for:', notionHref)
+            return
+          }
+          // but this doesn't mean you should ignore the operation
+          // sometimes this can cause a layout shift, so we need to clean up
+          return function onRemoved() {
+            cachedDomObserver.tick.notify()
+            console.log('cachedDomObserver.tick.notify')
+          }
         }
+
+        console.log('deploying', payload)
 
         notionHref.onclick = (e: any) => {
           e.preventDefault() // up the tree

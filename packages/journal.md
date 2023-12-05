@@ -21,10 +21,12 @@
 			- now when the resize tracker is on the edge of the parent, it becomes sluggish and sometimes it overflows it anyway
 			- the tracker and the mouse fall out of sync when entering the 'too small' branch
 		- the controls component should listen for keyboard events only when it's active/allowed
-		- when there are two followers on top of each other, it's hard to know the hidden one is there
+		- ◻ when there are two followers on top of each other, it's hard to know the hidden one is there
 		- sometimes the page's scroll wheel is blocked when the mouse is over the follower
 		- there's a lot of white space when two notionLinks/blocks are nested
 		- the follower/target causes a layout shift when it's created if the user is scrolling upwards (the page jumps down)
+		- ◻ the follower looses its notionLink when moving the block, specifically when drag and dropping
+			- ◻ sometimes the follower size shrinks to the size of the text
 		- when placing two notionLinks on the same block/text
 			- the second one doesn't work, plus it looses its pointerTarget function
 			- there's a lot of white space when two notionLinks are on the same block
