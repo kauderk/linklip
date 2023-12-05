@@ -43,7 +43,8 @@
   const { registerFollower } = follower
 
   const tiny = computed(() => rect.value.width <= 80)
-  $: normal = $fullScreen || $rect.width > config.minWidth
+  // it seems the preact/signal is falling behind some frames... +5 should be enough
+  const normal = computed(() => rect.value.width + 5 > config.minWidth || fullScreen.value)
   let any = '' as any
 
   const scrubbing = preSignal(false)
@@ -74,7 +75,7 @@
 		class="followerContent"
 	>
 	<div
-		class:mini={!normal}
+		class:mini={!$normal}
 		class="video-container video-cover context-menu-boundary {any}"
 		class:tiny={$tiny}
 		use:resize={config}
