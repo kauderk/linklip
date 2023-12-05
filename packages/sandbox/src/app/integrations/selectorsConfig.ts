@@ -223,7 +223,7 @@ export function createSelectorsConfig(
     },
     hostLess: {
       postBranch() {
-        playerConfig.resizeMode.value = 'center'
+        playerConfig.resizeMode.value = 'pictureInPicture'
 
         // FIXME: abstract follower
         // props.follower.styleHost(false)

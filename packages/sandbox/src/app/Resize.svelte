@@ -58,19 +58,27 @@
       mousemove(event, original) {
         // @ts-expect-error
         const direction = original.direction as string
+        const domRect = element.getBoundingClientRect()
+        const parent = document.body.getBoundingClientRect()
 
-        const deltaX = event.pageX - initialPos.x
-        const deltaY = event.pageY - initialPos.y
+        const pageX = event.pageX
+        const pageY = event.pageY
+        let deltaX = pageX - initialPos.x
+        let deltaY = pageY - initialPos.y
 
+        const deltaDir = findDeltaDirection()
         // exit if the size is too small
-        const widthDir = initialRect.width + findDeltaDirection()
-        if (_config.minWidth >= widthDir) {
-          assignInitialRects(event)
-          return
+        const _domRect = element.getBoundingClientRect()
+        const widthDir = _domRect.width + Math.sign(deltaDir)
+        let tooSmall = false
+        if (_config.minWidth > widthDir) {
+          tooSmall = true
+          initialPos = { x: event.pageX, y: event.pageY }
+          deltaX = 0
+          deltaY = 0
         }
 
         let outOfBounds = false
-        const domRect = element.getBoundingClientRect()
         const padding = _config.padding
         if (_config.bounds == 'mouse') {
           // if the domRect is out of the screen, exit
@@ -83,7 +91,6 @@
             if (isOverflowing()) return
           }
         } else if (_config.bounds == 'rect') {
-          const parent = document.body.getBoundingClientRect()
           if (
             domRect.left - padding < parent.left ||
             domRect.right + padding > parent.right ||
@@ -92,7 +99,7 @@
           ) {
             outOfBounds = true
 
-            assignInitialRects(event)
+            assignInitialRects(event, deltaDir)
 
             if (isOverflowing()) return
           }
@@ -104,16 +111,30 @@
 
         const aspectRatio = _config.aspectRatio.value
         const resizeMode = resolveResizeMode()
+        const minWidth = _config.minWidth
+        const minHeight = minWidth / aspectRatio
 
         rectChange: if (resizeMode == 'pictureInPicture') {
           /**
            * imitate the browser's picture-in-picture mode
            */
-          let delta: number
+          if (tooSmall) {
+            const heightDiff = domRect.height - minHeight
+            const widthDiff = domRect.width - minWidth
+            initialRect = {
+              ...initialRect,
+              width: minWidth,
+              height: minHeight,
+              left: domRect.left + widthDiff - parent.left,
+              right: parent.right - widthDiff - domRect.right,
+              top: domRect.top + heightDiff - parent.top,
+              bottom: parent.bottom - heightDiff - domRect.bottom,
+            }
+          }
           if (direction.match('right')) {
             _rect.width = initialRect.width + deltaX
           }
-          const _deltaX = initialPos.x - event.pageX
+          const _deltaX = initialPos.x - pageX
           if (direction.match(/left|top-left/)) {
             _rect.x = initialRect.left - _deltaX
             _rect.width = initialRect.width + _deltaX
@@ -121,7 +142,7 @@
           if (direction == 'top-left' || direction == 'left') {
             _rect.y = initialRect.top - _deltaX / aspectRatio
           } else if (direction.match('top')) {
-            delta = initialPos.y - event.pageY
+            const delta = initialPos.y - pageY
             _rect.y = initialRect.top - delta
             _rect.width = (initialRect.height + delta) * aspectRatio
           }
@@ -132,17 +153,16 @@
           if (constrained()) {
             _rect.y = _ogRect.y
             _rect.x = _ogRect.x
-            break rectChange
           }
         } else if (resizeMode == 'inlineBlockReversed') {
           let delta = 0
           if (direction.match(/left|right/)) {
             delta = direction.match(/left/) //
-              ? initialPos.x - event.pageX
+              ? initialPos.x - pageX
               : deltaX
           } else {
             delta = direction.match(/top/) //
-              ? initialPos.y - event.pageY
+              ? initialPos.y - pageY
               : deltaY
           }
           if (outOfBounds && delta == 0) {
@@ -207,10 +227,10 @@
         // if the next move is trying to move it back to the screen, then allow it
         function isOverflowing() {
           if (
-            (direction.match('left') && event.pageX < padding) ||
-            (direction.match('right') && event.pageX > window.innerWidth - padding) ||
-            (direction.match('top') && event.pageY < padding) ||
-            (direction.match('bottom') && event.pageY > window.innerHeight - padding)
+            (direction.match('left') && pageX < padding) ||
+            (direction.match('right') && pageX > window.innerWidth - padding) ||
+            (direction.match('top') && pageY < padding) ||
+            (direction.match('bottom') && pageY > window.innerHeight - padding)
           ) {
             return true
           }
@@ -236,7 +256,7 @@
         }
       },
     })
-    function assignInitialRects(event: MouseEvent) {
+    function assignInitialRects(event: MouseEvent, direction = 0) {
       const domRect = element.getBoundingClientRect()
       const parent = document.body.getBoundingClientRect()
 
@@ -249,7 +269,8 @@
         top: domRect.top - parent.top,
         bottom: parent.bottom - domRect.bottom,
       }
-      initialPos = { x: event.pageX, y: event.pageY }
+      direction = Math.sign(direction)
+      initialPos = { x: event.pageX + direction, y: event.pageY + direction }
     }
     // FIXME: this should be handled by the invoker
     function resolveResizeMode() {
