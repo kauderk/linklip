@@ -74,6 +74,7 @@
         if (_config.minWidth > widthDir) {
           tooSmall = true
           initialPos = { x: event.pageX, y: event.pageY }
+          // makes sense, because you don't want to grow anymore
           deltaX = 0
           deltaY = 0
         }
@@ -126,9 +127,7 @@
               width: minWidth,
               height: minHeight,
               left: domRect.left + widthDiff - parent.left,
-              right: parent.right - widthDiff - domRect.right,
               top: domRect.top + heightDiff - parent.top,
-              bottom: parent.bottom - heightDiff - domRect.bottom,
             }
           }
           if (direction.match('right')) {
@@ -165,7 +164,18 @@
               ? initialPos.y - pageY
               : deltaY
           }
-          if (outOfBounds && delta == 0) {
+
+          if (tooSmall) {
+            const heightDiff = domRect.height - minHeight
+            const widthDiff = domRect.width - minWidth
+            initialRect = {
+              ...initialRect,
+              width: minWidth,
+              height: minHeight,
+              left: domRect.left - widthDiff - parent.left,
+              top: domRect.top - heightDiff - parent.top,
+            }
+          } else if (outOfBounds && delta == 0) {
             delta = Math.sign(findDeltaDirection())
           }
 
@@ -176,13 +186,19 @@
           _rect.x = initialRect.left - delta
           _rect.y = initialRect.top - delta / aspectRatio
         } else if (resizeMode == 'inlineBlock') {
+          if (tooSmall) {
+            initialRect = {
+              ...initialRect,
+              width: minWidth,
+              height: minHeight,
+            }
+          }
+          const delta = findDeltaDirection()
           if (direction === 'right' || direction === 'left') {
-            inlineBlock(widthDir, true)
+            inlineBlock(initialRect.width + delta, true)
           } else {
             // top|bottom
-            const yDir = direction.match('top') ? -1 : 1
-            const heightDir = initialRect.height + deltaY * yDir
-            inlineBlock(heightDir, false)
+            inlineBlock(initialRect.height + delta, false)
           }
 
           if (isOutOfBounds()) return
@@ -197,6 +213,17 @@
             _rect[on ? 'height' : 'width'] = (size / widthRatio) * heightRatio
           }
         } else if (resizeMode == 'center') {
+          if (tooSmall) {
+            const heightDiff = domRect.height - minHeight
+            const widthDiff = domRect.width - minWidth
+            initialRect = {
+              ...initialRect,
+              width: minWidth,
+              height: minHeight,
+              left: domRect.left + widthDiff / 2 - parent.left,
+              top: domRect.top + heightDiff / 2 - parent.top,
+            }
+          }
           const delta = findDeltaDirection()
 
           _rect.width = initialRect.width + delta
