@@ -16,7 +16,10 @@
 	- bugs
 		- ◻ the follower/resize fails to constrain the to its max/min size
 		- ◻ the last follower pointer target should increase in z-index
-		- the resize stops when the mouse leaves the window
+		- ◻ the resize stops when the mouse leaves the window
+			- ◻ added rect mode to constraint to a parent element
+			- now when the resize tracker is on the edge of the parent, it becomes sluggish and sometimes it overflows it anyway
+			- the tracker and the mouse fall out of sync when entering the 'too small' branch
 		- the controls component should listen for keyboard events only when it's active/allowed
 		- when there are two followers on top of each other, it's hard to know the hidden one is there
 		- sometimes the page's scroll wheel is blocked when the mouse is over the follower

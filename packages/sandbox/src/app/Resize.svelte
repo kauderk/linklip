@@ -39,7 +39,18 @@
     const _config = { ...config, ...Config }
     const { rect } = _config
     let grabbers = createGrabbers()
-    let initialRect: DOMRect, initialPos: { x: number; y: number }
+    /**
+     * All the states are based on this object
+     * 'tooSmall' -> each resizeMode will handle their left & top offsets
+     * 'assignInitialRects' => updates the values to the current frame
+     */
+    let trackRect: {
+      width: number
+      height: number
+      left: number
+      top: number
+    }
+    let trackMouse: { x: number; y: number }
 
     const tracker = createMouseTrack({
       mousedown(event, original) {
@@ -56,48 +67,33 @@
 
       // resize on the eight directions, but respect the aspect ratio of 16 / 9
       mousemove(event, original) {
-        // @ts-expect-error
-        const direction = original.direction as string
         const domRect = element.getBoundingClientRect()
         const parent = document.body.getBoundingClientRect()
 
         const pageX = event.pageX
         const pageY = event.pageY
-        let deltaX = pageX - initialPos.x
-        let deltaY = pageY - initialPos.y
-
+        // the function's methods refer to these variables
+        let deltaX = pageX - trackMouse.x
+        let deltaY = pageY - trackMouse.y
+        const direction = (original as any).direction as string
         const deltaDir = findDeltaDirection()
-        // exit if the size is too small
-        const _domRect = element.getBoundingClientRect()
-        const widthDir = _domRect.width + Math.sign(deltaDir)
-        let tooSmall = false
-        if (_config.minWidth > widthDir) {
-          tooSmall = true
-          initialPos = { x: event.pageX, y: event.pageY }
-          // makes sense, because you don't want to grow anymore
-          deltaX = 0
-          deltaY = 0
-        }
 
         let outOfBounds = false
         const padding = _config.padding
         if (_config.bounds == 'mouse') {
           // if the domRect is out of the screen, exit
           if (
-            domRect.left - padding < 0 ||
-            domRect.right + padding > window.innerWidth ||
-            domRect.top - padding < 0 ||
-            domRect.bottom + padding > window.innerHeight
+            isAboutToOverflow({
+              left: 0,
+              right: window.innerWidth,
+              top: 0,
+              bottom: window.innerHeight,
+            })
           ) {
             if (isOverflowing()) return
           }
         } else if (_config.bounds == 'rect') {
-          if (
-            domRect.left - padding < parent.left ||
-            domRect.right + padding > parent.right ||
-            domRect.top - padding < parent.top ||
-            domRect.bottom + padding > parent.bottom
-          ) {
+          if (isAboutToOverflow(parent)) {
             outOfBounds = true
 
             assignInitialRects(event, deltaDir)
@@ -106,47 +102,54 @@
           }
         }
 
+        const aspectRatio = _config.aspectRatio.value
+        const minWidth = _config.minWidth
+        const minHeight = minWidth / aspectRatio
+        const heightDiff = domRect.height - minHeight
+        const widthDiff = domRect.width - minWidth
+
+        let tooSmall = false
+        const potentialWidth = domRect.width + Math.sign(deltaDir)
+        if (_config.minWidth > potentialWidth) {
+          tooSmall = true
+          assignInitialRects(event)
+          trackRect.width = minWidth
+          trackRect.height = minHeight
+          // makes sense, because you don't want to grow anymore
+          deltaX = 0
+          deltaY = 0
+        }
+
         const _ogRect = rect.peek()
         let _rect = { ..._ogRect }
         const constraint = _config.constraint?.constraint?.(_rect) ?? _rect
-
-        const aspectRatio = _config.aspectRatio.value
         const resizeMode = resolveResizeMode()
-        const minWidth = _config.minWidth
-        const minHeight = minWidth / aspectRatio
 
         rectChange: if (resizeMode == 'pictureInPicture') {
           /**
            * imitate the browser's picture-in-picture mode
            */
           if (tooSmall) {
-            const heightDiff = domRect.height - minHeight
-            const widthDiff = domRect.width - minWidth
-            initialRect = {
-              ...initialRect,
-              width: minWidth,
-              height: minHeight,
-              left: domRect.left + widthDiff - parent.left,
-              top: domRect.top + heightDiff - parent.top,
-            }
+            trackRect.left += widthDiff
+            trackRect.top += heightDiff
           }
           if (direction.match('right')) {
-            _rect.width = initialRect.width + deltaX
+            _rect.width = trackRect.width + deltaX
           }
-          const _deltaX = initialPos.x - pageX
+          const _deltaX = trackMouse.x - pageX
           if (direction.match(/left|top-left/)) {
-            _rect.x = initialRect.left - _deltaX
-            _rect.width = initialRect.width + _deltaX
+            _rect.x = trackRect.left - _deltaX
+            _rect.width = trackRect.width + _deltaX
           }
           if (direction == 'top-left' || direction == 'left') {
-            _rect.y = initialRect.top - _deltaX / aspectRatio
+            _rect.y = trackRect.top - _deltaX / aspectRatio
           } else if (direction.match('top')) {
-            const delta = initialPos.y - pageY
-            _rect.y = initialRect.top - delta
-            _rect.width = (initialRect.height + delta) * aspectRatio
+            const delta = trackMouse.y - pageY
+            _rect.y = trackRect.top - delta
+            _rect.width = (trackRect.height + delta) * aspectRatio
           }
           if (direction == 'bottom') {
-            _rect.width = (initialRect.height + deltaY) * aspectRatio
+            _rect.width = (trackRect.height + deltaY) * aspectRatio
           }
           if (isOutOfBounds()) return
           if (constrained()) {
@@ -157,48 +160,36 @@
           let delta = 0
           if (direction.match(/left|right/)) {
             delta = direction.match(/left/) //
-              ? initialPos.x - pageX
+              ? trackMouse.x - pageX
               : deltaX
           } else {
             delta = direction.match(/top/) //
-              ? initialPos.y - pageY
+              ? trackMouse.y - pageY
               : deltaY
           }
 
           if (tooSmall) {
-            const heightDiff = domRect.height - minHeight
-            const widthDiff = domRect.width - minWidth
-            initialRect = {
-              ...initialRect,
-              width: minWidth,
-              height: minHeight,
-              left: domRect.left - widthDiff - parent.left,
-              top: domRect.top - heightDiff - parent.top,
-            }
+            trackRect.left += widthDiff
+            trackRect.top += heightDiff
+            delta = 0
           } else if (outOfBounds && delta == 0) {
             delta = Math.sign(findDeltaDirection())
           }
 
-          _rect.width = initialRect.width + delta
+          _rect.width = trackRect.width + delta
           if (isOutOfBounds()) return
           if (constrained()) break rectChange
 
-          _rect.x = initialRect.left - delta
-          _rect.y = initialRect.top - delta / aspectRatio
+          _rect.x = trackRect.left - delta
+          _rect.y = trackRect.top - delta / aspectRatio
         } else if (resizeMode == 'inlineBlock') {
-          if (tooSmall) {
-            initialRect = {
-              ...initialRect,
-              width: minWidth,
-              height: minHeight,
-            }
-          }
+          // if (tooSmall) { } handled by the most common denominator
           const delta = findDeltaDirection()
           if (direction === 'right' || direction === 'left') {
-            inlineBlock(initialRect.width + delta, true)
+            inlineBlock(trackRect.width + delta, true)
           } else {
             // top|bottom
-            inlineBlock(initialRect.height + delta, false)
+            inlineBlock(trackRect.height + delta, false)
           }
 
           if (isOutOfBounds()) return
@@ -214,33 +205,26 @@
           }
         } else if (resizeMode == 'center') {
           if (tooSmall) {
-            const heightDiff = domRect.height - minHeight
-            const widthDiff = domRect.width - minWidth
-            initialRect = {
-              ...initialRect,
-              width: minWidth,
-              height: minHeight,
-              left: domRect.left + widthDiff / 2 - parent.left,
-              top: domRect.top + heightDiff / 2 - parent.top,
-            }
+            trackRect.left += widthDiff / 2
+            trackRect.top += heightDiff / 2
           }
           const delta = findDeltaDirection()
 
-          _rect.width = initialRect.width + delta
+          _rect.width = trackRect.width + delta
           if (isOutOfBounds()) return
           if (constrained()) break rectChange
 
           const pivot = delta / 2
-          _rect.x = initialRect.left - pivot
-          _rect.y = initialRect.top - pivot / aspectRatio
+          _rect.x = trackRect.left - pivot
+          _rect.y = trackRect.top - pivot / aspectRatio
         } else {
           // right|left|top|bottom
           const delta = findDeltaDirection()
 
           if (resizeMode.match(/right|left/)) {
-            _rect.width = initialRect.width + delta * (resizeMode.match(/left/) ? -1 : 1)
+            _rect.width = trackRect.width + delta * (resizeMode.match(/left/) ? -1 : 1)
           } else {
-            _rect.height = initialRect.height + delta * (resizeMode.match(/top/) ? -1 : 1)
+            _rect.height = trackRect.height + delta * (resizeMode.match(/top/) ? -1 : 1)
           }
 
           if (outOfBounds && _rect.height > _ogRect.height) {
@@ -250,18 +234,6 @@
 
         // invalidate the signal!
         rect.set({ ..._ogRect, ..._rect })
-
-        // if the next move is trying to move it back to the screen, then allow it
-        function isOverflowing() {
-          if (
-            (direction.match('left') && pageX < padding) ||
-            (direction.match('right') && pageX > window.innerWidth - padding) ||
-            (direction.match('top') && pageY < padding) ||
-            (direction.match('bottom') && pageY > window.innerHeight - padding)
-          ) {
-            return true
-          }
-        }
 
         function isOutOfBounds() {
           return outOfBounds && _rect.width > _ogRect.width
@@ -281,23 +253,42 @@
           }
           _rect.height = _rect.width / aspectRatio
         }
+
+        function isAboutToOverflow(parent: Pick<DOMRect, 'left' | 'right' | 'top' | 'bottom'>) {
+          return (
+            domRect.left - padding < parent.left ||
+            domRect.right + padding > parent.right ||
+            domRect.top - padding < parent.top ||
+            domRect.bottom + padding > parent.bottom
+          )
+        }
+        // if the next move is trying to move it back to the screen, then allow it
+        function isOverflowing() {
+          if (
+            (direction.match('left') && pageX < padding) ||
+            (direction.match('right') && pageX > window.innerWidth - padding) ||
+            (direction.match('top') && pageY < padding) ||
+            (direction.match('bottom') && pageY > window.innerHeight - padding)
+          ) {
+            return true
+          }
+        }
       },
     })
+
     function assignInitialRects(event: MouseEvent, direction = 0) {
       const domRect = element.getBoundingClientRect()
       const parent = document.body.getBoundingClientRect()
 
-      initialRect = {
-        ...initialRect,
+      trackRect = {
+        ...trackRect,
         width: domRect.width,
         height: domRect.height,
         left: domRect.left - parent.left,
-        right: parent.right - domRect.right,
         top: domRect.top - parent.top,
-        bottom: parent.bottom - domRect.bottom,
       }
       direction = Math.sign(direction)
-      initialPos = { x: event.pageX + direction, y: event.pageY + direction }
+      trackMouse = { x: event.pageX + direction, y: event.pageY + direction }
     }
     // FIXME: this should be handled by the invoker
     function resolveResizeMode() {
