@@ -46,7 +46,7 @@ export async function TryToUpdateBlock_fmt<T extends FormatterInterface | Format
         },
       },
     })
-    debugger
+
     UIDtoURLInstancesMapMap.delete(uid)
     UIDtoURLInstancesMapMap.delete(tempUID)
     return { url }

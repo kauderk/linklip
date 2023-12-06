@@ -45,3 +45,6 @@
 			- with the current draft the destroy stage works fine but the deployment won't take place until the next time react renders the notion link - you can "force" it by editing/focusing the block 
 		- notionLinks apps should be able to create their own followers
 			- specially if another notion client deletes the block/link element
+		- create a headless interface/function to update notion blocks with high level parameters
+			- decode the notion block format and interpret how it renders to tell the function update the (n) notionLink
+			- deal with complex states like recursion, projection, portals, tooltips, block references, notion specific elements like tables and pages

@@ -1,8 +1,7 @@
 import type { DeepPartial } from '$lib/types/utilities'
 import { mergeDeep } from '$lib/utils'
 import type { ParagraphBlockObjectResponse } from '@notionhq/client/build/src/api-endpoints'
-
-
+import notionSingleBlocks from '../init/observer/timestamp/emulation/notionSingleBlocks.json'
 /**
  * Blocks where the a block is referenced by a unique id
  */
@@ -16,18 +15,12 @@ export const updateBlock = async <T extends object>(block: T, partial: DeepParti
     return acc
   }, {} as any)
 
-  return proxyNotion<ParagraphBlockObjectResponse>({
-    ['blocks.update']: payload,
-  })
+  return
 }
 
 export const blockString = async (block_id: string) => {
   // return notion.blocks.retrieve({ block_id }).then(res => res as ParagraphBlockObjectResponse)
-  return proxyNotion<ParagraphBlockObjectResponse>({
-    ['blocks.retrieve']: {
-      block_id,
-    },
-  })
+  return notionSingleBlocks.find(b => b.id === block_id)
 }
 
 function proxyNotion<T>(query: any) {
@@ -37,7 +30,6 @@ function proxyNotion<T>(query: any) {
     .then(res => res.json())
     .then(res => {
       res.fetch_path = Object.keys(query)[0]
-      debugger
       // @ts-expect-error
       window.log = [...(window.log ?? []), res]
       console.log(res)
