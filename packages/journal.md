@@ -41,6 +41,7 @@
 		- since the follower overlays the target, when the user focuses to edit the block, move the caret to the ends of the target text
 		- find a better way to calculate the follower rect size when overlaying with other dom elements
 			- maybe provide a list of foreground elements to check against
-		- notionLinks apps don't know how to destroy themselves
+		- ◻ notionLinks apps don't know how to destroy themselves
+			- with the current draft the destroy stage works fine but the deployment won't take place until the next time react renders the notion link - you can "force" it by editing/focusing the block 
 		- notionLinks apps should be able to create their own followers
 			- specially if another notion client deletes the block/link element

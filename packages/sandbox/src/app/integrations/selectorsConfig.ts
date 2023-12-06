@@ -23,7 +23,7 @@ export function createSelectorsConfig(
     // FIXME: requires cyclic update
     notionRef: playerConfig.notionRef,
     notionCleanUp(containerID: string) {
-      if (!document.querySelector(`.notion-text-block[data-block-id="${containerID}"]`)) {
+      if (!document.querySelector(blockSelector(containerID))) {
         // notion gave the block a new ID, so we need to destroy the old style
         removeNotionHrefStyle(containerID)
       }
@@ -35,10 +35,11 @@ export function createSelectorsConfig(
       }
     },
   }
+
   function baseSelector(selector = '') {
     return () => {
       const id = followerUpdate.notionRef().containerID
-      return `.notion-text-block[data-block-id="${id}"] [href*="youtu"]${selector}`
+      return `${blockSelector(id)} [href*="youtu"]${selector}`
     }
   }
   const followerConfig = {
@@ -66,7 +67,7 @@ export function createSelectorsConfig(
             }
             createNotionHrefStyle(containerID, rect)
           } else {
-            removeNotionHrefStyle(containerID)
+            createNotionHrefPseudoStyle(containerID)
           }
         },
         constraint(notionHref) {
@@ -249,6 +250,9 @@ export function createSelectorsConfig(
   return { followerConfig, followerUpdate }
 }
 
+function blockSelector(blockId: string) {
+  return `.notion-text-block[data-block-id="${blockId}"]`
+}
 function createNotionHrefStyle(containerID: string, _rect: any) {
   const style = getNotionHrefStyle(containerID)
 
@@ -258,7 +262,7 @@ function createNotionHrefStyle(containerID: string, _rect: any) {
   }
   // style the target to accommodate the portal
   style.innerHTML = `
-		[data-block-id="${containerID}"]>div>div>.notranslate 
+		${blockSelector(containerID)}>div>div>.notranslate 
 		a.notion-link-token.notion-focusable-token.notion-enable-hover {
 			all: unset;
 
@@ -267,6 +271,26 @@ function createNotionHrefStyle(containerID: string, _rect: any) {
 
 			opacity: 0;
 			display: block;
+		}
+	`.trim()
+  document.head.appendChild(style)
+  style.id = styleID + containerID
+}
+function createNotionHrefPseudoStyle(containerID: string) {
+  const style = getNotionHrefStyle(containerID)
+
+  // style the target to accommodate the portal
+  style.innerHTML = `
+		${blockSelector(containerID)}>div>div>.notranslate 
+		a.notion-link-token.notion-focusable-token.notion-enable-hover::before {
+			display: inline-block;
+			width: .8em;
+			aspect-ratio: 1;
+			margin-right: .4em;
+			position: relative;
+			background: #999;
+			content: '';
+			vertical-align: middle;
 		}
 	`.trim()
   document.head.appendChild(style)

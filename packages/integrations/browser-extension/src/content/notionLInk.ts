@@ -13,13 +13,16 @@ import {
 import { follower_DragThreshold_ContextMenu } from '@packages/sandbox/src/app/integrations/follower_DragThreshold_ContextMenu'
 import { createSelectorsConfig } from '@packages/sandbox/src/app/integrations/selectorsConfig'
 import { cleanSubscribers } from '@packages/sandbox/src/lib/stores'
+import { createTrackMouseHold } from '@packages/sandbox/src/app/controller/click-track'
 
 export async function ObserveLinks_DeployLinklip() {
+  const keyToStateMap = new Map<string, { enabled: boolean }>()
   const urlToSvelteMap = new Map<
     string,
     {
       update: (params: { notionHref: HTMLElement; containerID: string }) => void
       cleanUp: (containerID: string) => () => void
+      destroy: () => void
     }
   >()
   const stagesCtx = ['Stages', createStagesCtx()]
@@ -58,8 +61,6 @@ export async function ObserveLinks_DeployLinklip() {
           }
         }
 
-        console.log('deploying', payload)
-
         notionHref.onclick = (e: any) => {
           e.preventDefault() // up the tree
           e.stopPropagation() // disable href (jump to link)
@@ -67,6 +68,29 @@ export async function ObserveLinks_DeployLinklip() {
         }
 
         const key = notionHref.href + containerID
+
+        notionHref.onmousedown = createTrackMouseHold({
+          hold(e) {
+            // TODO: execute the onDestroy from the deploy function
+            urlToSvelteMap.get(key)?.destroy()
+
+            console.log('change enabled state', toggle(key))
+
+            // notionHref.remove() // requests host rerender
+          },
+        })
+        function toggle(key: string) {
+          // one must reference the other, right?
+          const enabled = !keyToStateMap.get(key)?.enabled
+          keyToStateMap.set(key, {
+            enabled,
+          })
+          return enabled
+        }
+
+        if (keyToStateMap.has(key) && !keyToStateMap.get(key)?.enabled) {
+          return
+        }
 
         if (!urlToSvelteMap.has(key)) {
           const baseConfig = createConfig()
@@ -123,7 +147,11 @@ export async function ObserveLinks_DeployLinklip() {
             props: {
               config: baseConfig,
               follower,
-              dragThreshold: follower_DragThreshold_ContextMenu(followerConfig, follower, true),
+              dragThreshold: follower_DragThreshold_ContextMenu(followerConfig, follower, () => {
+                // TODO: better abstraction
+                destroy()
+                toggle(key)
+              }),
               mount: () =>
                 cleanSubscribers(follower.mount(notionHref), unSharedFollower, unResizeStage),
             },
@@ -134,6 +162,11 @@ export async function ObserveLinks_DeployLinklip() {
               stagesCtx,
             ] as any),
           })
+          function destroy() {
+            urlToSvelteMap.delete(key)
+            app.$destroy()
+            // toggle(key) // would cause an unwanted re-render
+          }
 
           urlToSvelteMap.set(key, {
             update({ notionHref, containerID }) {
@@ -146,6 +179,7 @@ export async function ObserveLinks_DeployLinklip() {
                 follower.changeHost(notionHref)
               }
             },
+            destroy,
             cleanUp(containerID) {
               // FIXME: handle other selectors
               const unStage = baseConfig.stage.subscribe(
@@ -159,6 +193,11 @@ export async function ObserveLinks_DeployLinklip() {
               }
             },
           })
+          keyToStateMap.set(key, {
+            enabled: true,
+          })
+
+          console.log('initial deployment', payload)
 
           // go to cleanUp
         } else {
@@ -169,6 +208,9 @@ export async function ObserveLinks_DeployLinklip() {
             return
           }
         }
+
+        console.log('update  deployment', payload)
+
         return urlToSvelteMap.get(key)!.cleanUp(containerID)
       },
     }

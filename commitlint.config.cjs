@@ -24,6 +24,7 @@ module.exports = {
         'config',
         'no-release',
         'wip',
+        'draft',
         'release',
         'add',
         'change',
