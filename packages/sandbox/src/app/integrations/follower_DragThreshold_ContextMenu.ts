@@ -9,15 +9,11 @@ import type { follower as createFollower } from '../controller/follower'
 export function follower_DragThreshold_ContextMenu(
   followerConfig: ReturnType<typeof createSelectorsConfig>['followerConfig'],
   follower: ReturnType<typeof createFollower>,
-  pictureInPicture = false
+  // TODO: better abstraction
+  extra: unknown
 ) {
-  const sharedStages = Object.keys(followerConfig.selectors)
-  // FIXME: abstract stageSignal
-  // .map(val => val.stageSignal?.shared ?? [])
-  // .flat()
   const contextMenuSelectorNodes = Object.entries(followerConfig.selectors)
     .map(([key, value]) => {
-      if (sharedStages.includes(key)) return
       return {
         content: camelCaseToTitleCase(key),
         async callback() {
@@ -30,6 +26,7 @@ export function follower_DragThreshold_ContextMenu(
           const hover = (toggle: boolean) => () =>
             follower.innerApi
               .resolveSelector(value.selector.target)
+              // FIXME: react reverts the class name
               ?.classList.toggle('follower-outline', toggle)
 
           return {
@@ -45,17 +42,20 @@ export function follower_DragThreshold_ContextMenu(
       }
     })
     .filter(Boolean)
-  if (pictureInPicture) {
+  if (extra) {
     contextMenuSelectorNodes.unshift(<any>{
       content: 'Picture In Picture',
       callback: follower.innerApi.branch,
+    })
+    contextMenuSelectorNodes.unshift(<any>{
+      content: 'Close Follower',
+      callback: extra,
     })
   }
 
   return createTrackMouseHold({
     threshold: follower.innerApi.trackPointer,
     hold(e) {
-      // @ts-expect-error
       useContextMenu(e, { nodes: contextMenuSelectorNodes }, true)
     },
   })
