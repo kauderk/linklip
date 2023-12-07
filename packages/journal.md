@@ -20,6 +20,7 @@
 			- ◻ added rect mode to constraint to a parent element
 			- now when the resize tracker is on the edge of the parent, it becomes sluggish and sometimes it overflows it anyway
 			- the tracker and the mouse fall out of sync when entering the 'too small' branch
+			- when in host mode and the browser window is cutting the block the resize priorities the window edge as it's limit instead of the block, in fact when giving the block enough space the resize tracker will work as intended
 		- the controls component should listen for keyboard events only when it's active/allowed
 		- ◻ when there are two followers on top of each other, it's hard to know the hidden one is there
 		- sometimes the page's scroll wheel is blocked when the mouse is over the follower
@@ -33,11 +34,14 @@
 			- when they share urls, the second one is kinda useless, but when the urls are different, the first one shrinks to the size of the actual notionLink url font size
 			- when dividing the block into two, it creates a new follower fo the second half but the old one the one that wasn't working is still there
 			- when there's nothing else but the notionLink in a block, it's almost impossible to edit the text
+				- you could reverse engineer the notion block focusIn event
 	- todo
-		- add a button to turn off the follower
+		- ◻ add a button to turn off the follower
+			- ◻ now it uses a holdDelay because I want to get ready for mobile support
 		- the follower pointer should highlight the available target(s)
 		- the follower is jerky when using the mouse wheel but when using the html scroll thumb it's smooth
-		- option for the follower to scale the target appropriately when on resize observers (only when shrinking)
+		- ◻ option for the follower to scale the target appropriately when on resize observers (only when shrinking)
+			- ◻ it seems the "fluid" mouseMove event makes this possible by default
 		- since the follower overlays the target, when the user focuses to edit the block, move the caret to the ends of the target text
 		- find a better way to calculate the follower rect size when overlaying with other dom elements
 			- maybe provide a list of foreground elements to check against
@@ -48,3 +52,8 @@
 		- create a headless interface/function to update notion blocks with high level parameters
 			- decode the notion block format and interpret how it renders to tell the function update the (n) notionLink
 			- deal with complex states like recursion, projection, portals, tooltips, block references, notion specific elements like tables and pages
+		- deal with the special cases when the only thing in the block is a notionLink and the user wants to edit/focus the block
+			- if the notionLink isn't occupying the whole block create a new line break and move the caret to it
+			- if the notionLink is occupying the whole block, create a new block down and move the caret to it
+		- serialize the data and delete all the memory when destroying notionLink instances
+			- load the data when the notionLink is created

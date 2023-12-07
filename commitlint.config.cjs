@@ -12,6 +12,7 @@ module.exports = {
         'tweak',
         'feat',
         'fix',
+        'changelog',
         'docs',
         'style',
         'refactor',
