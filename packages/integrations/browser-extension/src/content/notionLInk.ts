@@ -16,13 +16,19 @@ import { cleanSubscribers } from '@packages/sandbox/src/lib/stores'
 import { createTrackMouseHold } from '@packages/sandbox/src/app/controller/click-track'
 
 export async function ObserveLinks_DeployLinklip() {
-  const keyToStateMap = new Map<string, { enabled: boolean }>()
+  const keyToStateMap = new Map<
+    string,
+    {
+      enabled: boolean
+      fetchSaves: () => any
+      toggle: () => boolean | undefined
+    }
+  >()
   const urlToSvelteMap = new Map<
     string,
     {
       update: (params: { notionHref: HTMLElement; containerID: string }) => void
       cleanUp: (containerID: string) => () => void
-      destroy: () => void
     }
   >()
   const stagesCtx = ['Stages', createStagesCtx()]
@@ -72,28 +78,28 @@ export async function ObserveLinks_DeployLinklip() {
         notionHref.onmousedown = createTrackMouseHold({
           hold(e) {
             // TODO: execute the onDestroy from the deploy function
-            urlToSvelteMap.get(key)?.destroy()
+            const enabled = keyToStateMap.get(key)?.toggle()
 
-            console.log('change enabled state', toggle(key))
+            console.log('change enabled state', enabled)
 
-            // notionHref.remove() // requests host rerender
+            // FIXME: notionHref.remove() // requests host rerender
           },
         })
-        function toggle(key: string) {
-          // one must reference the other, right?
-          const enabled = !keyToStateMap.get(key)?.enabled
-          keyToStateMap.set(key, {
-            enabled,
-          })
-          return enabled
-        }
 
-        if (keyToStateMap.has(key) && !keyToStateMap.get(key)?.enabled) {
+        const initialState = keyToStateMap.get(key)
+        if (initialState?.enabled === false) {
           return
         }
 
+        function fetchSaves() {
+          const stringify = localStorage.getItem(key) || '{}'
+          return JSON.parse(stringify)
+        }
+
         if (!urlToSvelteMap.has(key)) {
-          const baseConfig = createConfig()
+          const saved = fetchSaves()
+
+          const baseConfig = createConfig(saved.baseConfig)
 
           const { followerConfig, followerUpdate } = createSelectorsConfig({
             aspectRatio: baseConfig.aspectRatio,
@@ -142,16 +148,14 @@ export async function ObserveLinks_DeployLinklip() {
             baseConfig.constraint.constraint = constraint
           })
 
+          // FIXME: most of these closures can cause memory leaks when destroying the component
+          // for example the dragThreshold's extra's (contextMenu) schema
           const app = new Linklip({
             target: document.body,
             props: {
               config: baseConfig,
               follower,
-              dragThreshold: follower_DragThreshold_ContextMenu(followerConfig, follower, () => {
-                // TODO: better abstraction
-                destroy()
-                toggle(key)
-              }),
+              dragThreshold: follower_DragThreshold_ContextMenu(followerConfig, follower, toggle),
               mount: () =>
                 cleanSubscribers(follower.mount(notionHref), unSharedFollower, unResizeStage),
             },
@@ -162,10 +166,31 @@ export async function ObserveLinks_DeployLinklip() {
               stagesCtx,
             ] as any),
           })
-          function destroy() {
-            urlToSvelteMap.delete(key)
-            app.$destroy()
-            // toggle(key) // would cause an unwanted re-render
+          function toggle() {
+            const state = keyToStateMap.get(key)
+            if (!state) {
+              console.error('state not found, calling toggle() before deployment')
+              return
+            }
+
+            urlToSvelteMap.delete(key) // rerender?
+            if (state.enabled) {
+              app.$$set?.({}) // attempt to free memory (garbage collection)
+              app.$destroy() // it wound't makes sense to destroy an already destroyed component
+            }
+
+            const serialized = {
+              baseConfig: createConfig.serialize(baseConfig),
+            }
+            localStorage.setItem(key, JSON.stringify(serialized))
+
+            // one must reference the other, right?
+            const enabled = !state.enabled
+            keyToStateMap.set(key, {
+              ...state!,
+              enabled,
+            })
+            return enabled
           }
 
           urlToSvelteMap.set(key, {
@@ -179,7 +204,6 @@ export async function ObserveLinks_DeployLinklip() {
                 follower.changeHost(notionHref)
               }
             },
-            destroy,
             cleanUp(containerID) {
               // FIXME: handle other selectors
               const unStage = baseConfig.stage.subscribe(
@@ -193,7 +217,10 @@ export async function ObserveLinks_DeployLinklip() {
               }
             },
           })
+
           keyToStateMap.set(key, {
+            fetchSaves,
+            toggle,
             enabled: true,
           })
 

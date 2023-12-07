@@ -7,30 +7,53 @@ const _Config = {
   width: 350,
   minWidth: 300,
   aspectRatio: [16, 9] as [number, number],
+  resizing: false,
+  stage: createDefaultStage({ mode: 'host' }).peek(),
+  resizeMode: 'inlineBlock' as resizeMode,
+  rect: {
+    x: 20,
+    y: 20,
+    width: 350,
+    height: 350 / (16 / 9),
+  },
 }
 export function createConfig(config?: Partial<typeof _Config>) {
   const _config = { ..._Config, ...config }
-  const width = _config.width
   const aspectRatio = aspectRatioFrom([..._config.aspectRatio])
+
+  const width = _config.width
   const height = width / aspectRatio.value
+
   const windowed = typeof window !== 'undefined'
   const offset = 200
   return {
     ..._config,
     aspectRatio,
     // prettier-ignore
-    rect: preSignal({
+    rect: preSignal(_config.rect || {
 			x: (windowed ? window.innerWidth  / 2 : offset) - width / 2,
 			y: (windowed ? window.innerHeight / 2 : offset) - height / 2,
 			width,
 			height,
 		}),
     constraint: {},
-    resizing: preSignal(false),
-    stage: createDefaultStage(),
-    resizeMode: preSignal('inlineBlock' as resizeMode),
+    resizing: preSignal(_config.resizing),
+    stage: createDefaultStage(_config.stage),
+    resizeMode: preSignal(_config.resizeMode),
   }
 }
+createConfig.serialize = function (self: ReturnType<typeof createConfig>) {
+  const { constraint, ...this_ } = self
+  return {
+    ...this_,
+    aspectRatio: self.aspectRatio.tuple as [number, number],
+    resizing: self.resizing.peek(),
+    rect: self.rect.peek(),
+    stage: self.stage.peek(),
+    resizeMode: self.resizeMode.peek(),
+  } satisfies typeof _Config
+}
+
 export const followerCycle = {
   update(hostRef, initRect) {
     return () => {

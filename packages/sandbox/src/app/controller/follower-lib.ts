@@ -1,5 +1,4 @@
 import type { PreSignal } from '$lib/pre-signal'
-import type { StageSignal } from '../follower/store'
 import type { follower } from './follower'
 import { createObservable, preSignal } from '$lib/pre-signal'
 import { createDebouncedListener, createDebouncedObserver } from '$lib/resize'
@@ -36,7 +35,6 @@ export type FollowerConfig = {
       followerCycle: FollowerCycle
       styleHost?: (hostRef?: HTMLElement, rect?: Rect) => void
       constraint?: (hostRef: HTMLElement) => Rect
-      stageSignal?: StageSignal
       preBranch?: (payload: {
         current?: string
         next: string

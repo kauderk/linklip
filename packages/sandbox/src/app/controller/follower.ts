@@ -116,7 +116,7 @@ export function follower<F extends Props>(config: Props) {
   }
   function tryFindHost(host: HTMLElement) {
     hostStack.selectorKey = selection.tryDock(host)
-    // FIXME: abstract stageSignal¿
+    // FIXME: abstract stageSignal - createDefaultStage
     // const selector = getSelector()
     // if (selector.stageSignal) {
     //   let pre = tryHost(selector.stageSignal.peek().selector)
@@ -373,7 +373,9 @@ export function follower<F extends Props>(config: Props) {
       }
     },
     mount(host?: Element | Targets) {
-      this.changeHost(host)
+      if (stage.peek().mode != 'free') {
+        this.changeHost(host)
+      }
 
       return cleanSubscribers(
         selection.clean,
