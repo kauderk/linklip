@@ -3,7 +3,7 @@ import { preSignal } from '$lib/pre-signal'
 import { type resizeMode, aspectRatioFrom } from '../Resize.svelte'
 import type { FollowerCycle } from '../controller/follower'
 import { createDefaultStage } from '../follower/store'
-import { createSerializableStore } from './serializable'
+import { createSerializableStore } from '../../lib/serializable'
 
 export const _Config = {
   width: 350,
