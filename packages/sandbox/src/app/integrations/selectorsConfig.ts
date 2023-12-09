@@ -74,6 +74,7 @@ export function createSelectorsConfig(
           const parent = notionHref.closest('.notranslate')!
           if (!parent) {
             debugger
+            // FIXME: handle the error properly
             throw new Error('No DOM constraint parent')
           }
           return {

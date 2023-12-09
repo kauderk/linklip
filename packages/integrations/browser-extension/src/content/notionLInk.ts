@@ -134,7 +134,9 @@ export async function ObserveLinks_DeployLinklip() {
             }
           })
 
-          // FUCK!
+          // FIXME: better abstraction, don't pollute the config
+          // @ts-expect-error
+          baseConfig.constraint = {}
           const unResizeStage = baseConfig.stage.subscribe((stage: any) => {
             // @ts-expect-error valueContainer
             const pre = followerConfig.selectors[stage.selector]?.constraint
@@ -180,7 +182,7 @@ export async function ObserveLinks_DeployLinklip() {
             }
 
             const serialized = {
-              baseConfig: createConfig.serialize(baseConfig),
+              baseConfig: baseConfig.serialize(),
             }
             localStorage.setItem(key, JSON.stringify(serialized))
 
