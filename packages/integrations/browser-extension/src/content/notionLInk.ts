@@ -179,12 +179,11 @@ export async function ObserveLinks_DeployLinklip() {
             if (state.enabled) {
               app.$$set?.({}) // attempt to free memory (garbage collection)
               app.$destroy() // it wound't makes sense to destroy an already destroyed component
+              const serialized = {
+                baseConfig: baseConfig.serialize(),
+              }
+              localStorage.setItem(key, JSON.stringify(serialized))
             }
-
-            const serialized = {
-              baseConfig: baseConfig.serialize(),
-            }
-            localStorage.setItem(key, JSON.stringify(serialized))
 
             // one must reference the other, right?
             const enabled = !state.enabled

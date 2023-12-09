@@ -56,4 +56,4 @@
 			- if the notionLink isn't occupying the whole block create a new line break and move the caret to it
 			- if the notionLink is occupying the whole block, create a new block down and move the caret to it
 		- serialize the data and delete all the memory when destroying notionLink instances
-			- load the data when the notionLink is created
+			- load the data when the notionLink is created 

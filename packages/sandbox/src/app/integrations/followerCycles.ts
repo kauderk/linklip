@@ -31,13 +31,13 @@ export const _Config = {
     const windowed = typeof window !== 'undefined'
     const offset = 200
     return {
-      value(override: any) {
+      value(override = <any>{}) {
         const max = (...args: any[]) => Math.max(...args.map(v => Number(v) ?? 0))
-        const width = max(pure.width, pure.minWidth, override.width)
-        const height = max(width / pure.aspectRatio.value, override.height)
+        const width = max(override.width ?? pure.width, pure.minWidth)
+        const height = width / pure.aspectRatio.value
         return {
-          x: max((windowed ? window.innerWidth / 2 : offset) - width / 2, override.x),
-          y: max((windowed ? window.innerHeight / 2 : offset) - height / 2, override.y),
+          x: override.x ?? (windowed ? window.innerWidth / 2 : offset) - width / 2,
+          y: override.y ?? (windowed ? window.innerHeight / 2 : offset) - height / 2,
           width,
           height,
         }
