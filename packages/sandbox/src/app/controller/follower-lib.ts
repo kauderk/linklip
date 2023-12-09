@@ -32,7 +32,7 @@ export type FollowerConfig = {
         scroll?: string | string[]
         window?: boolean
       }
-      followerCycle: FollowerCycle
+      followerCycle: FollowerCycle | undefined
       styleHost?: (hostRef?: HTMLElement, rect?: Rect) => void
       constraint?: (hostRef: HTMLElement) => Rect
       preBranch?: (payload: {

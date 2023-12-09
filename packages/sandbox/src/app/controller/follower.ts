@@ -177,7 +177,7 @@ export function follower<F extends Props>(config: Props) {
       createRectObserver()
 
       getSelector().styleHost?.(hostStack.ref, rect.peek())
-      send(getSelector().followerCycle.update(hostStack.ref, rect.peek(), rect))
+      send(getSelector().followerCycle!.update(hostStack.ref, rect.peek(), rect))
       getSelector().postBranch?.()
       observer.observe(hostStack.ref)
     } else {
@@ -220,8 +220,9 @@ export function follower<F extends Props>(config: Props) {
       if (stage.peek().mode !== 'host' || !isRendered(hostStack.ref!)) {
         return
       }
-      const selector = getSelector()
-      if (!selector.followerCycle.resize) {
+      // TODO: how do I tell the compiler that once 'host' is set, it will always be set?
+      const cycle = getSelector().followerCycle!
+      if (!cycle.resize) {
         hostStack.fn()
         return
       }
@@ -233,12 +234,7 @@ export function follower<F extends Props>(config: Props) {
       if (ratio === 0) {
         return
       }
-      const res = selector.followerCycle.resize(
-        follower.ref,
-        entry,
-        rect.peek(),
-        ratio === 0 || ratio === 1
-      )
+      const res = cycle.resize(follower.ref, entry, rect.peek(), ratio === 0 || ratio === 1)
       if (!res) {
         hostStack.fn()
         return
@@ -387,7 +383,7 @@ export function follower<F extends Props>(config: Props) {
         () => {
           // prettier-ignore
           getSelector().styleHost?.(hostStack.ref)
-          getSelector().followerCycle.clean?.(follower.ref)
+          getSelector().followerCycle?.clean?.(follower.ref)
           follower = {} as any
           hostStack = {} as any
         }
