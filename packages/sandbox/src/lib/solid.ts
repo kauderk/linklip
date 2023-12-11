@@ -1,5 +1,16 @@
-import { createEffect, createSignal, type Accessor, createMemo, untrack, from } from 'solid-js'
-export { createEffect, createRoot } from 'solid-js'
+import {
+  createComputed,
+  createSignal,
+  type Accessor,
+  createMemo,
+  untrack,
+  from,
+  observable,
+  createRoot,
+} from 'solid-js'
+// https://github.com/solidjs/solid/discussions/397#discussioncomment-595304
+// https://codesandbox.io/s/derivation-j0nzm?file=/index.js
+export { createComputed as createEffect, createRoot } from 'solid-js'
 // import type { Readable, Writable } from 'svelte/store'
 
 export interface $Writable<T> {
@@ -14,13 +25,13 @@ export interface $Writable<T> {
 }
 export const createSvelteSignal = <T>(value: T) => {
   const [signal, setSignal] = createSignal<T>(value)
+  const obs = observable(signal)
 
   return <$Writable<T>>{
     // @ts-expect-error
     set: newValue => setSignal(typeof newValue == 'function' ? newValue(signal()) : newValue),
     subscribe(fn) {
-      createEffect(() => fn(signal()))
-      return () => {}
+      return subscription<T>(signal, fn)
     },
     update(incoming) {
       // @ts-expect-error
@@ -49,19 +60,41 @@ export const createSvelteSignal = <T>(value: T) => {
 export type SvelteSignal<T> = ReturnType<typeof createSvelteSignal<T>>
 
 export interface $Readable<T> {
-  subscribe: (fn: (value: T) => () => void) => void
-
+  subscribe: (fn: (value: T) => void) => () => void
+  get value(): T
   peek: () => T
 }
 export const createSvelteMemo = <T>(fn: () => T) => {
   const signal = createMemo(fn)
   return <$Readable<T>>{
     subscribe(fn) {
-      createEffect(() => fn(signal()))
-      return () => {}
+      return subscription<T>(signal, fn)
+    },
+    get value() {
+      return signal()
     },
     peek: () => untrack(signal),
   }
+}
+
+/**
+ * Svelte needs this to run as soon as it is created
+ */
+function subscription<T>(signal: Accessor<T>, fn: (value: T) => void) {
+  return effect(() => {
+    const v = signal()
+    untrack(() => fn(v))
+  })
+}
+
+/**
+ * @returns unsubscribe function
+ */
+export function effect<T>(fn: () => void) {
+  return createRoot(disposer => {
+    createComputed(fn)
+    return disposer
+  })
 }
 
 /**

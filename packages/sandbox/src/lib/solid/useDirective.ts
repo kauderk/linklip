@@ -1,4 +1,4 @@
-import { type SvelteSignal, createEffect } from '$lib/solid'
+import { type SvelteSignal, effect } from '$lib/solid'
 import { cleanAction } from '$lib/stores'
 
 export function useClass(element: HTMLElement, signalList: Record<string, SvelteSignal<boolean>>) {
@@ -6,17 +6,11 @@ export function useClass(element: HTMLElement, signalList: Record<string, Svelte
     // @ts-expect-error
     typeof signalList == 'function' ? signalList() : signalList
 
-  // TODO: check if this gets cleaned up
-  Object.entries(list).forEach(([className, signal]) => {
-    createEffect(() => {
-      element.classList.toggle(className, signal.value)
-    })
-  })
-  // return cleanAction(
-  //   ...Object.entries(list).map(([className, signal]) =>
-  //     effect(() => {
-  //       element.classList.toggle(className, signal.value)
-  //     })
-  //   )
-  // )
+  return cleanAction(
+    ...Object.entries(list).map(([className, signal]) =>
+      effect(() => {
+        element.classList.toggle(className, signal.value)
+      })
+    )
+  )
 }

@@ -1,18 +1,21 @@
 <script lang="ts" context="module">
-  import { contextMenuSchema } from './ContextMenuSchema'
+  import { defaultSchema } from './ContextMenuSchema'
   import type { ContextMenuSchema, ContextMenuSchemaActionNode } from './types'
+  export type { ContextMenuSchemaActionNode as Schema } from './types'
+
   let menu = createSvelteSignal(() => ({
     x: 0,
     y: 0,
   }))
   let open = createSvelteSignal(false)
-  let contain$ = createSvelteMemo(() => contextMenuSchema.value.container)
-  export type { ContextMenuSchemaActionNode as Schema } from './types'
+
+  // solid-js signals need a root, and this is module context, use a simple store instead
+  export const GlobalContextMenuSchema = createObservable(defaultSchema)
 
   export function useContextMenu(event: MouseEvent, schema: ContextMenuSchema, overlay?: boolean) {
     event.stopPropagation()
     event.preventDefault()
-    contextMenuSchema.set(schema)
+    GlobalContextMenuSchema.set(schema)
     if (overlay) {
       ;(event.target as any)
         ?.closest('.context-menu-boundary')
@@ -24,7 +27,7 @@
     const target = event.target as HTMLElement
     open.value = false
 
-    const contain = contain$.peek()
+    const contain = GlobalContextMenuSchema.value.container
     if (!!contain && target !== contain && !Array.from(contain.children).includes(target)) {
       return
     }
@@ -69,10 +72,9 @@
 
 <script lang="ts">
   import { ignoreCssRules, tsAny } from '$lib/no-invalidate'
-  import { createSvelteSignal, type SvelteSignal } from '$lib/solid'
+  import { createObservable, createSvelteSignal, type SvelteSignal } from '$lib/solid'
   import { updateWindow } from '$lib/resize'
   import { cleanSubscribers } from '$lib/stores'
-  import { createSvelteMemo } from '$lib/solid'
   import { onMount } from 'svelte'
   import Template, { defineTemplate } from '../template/Template.svelte'
   import Show from './Show.svelte'
@@ -116,7 +118,7 @@
 {#if $open}
   <div class="context-menu" style:z-index={$zIndex + 1} use:adjustRect>
     <ul>
-      {#each $contextMenuSchema.nodes as item}
+      {#each $GlobalContextMenuSchema.nodes as item}
         {#if 'children' in item}
           {@const open = createSvelteSignal(tsAny(item.open))}
           <li

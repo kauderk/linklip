@@ -1,5 +1,5 @@
 import { createContext } from '$lib/create-context'
-import { createSvelteSignal, createSvelteMemo, createEffect } from '$lib/solid'
+import { createSvelteSignal, createSvelteMemo, effect } from '$lib/solid'
 import { resizeAction } from '$lib/resize'
 import { cleanSubscribers, diffStore } from '$lib/stores'
 import { createContextMenuCallbacks } from 'src/context-menu/controller'
@@ -48,17 +48,13 @@ const timeline = (config: { controlsMinHeight: number }) => {
 
   const sharedFocus = createSvelteSignal(false)
 
-  // TODO: check if this gets cleaned up
-  createEffect(() => {
-    progress.mod({ progress: seekTo.value / durationMs })
-  })
   return {
     context: {
       mount: () =>
         cleanSubscribers(
-          // createEf(() => {
-          //   progress.mod({ progress: seekTo.value / durationMs })
-          // }),
+          effect(() => {
+            progress.mod({ progress: seekTo.value / durationMs })
+          }),
           progress.subscribe($progress =>
             diffBoundaries.forEach((diff, i) =>
               diff.tryInvalidate({

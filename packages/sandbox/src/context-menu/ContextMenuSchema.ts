@@ -1,7 +1,6 @@
-import { createSvelteSignal } from '$lib/solid'
 import type { ContextMenuSchema } from './types'
 
-const defaultSchema: ContextMenuSchema = {
+export const defaultSchema: ContextMenuSchema = {
   nodes: [
     {
       content: 'A Parent Node',
@@ -19,5 +18,3 @@ const defaultSchema: ContextMenuSchema = {
     },
   ],
 }
-
-export const contextMenuSchema = createSvelteSignal(defaultSchema)

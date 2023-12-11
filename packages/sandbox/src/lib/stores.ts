@@ -23,6 +23,7 @@ export function debounceWritable<T>(store: SvelteSignal<T>, delay = 400) {
   return store
 }
 
+// TODO: use solid-js (prev: T, next: T) => boolean API
 export function diffStore<T>(store: SvelteSignal<T>) {
   const prevSet = store.set
   store.set = ((next: T) => {
