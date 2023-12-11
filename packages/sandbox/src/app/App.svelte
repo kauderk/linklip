@@ -3,7 +3,6 @@
 <script lang="ts">
   import { createSvelteSignal, createSvelteMemo } from '$lib/solid'
   import { useClass } from '$lib/solid/useDirective'
-  import { cleanSubscribers } from '$lib/stores'
   import { onMount } from 'svelte'
   import Controls from './Controls.svelte'
   import { resize } from './Resize.svelte'
@@ -23,18 +22,7 @@
   export let mount = () => () => {}
   export let dragThreshold = (e: MouseEvent) => {}
 
-  onMount(() =>
-    cleanSubscribers(
-      mount(),
-      timeline.context.mount(),
-      player.mount(),
-      config.resizing.subscribe(resizing => {
-        if (!resizing && config.stage.peek().mode != 'free') {
-          follower.styleHost()
-        }
-      })
-    )
-  )
+  onMount(mount)
 
   const { paused, fullScreen, time } = player
   const { resizeRect } = timeline.context

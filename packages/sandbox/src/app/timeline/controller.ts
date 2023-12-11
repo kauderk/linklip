@@ -59,7 +59,6 @@ const timeline = (config: { controlsMinHeight: number }) => {
   })
   return {
     context: {
-      mount: () => {},
       resizeRect: (el: HTMLElement) =>
         resizeAction(el, [
           rect => {

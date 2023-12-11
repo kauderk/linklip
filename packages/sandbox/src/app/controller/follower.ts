@@ -9,7 +9,6 @@ import { createDefaultStage } from '../follower/store'
 import { isRendered } from '$lib/utils'
 import { createSvelteSignal } from '$lib/solid'
 
-export const followers = createSvelteSignal({ message: '' as 'reset' | '' })
 type Props = Pick<PlayerConfig, 'rect' | 'dragging' | 'stage'> &
   FollowerConfig & {
     cachedDomObserver: ReturnType<typeof createCachedDomObserver>
@@ -341,13 +340,6 @@ export function follower<F extends Props>(config: Props) {
           }),
           createDebouncedListener(window, 'wheel', debounced => {
             ref.style.pointerEvents = debounced ? 'none' : 'unset'
-          }),
-          followers.subscribe(state => {
-            if (state.message == 'reset') {
-              branch()
-            }
-            // don't invalidate the state
-            state.message = ''
           })
         ),
       }

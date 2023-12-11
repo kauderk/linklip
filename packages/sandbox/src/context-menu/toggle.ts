@@ -30,7 +30,6 @@ export function createToggleStore<T extends o>(target: T, initial?: b) {
     set: toggle.set.bind(toggle),
     peek: toggle.peek.bind(toggle),
     derived: listen,
-    subscribe: toggle.subscribe.bind(toggle),
     props,
     tap(value: b | undefined) {
       if (typeof value == 'boolean') {

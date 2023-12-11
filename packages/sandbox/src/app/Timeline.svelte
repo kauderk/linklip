@@ -7,9 +7,7 @@
   let ignoreCssRules = { ['ignoreCssRules']: '' }
   import { heatmap } from '$mock/heatmap.json'
   import { createScrubber } from './timeline/scrubber'
-  import { onMount } from 'svelte'
   import { createRangeSlider } from './timeline/slider'
-  import { cleanSubscribers } from '$lib/stores'
   import { mapTiles } from './timeline/ratio/compute'
   import { createSvelteMemo } from '$lib/solid'
   import { createSvelteSignal } from '$lib/solid'

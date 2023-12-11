@@ -7,10 +7,12 @@ import {
   from,
   observable,
   createRoot,
+  onMount as _onMount,
+  onCleanup,
 } from 'solid-js'
 // https://github.com/solidjs/solid/discussions/397#discussioncomment-595304
 // https://codesandbox.io/s/derivation-j0nzm?file=/index.js
-export { createComputed, createRoot } from 'solid-js'
+export { createComputed, onCleanup, createRoot } from 'solid-js'
 // import type { Readable, Writable } from 'svelte/store'
 
 export interface $Writable<T> {
@@ -102,6 +104,15 @@ export function effect<T>(fn: () => void) {
   return createRoot(disposer => {
     createComputed(fn)
     return disposer
+  })
+}
+
+export function onMount(fn: () => any | (() => () => void)) {
+  _onMount(() => {
+    const res = fn()
+    if (typeof res == 'function') {
+      onCleanup(res)
+    }
   })
 }
 

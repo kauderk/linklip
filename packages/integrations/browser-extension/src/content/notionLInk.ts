@@ -160,7 +160,15 @@ export async function ObserveLinks_DeployLinklip() {
                 config: baseConfig,
                 follower,
                 dragThreshold: follower_DragThreshold_ContextMenu(followerConfig, follower, toggle),
-                mount: () => cleanSubscribers(follower.mount(notionHref)),
+                mount: () =>
+                  cleanSubscribers(
+                    follower.mount(notionHref),
+                    baseConfig.resizing.subscribe((resizing: any) => {
+                      if (!resizing && baseConfig.stage.peek().mode != 'free') {
+                        follower.styleHost()
+                      }
+                    })
+                  ),
               },
               context: new Map([
                 ['Player', player()],

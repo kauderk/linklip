@@ -1,7 +1,7 @@
 import { createContext } from '$lib/create-context'
 import { cleanSubscribers } from '$lib/stores'
 import storyboard_ from '$mock/storyboard.json'
-import { createSvelteSignal } from '$lib/solid'
+import { createSvelteSignal, onCleanup } from '$lib/solid'
 import { createFullScreenController } from '../controller/fullscreen'
 
 export const storyboard = () => ({
@@ -19,12 +19,17 @@ export const player = () => {
   const paused = createSvelteSignal(true)
   const fullScreen = createFullScreenController(refs)
 
+  onCleanup(() => {
+    // FIXME: make the types a undefined union
+    // @ts-expect-error
+    refs = {}
+  })
   return {
     scrubbing: createSvelteSignal(false),
     captions: createSvelteSignal(false),
     miniPlayer: createSvelteSignal(false),
     theater: createSvelteSignal(false),
-    fullScreen: fullScreen.fullScreen,
+    fullScreen: fullScreen,
     centeredControls: createSvelteSignal(false),
 
     volumeLevel: createSvelteSignal<'high' | 'low' | 'muted'>('high'),
@@ -43,11 +48,6 @@ export const player = () => {
     }),
     refs,
 
-    mount: () =>
-      cleanSubscribers(fullScreen.mount(), () => {
-        // @ts-ignore
-        refs = {}
-      }),
     togglePlay() {
       paused.value ? refs.video.play() : refs.video.pause()
     },
