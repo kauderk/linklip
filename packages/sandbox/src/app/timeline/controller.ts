@@ -1,5 +1,5 @@
 import { createContext } from '$lib/create-context'
-import { preSignal } from '$lib/solid'
+import { createSvelteSignal } from '$lib/solid'
 import { resizeAction } from '$lib/resize'
 import { cleanSubscribers, diffStore } from '$lib/stores'
 import { computed, effect } from '@preact/signals-core'
@@ -11,20 +11,20 @@ import { ms2Hms } from '../controller/formatter'
 import { createRangeConfig } from './ratio/config'
 
 const timeline = (config: { controlsMinHeight: number }) => {
-  const seekTo = preSignal(0)
+  const seekTo = createSvelteSignal(0)
   const videoRect = diffStore(
-    preSignal({
+    createSvelteSignal({
       width: 500,
       height: 350,
     })
   )
-  let timelineHeight = preSignal(90)
+  let timelineHeight = createSvelteSignal(90)
   const tuneStoryboardRatio = 0.5
-  let storyboardRatio = preSignal(0)
+  let storyboardRatio = createSvelteSignal(0)
   const durationMs = Number(macro_chapters.pop()?.chapter.endTimeMs) || 0
 
   //#region Timeline
-  const progress = preSignal({
+  const progress = createSvelteSignal({
     preview: 0,
     scrubbing: false,
     progress: 0.2,
@@ -47,7 +47,7 @@ const timeline = (config: { controlsMinHeight: number }) => {
     progress,
   })
 
-  const sharedFocus = preSignal(false)
+  const sharedFocus = createSvelteSignal(false)
 
   return {
     context: {

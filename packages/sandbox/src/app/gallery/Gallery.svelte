@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { preSignal } from '$lib/solid'
+  import { createSvelteSignal } from '$lib/solid'
   import { onMount, tick } from 'svelte'
   import { resize, type ResizeConfig } from '../Resize.svelte'
   import { createMouseTrack } from '../controller/mouse-track'
@@ -88,7 +88,7 @@
     bounds: 'rect',
     padding: 0,
     minWidth: 0,
-    rect: preSignal({
+    rect: createSvelteSignal({
       height: 100,
       width: 100,
       x: 0,

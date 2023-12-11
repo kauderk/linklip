@@ -1,4 +1,4 @@
-import { preSignal } from '../../../lib/pre-signal'
+import { createSvelteSignal } from '../../../lib/solid'
 import { noInvalidate } from '../../../lib/no-invalidate'
 import { createInstance, type pair } from './instance'
 import { Direction, flipStep } from './helper'
@@ -15,7 +15,7 @@ type Props = {
 }
 export function createRangeSlider({ guard, rangeContext, calculateValue }: Props) {
   // state management
-  const nub = preSignal({
+  const nub = createSvelteSignal({
     active: false,
     pressed: false,
   })
@@ -65,7 +65,7 @@ export function createRangeSlider({ guard, rangeContext, calculateValue }: Props
       })
     )
 
-  let focus = preSignal(false as any)
+  let focus = createSvelteSignal(false as any)
 
   function blur() {
     focus.set(false)

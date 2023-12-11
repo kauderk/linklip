@@ -1,7 +1,7 @@
 import type { pair } from '../slider/instance'
 import { createDiffBoundary, createDiffRatio } from './diff'
 import { createRatioBoundary } from './compute'
-import { preSignal } from '../../../lib/pre-signal'
+import { createSvelteSignal } from '../../../lib/solid'
 import { computed } from '@preact/signals-core'
 import { Clone } from '$lib/polyfill'
 
@@ -11,10 +11,10 @@ const createEvents = () => ({
   blur() {},
 })
 const createState = () => ({
-  edit: preSignal<'free' | 'lock' | 'focus'>('free'),
+  edit: createSvelteSignal<'free' | 'lock' | 'focus'>('free'),
 })
 export const createRangeConfig = () => {
-  const staleValues = preSignal([
+  const staleValues = createSvelteSignal([
     // { start: 0, end: 10 },
     // { start: 20, end: 30 },
     // { start: 30 + 15, end: 40 + 15 },
@@ -23,7 +23,7 @@ export const createRangeConfig = () => {
     // { start: 95, end: 100 },
   ])
   const runtimeValues = computed(() =>
-    staleValues.value.map(entry => preSignal(Clone(entry) as pair))
+    staleValues.value.map(entry => createSvelteSignal(Clone(entry) as pair))
   )
 
   const $values = staleValues.peek()

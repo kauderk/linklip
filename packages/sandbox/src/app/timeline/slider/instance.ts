@@ -12,7 +12,7 @@ import { Backwards, Direction, flipStep, mapRange, objectMap } from './helper'
 
 import { Clone } from '$lib/polyfill'
 import { computed } from '@preact/signals-core'
-import { preSignal } from '../../../lib/pre-signal'
+import { createSvelteSignal } from '../../../lib/solid'
 import type { createRangeConfig } from '../ratio/config'
 
 type Props = {
@@ -28,18 +28,18 @@ export function createInstance({ rangeContext }: Props) {
 
   const { staleValues, runtimeValues, states } = rangeContext
 
-  const handle = preSignal(<DeepReadonly<handle>>{
+  const handle = createSvelteSignal(<DeepReadonly<handle>>{
     index: 0,
     step: staleValues.peek()[0]?.start ? 'start' : 'end',
   })
-  const settings = preSignal(<const>{
+  const settings = createSvelteSignal(<const>{
     min: 0,
     max: 100,
     pipStep: 1,
     precision: 2,
   })
-  const rect = preSignal(<const>{ gap: 0, min: 5 }) // why 10?
-  const state = preSignal(<const>{
+  const rect = createSvelteSignal(<const>{ gap: 0, min: 5 }) // why 10?
+  const state = createSvelteSignal(<const>{
     range: true as b | 'min' | 'max',
     push: 'set' as 'edges' | 'set' | 'rangeSets',
     disabled: false,

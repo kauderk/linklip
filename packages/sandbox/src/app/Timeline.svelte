@@ -12,7 +12,7 @@
   import { cleanSubscribers } from '$lib/stores'
   import { mapTiles } from './timeline/ratio/compute'
   import { computed } from '@preact/signals-core'
-  import { preSignal } from '$lib/solid'
+  import { createSvelteSignal } from '$lib/solid'
   import { resizeAction } from '$lib/resize'
 
   const { shared, progressBar, slider } = getTimelineContext()
@@ -76,9 +76,9 @@
       })
     )
   )
-  const sliderRect = preSignal({ width: 300, height: 90 })
-  const resizing = preSignal(false)
-  const windowResize = preSignal(false)
+  const sliderRect = createSvelteSignal({ width: 300, height: 90 })
+  const resizing = createSvelteSignal(false)
+  const windowResize = createSvelteSignal(false)
 </script>
 
 <div

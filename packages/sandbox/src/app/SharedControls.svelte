@@ -3,7 +3,7 @@
   import { follower as setSharedControlsContext } from './controller/follower'
   import type { FollowerConfig } from './controller/follower-lib'
   import { cleanSubscribers } from '$lib/stores'
-  import { preSignal } from '$lib/solid'
+  import { createSvelteSignal } from '$lib/solid'
   import { defaultCornerFollowerCycle, observerSelectors } from './follower/corner'
   import Controls from './Controls.svelte'
   import { createDefaultStage, getStagesContext } from './follower/store'
@@ -59,7 +59,7 @@
       },
     },
     width,
-    rect: preSignal({
+    rect: createSvelteSignal({
       x: window.innerWidth / 2 - width / 2,
       y: window.innerHeight / 2 - height / 2,
       width,

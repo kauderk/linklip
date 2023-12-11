@@ -1,8 +1,8 @@
-import { preSignal } from '$lib/solid'
+import { createSvelteSignal } from '$lib/solid'
 import { computed } from '@preact/signals-core'
 
 export function createToggleStore<T extends o>(target: T, initial?: b) {
-  const toggle = preSignal<boolean>(initial ?? false)
+  const toggle = createSvelteSignal<boolean>(initial ?? false)
   const listen = computed(() => {
     toggle.value
     return props()
