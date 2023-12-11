@@ -34,7 +34,6 @@ export function createToggleStore<T extends o>(target: T, initial?: b) {
     props,
     tap(value: b | undefined) {
       if (typeof value == 'boolean') {
-        //@ts-expect-error FIXME: type error
         toggle.set(value)
       }
       return props()

@@ -80,12 +80,10 @@ export function createContextMenuCallbacks({
     if (id == 'focus') {
       states.forEach(state => {
         if (state.edit.peek() == id) {
-          // @ts-expect-error
           state.edit.set('free')
         }
       })
     }
-    // @ts-expect-error
     states[index].edit.set(id)
   }
   const editSelect = <const>[

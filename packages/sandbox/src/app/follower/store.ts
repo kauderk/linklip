@@ -1,7 +1,7 @@
 import { createContext } from '$lib/create-context'
 import { createSvelteSignal } from '$lib/solid'
 
-type S = {
+export type S = {
   mode: 'host' | 'free' | 'theater' | 'panic'
   selector?: string
 }

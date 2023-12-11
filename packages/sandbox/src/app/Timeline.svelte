@@ -64,18 +64,15 @@
     },
   })
 
-  onMount(() =>
-    cleanSubscribers(
-      focus.subscribe(focus => (sharedFocus.value = focus)),
-      sharedFocus.subscribe(() => {
-        rangeContext.derivedRatios.diffRatios.forEach((diff, i) => {
-          diff.set(mapTiles(boundaries[i].peek()))
-          // Notify the <Board /> that there are new tiles
-          diffBoundaries[i].progress.update($ => $)
-        })
-      })
-    )
-  )
+  focus.compute(focus => (sharedFocus.value = focus))
+  sharedFocus.compute(() => {
+    rangeContext.derivedRatios.diffRatios.forEach((diff, i) => {
+      diff.set(mapTiles(boundaries[i].peek()))
+      // Notify the <Board /> that there are new tiles
+      diffBoundaries[i].progress.update($ => $)
+    })
+  })
+
   const sliderRect = createSvelteSignal({ width: 300, height: 90 })
   const resizing = createSvelteSignal(false)
   const windowResize = createSvelteSignal(false)

@@ -10,12 +10,16 @@ import {
 } from 'solid-js'
 // https://github.com/solidjs/solid/discussions/397#discussioncomment-595304
 // https://codesandbox.io/s/derivation-j0nzm?file=/index.js
-export { createComputed as createEffect, createRoot } from 'solid-js'
+export { createComputed, createRoot } from 'solid-js'
 // import type { Readable, Writable } from 'svelte/store'
 
 export interface $Writable<T> {
   set: (newValue: T | ((prev: T) => T)) => void
   subscribe: (fn: (value: T) => void) => () => void
+  /**
+   * React to its own changes and ignore/untrack changes from other signals
+   */
+  compute: (fn: (value: T) => void) => void
   update: (fn: T | ((prev: T) => T)) => void
   mod: (newPartial: Partial<T>) => void
   get value(): T
@@ -32,6 +36,10 @@ export const createSvelteSignal = <T>(value: T) => {
     set: newValue => setSignal(typeof newValue == 'function' ? newValue(signal()) : newValue),
     subscribe(fn) {
       return subscription<T>(signal, fn)
+    },
+    compute(fn) {
+      const v = signal()
+      createComputed(() => untrack(() => fn(v)))
     },
     update(incoming) {
       // @ts-expect-error

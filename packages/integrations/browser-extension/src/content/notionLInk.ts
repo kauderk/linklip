@@ -121,7 +121,7 @@ export async function ObserveLinks_DeployLinklip() {
             })
 
             const stages = stagesCtx[1] as any // the signal types or generics don't work across packages
-            const unSharedFollower = stages.sharedControls.subscribe((stage: any) => {
+            stages.sharedControls.compute((stage: any) => {
               const bottom = ['notionPage', 'notionMainScroller']
               const top = ['notionTopBar']
               const self = baseConfig.stage.peek()
@@ -139,7 +139,7 @@ export async function ObserveLinks_DeployLinklip() {
             // FIXME: better abstraction, don't pollute the config
             // @ts-expect-error
             baseConfig.constraint = {}
-            const unResizeStage = baseConfig.stage.subscribe((stage: any) => {
+            baseConfig.stage.compute((stage: any) => {
               // @ts-expect-error valueContainer
               const pre = followerConfig.selectors[stage.selector]?.constraint
               const constraint =
@@ -160,8 +160,7 @@ export async function ObserveLinks_DeployLinklip() {
                 config: baseConfig,
                 follower,
                 dragThreshold: follower_DragThreshold_ContextMenu(followerConfig, follower, toggle),
-                mount: () =>
-                  cleanSubscribers(follower.mount(notionHref), unSharedFollower, unResizeStage),
+                mount: () => cleanSubscribers(follower.mount(notionHref)),
               },
               context: new Map([
                 ['Player', player()],
