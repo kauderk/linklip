@@ -4,6 +4,7 @@ import { createToggleStore } from './toggle'
 import type { createRangeConfig } from '../app/timeline/ratio/config'
 type Context = ReturnType<typeof createRangeConfig>
 import type { SvelteSignal } from '$lib/solid'
+import type { ActionReturn } from '$lib/event-life-cycle'
 
 type Props = {
   boundaries: Context['derivedRatios']['boundaries']
@@ -32,14 +33,14 @@ export function createContextMenuCallbacks({
         target.style.setProperty('--left', `${boundary.startRatio * 100}%`)
         target.style.setProperty('--right', `${100 - boundary.endRatio * 100}%`)
       }),
-    }
+    } satisfies ActionReturn
   }
   function stateAction(target: HTMLElement, index: n) {
     return {
       destroy: states[index].edit.subscribe(state => {
         target.setAttribute('data-state', state)
       }),
-    }
+    } satisfies ActionReturn
   }
 
   const mutateToggle = createToggleStore(<const>{

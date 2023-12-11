@@ -1,4 +1,5 @@
 import type { SvelteSignal } from '$lib/solid'
+import type { ActionReturn } from '$lib/event-life-cycle'
 // https://svelte.dev/repl/90847a5d2bac438184ce5548137853c2?version=3.50.0
 
 export function debounceWritable<T>(store: SvelteSignal<T>, delay = 400) {
@@ -49,5 +50,5 @@ export function cleanSubscribers(...unsubscribers: (() => void)[]) {
 export function cleanAction(...unsubscribers: (() => void)[]) {
   return {
     destroy: cleanSubscribers(...unsubscribers),
-  }
+  } satisfies ActionReturn
 }

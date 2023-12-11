@@ -1,4 +1,4 @@
-import { createListeners } from '$lib/event-life-cycle'
+import { ActionReturn, createListeners } from '$lib/event-life-cycle'
 import { cleanSubscribers } from '$lib/stores'
 import { useContextMenu } from 'src/context-menu/ContextMenu.svelte'
 import { createTrackMouseHold } from '../controller/click-track'
@@ -37,7 +37,7 @@ export function follower_DragThreshold_ContextMenu(
               }),
               hover(false)
             ),
-          }
+          } satisfies ActionReturn
         },
       }
     })

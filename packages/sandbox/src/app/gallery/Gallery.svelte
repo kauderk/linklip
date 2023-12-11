@@ -4,6 +4,7 @@
   import { resize, type ResizeConfig } from '../Resize.svelte'
   import { createMouseTrack } from '../controller/mouse-track'
   import { createDebouncedListener } from '$lib/resize'
+  import type { ActionReturn } from '$lib/event-life-cycle'
 
   function portal(target: HTMLElement) {
     const host = document.querySelector('.whenContentEditable')!
@@ -109,7 +110,7 @@
         const to = isTop ? 'height' : 'width'
         ref.style[to] = rect[to] + 'px'
       }),
-    }
+    } satisfies ActionReturn
   }
   const overflow = createMouseTrack({
     mouseup(_, currentTarget) {

@@ -37,7 +37,7 @@ export function keydown<T extends HTMLElement, K extends keyof HTMLElementEventM
       params = rest = undefined
       node.remove()
     },
-  }
+  } satisfies ActionReturn
 }
 
 export const down = <T extends HTMLElement>(
@@ -53,8 +53,14 @@ export const down = <T extends HTMLElement>(
       params = undefined
       node.remove()
     },
-  }
+  } satisfies ActionReturn
 }
+
+export interface ActionReturn<Parameter = any> {
+  update?: (parameter: Parameter) => void
+  destroy?: () => void
+}
+import type { Action } from 'svelte/types/runtime/action'
 
 // TODO: better abstraction
 export function Event<T extends HTMLElement, K extends string>(
@@ -66,7 +72,7 @@ export function Event<T extends HTMLElement, K extends string>(
 ) {
   return {
     destroy: createListeners(node, params),
-  }
+  } satisfies ActionReturn
 }
 export function createListeners<T extends HTMLElement, K extends string>(
   node: T,

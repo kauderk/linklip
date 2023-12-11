@@ -1,4 +1,5 @@
 <script lang="ts" context="module">
+  import type { ActionReturn } from '$lib/event-life-cycle'
   import { type SvelteSignal, createSvelteSignal } from '$lib/solid'
   import type { Rect } from './controller/follower-lib'
   import { createMouseTrack } from './controller/mouse-track'
@@ -322,7 +323,7 @@
         Object.assign(_config, Config)
         update()
       },
-    }
+    } satisfies ActionReturn
   }
   function createGrabbers() {
     // prettier-ignore

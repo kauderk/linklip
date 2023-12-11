@@ -1,3 +1,4 @@
+import type { ActionReturn } from '$lib/event-life-cycle'
 import { type SvelteSignal, createSvelteSignal } from './solid'
 import { cleanSubscribers } from './stores'
 
@@ -65,7 +66,7 @@ type x = Parameters<typeof resizeSubscription>
 export const resizeAction = (el: x[0], [fn, busy]: x[1]) => {
   return {
     destroy: resizeSubscription(el, [fn, busy]),
-  }
+  } satisfies ActionReturn
 }
 
 const debounce = <F extends (...args: any) => void>(func: F, delay: n) => {

@@ -8,6 +8,7 @@ import { fitToTarget, mapRange, type FollowerConfig, type PlayerConfig, type Rec
 import { createDefaultStage } from '../follower/store'
 import { isRendered } from '$lib/utils'
 import { createSvelteSignal } from '$lib/solid'
+import type { ActionReturn } from '$lib/event-life-cycle'
 
 type Props = Pick<PlayerConfig, 'rect' | 'dragging' | 'stage'> &
   FollowerConfig & {
@@ -323,7 +324,7 @@ export function follower<F extends Props>(config: Props) {
       branch,
       resolveSelector,
     },
-    registerFollower(ref: HTMLElement) {
+    registerFollower(ref: HTMLElement):ActionReturn<any> {
       follower.ref = ref
       return {
         destroy: cleanSubscribers(

@@ -57,7 +57,7 @@
   function adjustRect(menuRef: HTMLElement) {
     return {
       destroy: updateWindow(() => update(menuRef), 300, true),
-    }
+    } satisfies ActionReturn
   }
   function handle_click_outside(event: MouseEvent) {
     const target = event.target as HTMLElement
@@ -79,6 +79,7 @@
   import Template, { defineTemplate } from '../template/Template.svelte'
   import Show from './Show.svelte'
   import { fitToTarget, zIndex } from 'src/app/controller/follower-lib'
+  import type { ActionReturn } from '$lib/event-life-cycle'
   let template = defineTemplate<{
     item: ContextMenuSchemaActionNode
     open: SvelteSignal<boolean | undefined>
