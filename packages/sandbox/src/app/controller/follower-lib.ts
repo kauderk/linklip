@@ -1,14 +1,14 @@
-import type { PreSignal } from '$lib/pre-signal'
 import type { follower } from './follower'
-import { createObservable, preSignal } from '$lib/pre-signal'
+import { createObservable, deprecatedSignal } from '$lib/pre-signal'
 import { createDebouncedListener, createDebouncedObserver } from '$lib/resize'
 import { cleanSubscribers } from '$lib/stores'
+import type { SvelteSignal } from '$lib/solid'
 
 export type PlayerConfig = {
   width: number
   aspectRatio: [number, number]
-  rect: PreSignal<Rect>
-  dragging?: PreSignal<boolean>
+  rect: SvelteSignal<Rect>
+  dragging?: SvelteSignal<boolean>
   stage?: Stage
 }
 export type Selector =
@@ -47,7 +47,7 @@ export type FollowerConfig = {
     postBranch?: () => void
   }
 }
-export type Stage = PreSignal<{
+export type Stage = SvelteSignal<{
   mode: 'host' | 'free' | 'theater' | 'panic'
   selector?: string
 }>
@@ -55,7 +55,7 @@ export type Stage = PreSignal<{
 export type El = HTMLElement | undefined
 type Send = ReturnType<typeof follower>['sendType']
 export type FollowerCycle = {
-  update: (hostRef: HTMLElement, initRect: Rect, initRectSignal: PreSignal<Rect>) => Send
+  update: (hostRef: HTMLElement, initRect: Rect, initRectSignal: SvelteSignal<Rect>) => Send
   resize?: (
     followerRef: El,
     entry: IntersectionObserverEntry,
@@ -212,4 +212,4 @@ export function createCachedDomObserver(options?: { cache?: typeof cache }) {
   }
 }
 
-export const zIndex = preSignal(101)
+export const zIndex = deprecatedSignal(101)

@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  import { preSignal, type PreSignal } from '$lib/pre-signal'
+  import { type SvelteSignal, createSvelteSignal } from '$lib/solid'
   import type { Rect } from './controller/follower-lib'
   import { createMouseTrack } from './controller/mouse-track'
 
@@ -16,13 +16,13 @@
     | 'center'
   const config = {
     aspectRatio: aspectRatioFrom([16, 9]),
-    resizeMode: 'inlineBlock' as resizeMode | PreSignal<resizeMode>,
+    resizeMode: 'inlineBlock' as resizeMode | SvelteSignal<resizeMode>,
     bounds: 'rect' as 'mouse' | 'rect' | 'none',
     hide: false,
     minWidth: 300,
-    resizing: preSignal(false),
+    resizing: createSvelteSignal(false),
     padding: 5,
-    rect: preSignal(<Rect>{
+    rect: createSvelteSignal(<Rect>{
       x: 200,
       y: 200,
       width: 600,

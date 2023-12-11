@@ -1,4 +1,4 @@
-import { preSignal } from '$lib/pre-signal'
+import { createSvelteSignal } from '$lib/solid'
 import { mapRatio } from './map'
 
 //#region Ratio
@@ -8,12 +8,12 @@ export const _boundary_ = {
 }
 
 export const createRelativeRatio = () =>
-  preSignal({
+  createSvelteSignal({
     ratio: 0,
     playing: false,
   })
-export const createRatioBoundary = () => preSignal({ ..._boundary_ })
-export const createTiles = () => preSignal(mapTiles({ ..._boundary_ }))
+export const createRatioBoundary = () => createSvelteSignal({ ..._boundary_ })
+export const createTiles = () => createSvelteSignal(mapTiles({ ..._boundary_ }))
 export type Boundary = ReturnType<typeof createRatioBoundary>
 
 export function deriveRatio(

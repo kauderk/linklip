@@ -1,6 +1,5 @@
 import { createContext } from '$lib/create-context'
-import { createObservable, preSignal } from '$lib/pre-signal'
-import { createDebouncedListener, createDebouncedObserver, createTimeout } from '$lib/resize'
+import { createDebouncedListener, createTimeout } from '$lib/resize'
 import { useClass } from '$lib/solid/useDirective'
 import { cleanSubscribers } from '$lib/stores'
 import { createMouseTrack } from './mouse-track'
@@ -8,8 +7,9 @@ import { createMouseTrack } from './mouse-track'
 import { fitToTarget, mapRange, type FollowerConfig, type PlayerConfig, type Rect, type Selector, togglePointerTarget, animationFrameInterval, type El, createCachedDomObserver } from './follower-lib'
 import { createDefaultStage } from '../follower/store'
 import { isRendered } from '$lib/utils'
+import { createSvelteSignal } from '$lib/solid'
 
-export const followers = preSignal({ message: '' as 'reset' | '' })
+export const followers = createSvelteSignal({ message: '' as 'reset' | '' })
 type Props = Pick<PlayerConfig, 'rect' | 'dragging' | 'stage'> &
   FollowerConfig & {
     cachedDomObserver: ReturnType<typeof createCachedDomObserver>
@@ -22,7 +22,7 @@ export function follower<F extends Props>(config: Props) {
     selectorKey: '',
     ref: <El>undefined,
   }
-  let dragging = config.dragging ?? preSignal(false)
+  let dragging = config.dragging ?? createSvelteSignal(false)
   let stage = config.stage ?? createDefaultStage()
   let follower = { ref: <HTMLElement>{} }
 

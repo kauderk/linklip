@@ -1,11 +1,11 @@
 <script lang="ts" context="module">
   import { contextMenuSchema } from './ContextMenuSchema'
   import type { ContextMenuSchema, ContextMenuSchemaActionNode } from './types'
-  let menu = preSignal(() => ({
+  let menu = deprecatedSignal(() => ({
     x: 0,
     y: 0,
   }))
-  let open = preSignal(false)
+  let open = deprecatedSignal(false)
   let contain$ = computed(() => contextMenuSchema.value.container)
   export type { ContextMenuSchemaActionNode as Schema } from './types'
 
@@ -69,7 +69,7 @@
 
 <script lang="ts">
   import { ignoreCssRules, tsAny } from '$lib/no-invalidate'
-  import { preSignal, type PreSignal } from '$lib/pre-signal'
+  import { deprecatedSignal, type PreSignal } from '$lib/pre-signal'
   import { updateWindow } from '$lib/resize'
   import { cleanSubscribers } from '$lib/stores'
   import { computed } from '@preact/signals-core'
@@ -118,7 +118,7 @@
     <ul>
       {#each $contextMenuSchema.nodes as item}
         {#if 'children' in item}
-          {@const open = preSignal(tsAny(item.open))}
+          {@const open = deprecatedSignal(tsAny(item.open))}
           <li
             class="action"
             {...ignoreCssRules}

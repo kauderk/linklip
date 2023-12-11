@@ -1,4 +1,4 @@
-import { preSignal } from '$lib/pre-signal'
+import { createSvelteSignal } from '$lib/solid'
 import type { ContextMenuSchema } from './types'
 
 const defaultSchema: ContextMenuSchema = {
@@ -20,4 +20,4 @@ const defaultSchema: ContextMenuSchema = {
   ],
 }
 
-export const contextMenuSchema = preSignal(defaultSchema)
+export const contextMenuSchema = createSvelteSignal(defaultSchema)

@@ -1,11 +1,12 @@
-import { preSignal } from '$lib/pre-signal'
 import { createContext } from '$lib/create-context'
+import { createSvelteSignal } from '$lib/solid'
+
 type S = {
   mode: 'host' | 'free' | 'theater' | 'panic'
   selector?: string
 }
 export const createDefaultStage = (stage = <S>{ mode: 'free' }) => {
-  return preSignal(stage)
+  return createSvelteSignal(stage)
 }
 const shared = ['notionPage', 'notionTopBar', 'notionMainScroller']
 export const stages = () => ({

@@ -1,5 +1,4 @@
-import { createMouseTrack } from 'src/app/controller/mouse-track'
-import { preSignal, type PreSignal } from './pre-signal'
+import { type SvelteSignal, createSvelteSignal } from './solid'
 import { cleanSubscribers } from './stores'
 
 function resize(el: HTMLElement, updater: (entry: ResizeObserverEntry) => void) {
@@ -20,14 +19,14 @@ function resize(el: HTMLElement, updater: (entry: ResizeObserverEntry) => void) 
 
 function resizeSubscription(
   el: HTMLElement,
-  [fn, busy]: [fn: (rect: DOMRect) => void, busy?: PreSignal<boolean>]
+  [fn, busy]: [fn: (rect: DOMRect) => void, busy?: SvelteSignal<boolean>]
 ) {
   function deriveRect(el: HTMLElement) {
     fn(el.getBoundingClientRect())
   }
   deriveRect(el)
 
-  let _busy = busy || preSignal(false)
+  let _busy = busy || createSvelteSignal(false)
   const debounced = debounce((el: HTMLElement) => {
     _busy.value = false
 

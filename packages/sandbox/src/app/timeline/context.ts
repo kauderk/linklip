@@ -1,11 +1,11 @@
 import { createContext } from '$lib/create-context'
 import { cleanSubscribers } from '$lib/stores'
 import storyboard_ from '$mock/storyboard.json'
-import { preSignal } from '$lib/pre-signal'
+import { createSvelteSignal } from '$lib/solid'
 import { createFullScreenController } from '../controller/fullscreen'
 
 export const storyboard = () => ({
-  totalSize: preSignal(storyboard_.high.slot.thumbnailCount),
+  totalSize: createSvelteSignal(storyboard_.high.slot.thumbnailCount),
 })
 export const { getStoryboardContext, setStoryboardContext } = createContext({
   storyboard,
@@ -16,28 +16,28 @@ export const player = () => {
     videoContainer: <HTMLElement>{},
     video: <HTMLVideoElement>{},
   }
-  const paused = preSignal(true)
+  const paused = createSvelteSignal(true)
   const fullScreen = createFullScreenController(refs)
 
   return {
-    scrubbing: preSignal(false),
-    captions: preSignal(false),
-    miniPlayer: preSignal(false),
-    theater: preSignal(false),
+    scrubbing: createSvelteSignal(false),
+    captions: createSvelteSignal(false),
+    miniPlayer: createSvelteSignal(false),
+    theater: createSvelteSignal(false),
     fullScreen: fullScreen.fullScreen,
-    centeredControls: preSignal(false),
+    centeredControls: createSvelteSignal(false),
 
-    volumeLevel: preSignal<'high' | 'low' | 'muted'>('high'),
-    speedBtnTxt: preSignal('1x'),
-    time: preSignal({ current: '0:00', total: '0' }),
+    volumeLevel: createSvelteSignal<'high' | 'low' | 'muted'>('high'),
+    speedBtnTxt: createSvelteSignal('1x'),
+    time: createSvelteSignal({ current: '0:00', total: '0' }),
 
-    volume: preSignal(1),
+    volume: createSvelteSignal(1),
     paused,
-    muted: preSignal(false),
-    duration: preSignal(0),
-    playbackRate: preSignal(1),
-    currentTime: preSignal(0),
-    progress: preSignal({
+    muted: createSvelteSignal(false),
+    duration: createSvelteSignal(0),
+    playbackRate: createSvelteSignal(1),
+    currentTime: createSvelteSignal(0),
+    progress: createSvelteSignal({
       preview: 0,
       timeline: 0.2,
     }),

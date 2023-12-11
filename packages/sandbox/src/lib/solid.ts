@@ -1,14 +1,15 @@
 import { createEffect, createSignal, type Accessor, createMemo } from 'solid-js'
 // import type { Readable, Writable } from 'svelte/store'
 
-export type $Writable<T> = {
+export interface $Writable<T> {
   set: (newValue: Exclude<T, Function> | ((prev: T) => T)) => void
-  subscribe: (fn: (value: T) => () => void) => void
+  subscribe: (fn: (value: T) => void) => () => void
   update: (fn: Exclude<T, Function> | ((prev: T) => T)) => void
   mod: (newPartial: Partial<Exclude<T, Function>>) => void
   get value(): T
   set value(newValue: T)
   toSignal: <T>() => ReturnType<typeof createSignal<T>>
+  peek: () => T
 }
 export const createSvelteSignal = <T>(value: T) => {
   const [signal, setSignal] = createSignal<T>(value)
@@ -31,6 +32,7 @@ export const createSvelteSignal = <T>(value: T) => {
         setSignal(newPartial as any)
       }
     },
+    peek: () => signal(),
     get value() {
       return signal()
     },

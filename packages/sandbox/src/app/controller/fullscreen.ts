@@ -1,9 +1,9 @@
 import { createListeners } from '$lib/event-life-cycle'
-import { preSignal } from '$lib/pre-signal'
+import { createSvelteSignal } from '$lib/solid'
 import { cleanSubscribers } from '$lib/stores'
 
 export const createFullScreenController = (props: { videoContainer: HTMLElement }) => {
-  const fullScreen = preSignal(false)
+  const fullScreen = createSvelteSignal(false)
   function off() {
     if (document.fullscreenElement) return
     fullScreen.value = false

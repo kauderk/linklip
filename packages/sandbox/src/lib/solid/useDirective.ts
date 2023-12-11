@@ -1,8 +1,8 @@
-import type { PreSignal } from '$lib/pre-signal'
+import type { SvelteSignal } from '$lib/solid'
 import { cleanAction } from '$lib/stores'
 import { effect } from '@preact/signals-core'
 
-export function useClass(element: HTMLElement, signalList: Record<string, PreSignal<boolean>>) {
+export function useClass(element: HTMLElement, signalList: Record<string, SvelteSignal<boolean>>) {
   const list: typeof signalList =
     // @ts-expect-error
     typeof signalList == 'function' ? signalList() : signalList
