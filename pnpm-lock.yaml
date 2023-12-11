@@ -62,6 +62,9 @@ importers:
       sass:
         specifier: ^1.57.1
         version: 1.62.1
+      solid-js:
+        specifier: ^1.8.7
+        version: 1.8.7
       svelte:
         specifier: ^3.58.0
         version: 3.58.0
@@ -156,6 +159,9 @@ importers:
       sass:
         specifier: ^1.57.1
         version: 1.62.1
+      solid-js:
+        specifier: ^1.8.7
+        version: 1.8.7
       svelte:
         specifier: ^3.54.0
         version: 3.58.0
@@ -5270,6 +5276,11 @@ packages:
       lru-cache: 6.0.0
     dev: true
 
+  /seroval@0.15.1:
+    resolution: {integrity: sha512-OPVtf0qmeC7RW+ScVX+7aOS+xoIM7pWcZ0jOWg2aTZigCydgRB04adfteBRbecZnnrO1WuGQ+C3tLeBBzX2zSQ==}
+    engines: {node: '>=10'}
+    dev: true
+
   /set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
     dev: true
@@ -5388,6 +5399,13 @@ packages:
       strip-ansi: 6.0.1
       wcwidth: 1.0.1
       yargs: 15.4.1
+    dev: true
+
+  /solid-js@1.8.7:
+    resolution: {integrity: sha512-9dzrSVieh2zj3SnJ02II6xZkonR6c+j/91b7XZUNcC6xSaldlqjjGh98F1fk5cRJ8ZTkzqF5fPIWDxEOs6QZXA==}
+    dependencies:
+      csstype: 3.1.2
+      seroval: 0.15.1
     dev: true
 
   /sorcery@0.10.0:

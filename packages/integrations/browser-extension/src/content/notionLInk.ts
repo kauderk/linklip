@@ -14,6 +14,7 @@ import { follower_DragThreshold_ContextMenu } from '@packages/sandbox/src/app/in
 import { createSelectorsConfig } from '@packages/sandbox/src/app/integrations/selectorsConfig'
 import { cleanSubscribers } from '@packages/sandbox/src/lib/stores'
 import { createTrackMouseHold } from '@packages/sandbox/src/app/controller/click-track'
+import { createRoot } from 'solid-js'
 
 export async function ObserveLinks_DeployLinklip() {
   const keyToStateMap = new Map<
@@ -97,135 +98,138 @@ export async function ObserveLinks_DeployLinklip() {
         }
 
         if (!urlToSvelteMap.has(key)) {
-          const saved = fetchSaves()
+          createRoot(dispose => {
+            const saved = fetchSaves()
 
-          const baseConfig = createConfig(saved.baseConfig)
+            const baseConfig = createConfig(saved.baseConfig)
 
-          const { followerConfig, followerUpdate } = createSelectorsConfig({
-            aspectRatio: baseConfig.aspectRatio,
-            rect: baseConfig.rect,
-            stage: baseConfig.stage,
-            resizeMode: baseConfig.resizeMode,
-            notionRef: () => ({
-              notionHref,
-              containerID,
-            }),
-          })
-          const follower = createFollower({
-            rect: baseConfig.rect,
-            stage: baseConfig.stage,
-            ...followerConfig,
-            cachedDomObserver,
-          })
-
-          const stages = stagesCtx[1] as any // the signal types or generics don't work across packages
-          const unSharedFollower = stages.sharedControls.subscribe((stage: any) => {
-            const bottom = ['notionPage', 'notionMainScroller']
-            const top = ['notionTopBar']
-            const self = baseConfig.stage.peek()
-            if (stage.mode != 'host' || self.mode == 'free') return
-
-            // FIXME: no side effects
-            followerUpdate.offset((_, original) => ({
-              y: !bottom.includes(stage.selector!) ? 10 : original.y,
-            }))
-            if ([...bottom, ...top].includes(self.selector!)) {
-              follower.trySwitchHost(stage.selector)
-            }
-          })
-
-          // FIXME: better abstraction, don't pollute the config
-          // @ts-expect-error
-          baseConfig.constraint = {}
-          const unResizeStage = baseConfig.stage.subscribe((stage: any) => {
-            // @ts-expect-error valueContainer
-            const pre = followerConfig.selectors[stage.selector]?.constraint
-            const constraint =
-              pre && stage.mode != 'free'
-                ? (rect: any) => {
-                    return pre(followerUpdate.notionRef().notionHref, rect)
-                  }
-                : undefined
-            // @ts-expect-error valueContainer
-            baseConfig.constraint.constraint = constraint
-          })
-
-          // FIXME: most of these closures can cause memory leaks when destroying the component
-          // for example the dragThreshold's extra's (contextMenu) schema
-          const app = new Linklip({
-            target: document.body,
-            props: {
-              config: baseConfig,
-              follower,
-              dragThreshold: follower_DragThreshold_ContextMenu(followerConfig, follower, toggle),
-              mount: () =>
-                cleanSubscribers(follower.mount(notionHref), unSharedFollower, unResizeStage),
-            },
-            context: new Map([
-              ['Player', player()],
-              ['Storyboard', storyboard()],
-              ['Follower', follower],
-              stagesCtx,
-            ] as any),
-          })
-          function toggle() {
-            const state = keyToStateMap.get(key)
-            if (!state) {
-              console.error('state not found, calling toggle() before deployment')
-              return
-            }
-
-            urlToSvelteMap.delete(key) // rerender?
-            if (state.enabled) {
-              app.$$set?.({}) // attempt to free memory (garbage collection)
-              app.$destroy() // it wound't makes sense to destroy an already destroyed component
-              const serialized = {
-                baseConfig: baseConfig.serialize(),
-              }
-              localStorage.setItem(key, JSON.stringify(serialized))
-            }
-
-            // one must reference the other, right?
-            const enabled = !state.enabled
-            keyToStateMap.set(key, {
-              ...state!,
-              enabled,
-            })
-            return enabled
-          }
-
-          urlToSvelteMap.set(key, {
-            update({ notionHref, containerID }) {
-              // FIXME: requires cyclic update
-              followerUpdate.notionRef = () => ({
+            const { followerConfig, followerUpdate } = createSelectorsConfig({
+              aspectRatio: baseConfig.aspectRatio,
+              rect: baseConfig.rect,
+              stage: baseConfig.stage,
+              resizeMode: baseConfig.resizeMode,
+              notionRef: () => ({
                 notionHref,
                 containerID,
+              }),
+            })
+            const follower = createFollower({
+              rect: baseConfig.rect,
+              stage: baseConfig.stage,
+              ...followerConfig,
+              cachedDomObserver,
+            })
+
+            const stages = stagesCtx[1] as any // the signal types or generics don't work across packages
+            const unSharedFollower = stages.sharedControls.subscribe((stage: any) => {
+              const bottom = ['notionPage', 'notionMainScroller']
+              const top = ['notionTopBar']
+              const self = baseConfig.stage.peek()
+              if (stage.mode != 'host' || self.mode == 'free') return
+
+              // FIXME: no side effects
+              followerUpdate.offset((_, original) => ({
+                y: !bottom.includes(stage.selector!) ? 10 : original.y,
+              }))
+              if ([...bottom, ...top].includes(self.selector!)) {
+                follower.trySwitchHost(stage.selector)
+              }
+            })
+
+            // FIXME: better abstraction, don't pollute the config
+            // @ts-expect-error
+            baseConfig.constraint = {}
+            const unResizeStage = baseConfig.stage.subscribe((stage: any) => {
+              // @ts-expect-error valueContainer
+              const pre = followerConfig.selectors[stage.selector]?.constraint
+              const constraint =
+                pre && stage.mode != 'free'
+                  ? (rect: any) => {
+                      return pre(followerUpdate.notionRef().notionHref, rect)
+                    }
+                  : undefined
+              // @ts-expect-error valueContainer
+              baseConfig.constraint.constraint = constraint
+            })
+
+            // FIXME: most of these closures can cause memory leaks when destroying the component
+            // for example the dragThreshold's extra's (contextMenu) schema
+            const app = new Linklip({
+              target: document.body,
+              props: {
+                config: baseConfig,
+                follower,
+                dragThreshold: follower_DragThreshold_ContextMenu(followerConfig, follower, toggle),
+                mount: () =>
+                  cleanSubscribers(follower.mount(notionHref), unSharedFollower, unResizeStage),
+              },
+              context: new Map([
+                ['Player', player()],
+                ['Storyboard', storyboard()],
+                ['Follower', follower],
+                stagesCtx,
+              ] as any),
+            })
+            function toggle() {
+              const state = keyToStateMap.get(key)
+              if (!state) {
+                console.error('state not found, calling toggle() before deployment')
+                return
+              }
+
+              urlToSvelteMap.delete(key) // rerender?
+              if (state.enabled) {
+                app.$$set?.({}) // attempt to free memory (garbage collection)
+                app.$destroy() // it wound't makes sense to destroy an already destroyed component
+                const serialized = {
+                  baseConfig: baseConfig.serialize(),
+                }
+                localStorage.setItem(key, JSON.stringify(serialized))
+                dispose()
+              }
+
+              // one must reference the other, right?
+              const enabled = !state.enabled
+              keyToStateMap.set(key, {
+                ...state!,
+                enabled,
               })
-              if (baseConfig.stage.peek().mode == 'host') {
-                follower.changeHost(notionHref)
-              }
-            },
-            cleanUp(containerID) {
-              // FIXME: handle other selectors
-              const unStage = baseConfig.stage.subscribe(
-                followerConfig.selectors.notionLink.styleHost
-              )
+              return enabled
+            }
 
-              return function onRemoved() {
-                unStage()
-                followerUpdate.notionCleanUp(containerID)
-                console.log('destroying')
-              }
-            },
+            urlToSvelteMap.set(key, {
+              update({ notionHref, containerID }) {
+                // FIXME: requires cyclic update
+                followerUpdate.notionRef = () => ({
+                  notionHref,
+                  containerID,
+                })
+                if (baseConfig.stage.peek().mode == 'host') {
+                  follower.changeHost(notionHref)
+                }
+              },
+              cleanUp(containerID) {
+                // FIXME: handle other selectors
+                const unStage = baseConfig.stage.subscribe(
+                  followerConfig.selectors.notionLink.styleHost
+                )
+
+                return function onRemoved() {
+                  unStage()
+                  followerUpdate.notionCleanUp(containerID)
+                  console.log('destroying')
+                }
+              },
+            })
+
+            keyToStateMap.set(key, {
+              fetchSaves,
+              toggle,
+              enabled: true,
+            })
+
+            console.log('initial deployment', payload)
           })
-
-          keyToStateMap.set(key, {
-            fetchSaves,
-            toggle,
-            enabled: true,
-          })
-
-          console.log('initial deployment', payload)
 
           // go to cleanUp
         } else {

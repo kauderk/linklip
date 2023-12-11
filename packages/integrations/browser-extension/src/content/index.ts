@@ -1,5 +1,6 @@
 import './../shared/dependencies.js'
 import App from './Content.svelte'
+import { createRoot } from 'solid-js'
 
 const div = document.createElement('div')
 div.style.setProperty('z-index', '100000')
@@ -16,8 +17,10 @@ let timeout = setTimeout(() => {
   clearTimeout(timeout)
 
   if (!loaded) {
-    const app = new App({
-      target: div,
+    createRoot(() => {
+      const app = new App({
+        target: shadowRoot,
+      })
     })
   }
   loaded = true
