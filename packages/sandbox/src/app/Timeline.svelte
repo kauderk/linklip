@@ -11,7 +11,7 @@
   import { createRangeSlider } from './timeline/slider'
   import { cleanSubscribers } from '$lib/stores'
   import { mapTiles } from './timeline/ratio/compute'
-  import { computed } from '@preact/signals-core'
+  import { createSvelteMemo } from '$lib/solid'
   import { createSvelteSignal } from '$lib/solid'
   import { resizeAction } from '$lib/resize'
 
@@ -149,6 +149,7 @@
           on:blur={events[index].blur}
         >
           <Subscribe batch={ratios.diffBoundaries[index].batch} let:batch>
+            <!-- FIXME: the types are all wrong -->
             <div class="load-progress" style:transform="scaleX({0})" />
             <div
               class="hover-progress hover-progress-light"
@@ -215,7 +216,8 @@
             class:hidden={$sharedFocus || $resizing || $progress.scrubbing || $windowResize}
           >
             <Board rect={sliderRect} store={ratios.diffBoundaries[index].progress} let:template>
-              <Subscribe tiles={computed(() => ratios.diffRatios[index].value)} let:tiles>
+              <!-- FIXME: the types are all wrong -->
+              <Subscribe tiles={createSvelteMemo(() => ratios.diffRatios[index].value)} let:tiles>
                 {#each Array(tiles.size) as _, relativeCount (relativeCount)}
                   <svelte:component
                     this={template}

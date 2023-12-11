@@ -1,8 +1,7 @@
 import { createContext } from '$lib/create-context'
-import { createSvelteSignal } from '$lib/solid'
+import { createSvelteSignal, createSvelteMemo, createEffect } from '$lib/solid'
 import { resizeAction } from '$lib/resize'
 import { cleanSubscribers, diffStore } from '$lib/stores'
-import { computed, effect } from '@preact/signals-core'
 import { createContextMenuCallbacks } from 'src/context-menu/controller'
 import { macro_chapters } from '$mock/chapter.json'
 import { tick } from 'svelte'
@@ -49,13 +48,17 @@ const timeline = (config: { controlsMinHeight: number }) => {
 
   const sharedFocus = createSvelteSignal(false)
 
+  // TODO: check if this gets cleaned up
+  createEffect(() => {
+    progress.mod({ progress: seekTo.value / durationMs })
+  })
   return {
     context: {
       mount: () =>
         cleanSubscribers(
-          effect(() => {
-            progress.mod({ progress: seekTo.value / durationMs })
-          }),
+          // createEf(() => {
+          //   progress.mod({ progress: seekTo.value / durationMs })
+          // }),
           progress.subscribe($progress =>
             diffBoundaries.forEach((diff, i) =>
               diff.tryInvalidate({
@@ -75,7 +78,7 @@ const timeline = (config: { controlsMinHeight: number }) => {
             timelineHeight.set(rect.height * tuneStoryboardRatio)
           },
         ]),
-      controlsHeight: computed(
+      controlsHeight: createSvelteMemo(
         () => config.controlsMinHeight * (1 - storyboardRatio.value / tuneStoryboardRatio)
       ),
     },
@@ -94,8 +97,8 @@ const timeline = (config: { controlsMinHeight: number }) => {
     progressBar: {
       progress,
       time: {
-        preview: computed(() => ms2Hms(durationMs * progress.value.preview)),
-        progress: computed(() => ms2Hms(durationMs * progress.value.progress)),
+        preview: createSvelteMemo(() => ms2Hms(durationMs * progress.value.preview)),
+        progress: createSvelteMemo(() => ms2Hms(durationMs * progress.value.progress)),
       },
       chapters: {},
       events: rangeContext.events,
@@ -108,7 +111,7 @@ const timeline = (config: { controlsMinHeight: number }) => {
         tick().then(() => rangeContext.derivedRatios.diffBoundaries[index].progress.update($ => $))
       },
 
-      sliderHeight: computed(() => timelineHeight.value * storyboardRatio.value),
+      sliderHeight: createSvelteMemo(() => timelineHeight.value * storyboardRatio.value),
     },
   }
 }

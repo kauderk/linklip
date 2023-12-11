@@ -1,4 +1,5 @@
-import { createEffect, createSignal, type Accessor, createMemo, untrack } from 'solid-js'
+import { createEffect, createSignal, type Accessor, createMemo, untrack, from } from 'solid-js'
+export { createEffect, createRoot } from 'solid-js'
 // import type { Readable, Writable } from 'svelte/store'
 
 export interface $Writable<T> {
@@ -47,18 +48,20 @@ export const createSvelteSignal = <T>(value: T) => {
 
 export type SvelteSignal<T> = ReturnType<typeof createSvelteSignal<T>>
 
-export type $Readable<T> = {
+export interface $Readable<T> {
   subscribe: (fn: (value: T) => () => void) => void
+
+  peek: () => T
 }
 export const createSvelteMemo = <T>(fn: () => T) => {
   const signal = createMemo(fn)
-  Object.assign(signal, <$Readable<T>>{
-    subscribe: fn => {
+  return <$Readable<T>>{
+    subscribe(fn) {
       createEffect(() => fn(signal()))
       return () => {}
     },
-  })
-  return signal as Accessor<T> & $Readable<T>
+    peek: () => untrack(signal),
+  }
 }
 
 /**

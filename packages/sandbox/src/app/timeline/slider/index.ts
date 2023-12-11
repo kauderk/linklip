@@ -1,4 +1,4 @@
-import { createSvelteSignal } from '../../../lib/solid'
+import { createSvelteSignal } from '$lib/solid'
 import { noInvalidate } from '../../../lib/no-invalidate'
 import { createInstance, type pair } from './instance'
 import { Direction, flipStep } from './helper'

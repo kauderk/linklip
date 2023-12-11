@@ -11,8 +11,7 @@ type DeepReadonly<T> = T
 import { Backwards, Direction, flipStep, mapRange, objectMap } from './helper'
 
 import { Clone } from '$lib/polyfill'
-import { computed } from '@preact/signals-core'
-import { createSvelteSignal } from '../../../lib/solid'
+import { createSvelteMemo, createSvelteSignal } from '$lib/solid'
 import type { createRangeConfig } from '../ratio/config'
 
 type Props = {
@@ -45,7 +44,7 @@ export function createInstance({ rangeContext }: Props) {
     disabled: false,
   })
 
-  const look = computed(() => ({
+  const look = createSvelteMemo(() => ({
     startLookup: walkValuesLimit([...staleValues.value], 'start'),
     endLookup: walkValuesLimit([...staleValues.value].reverse(), 'end')
       .map((pair, i, arr) => {

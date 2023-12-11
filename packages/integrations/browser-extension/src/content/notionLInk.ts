@@ -14,7 +14,7 @@ import { follower_DragThreshold_ContextMenu } from '@packages/sandbox/src/app/in
 import { createSelectorsConfig } from '@packages/sandbox/src/app/integrations/selectorsConfig'
 import { cleanSubscribers } from '@packages/sandbox/src/lib/stores'
 import { createTrackMouseHold } from '@packages/sandbox/src/app/controller/click-track'
-import { createRoot } from 'solid-js'
+import { createRoot } from '@packages/sandbox/src/lib/solid'
 
 export async function ObserveLinks_DeployLinklip() {
   const keyToStateMap = new Map<

@@ -6,7 +6,7 @@
     y: 0,
   }))
   let open = createSvelteSignal(false)
-  let contain$ = computed(() => contextMenuSchema.value.container)
+  let contain$ = createSvelteMemo(() => contextMenuSchema.value.container)
   export type { ContextMenuSchemaActionNode as Schema } from './types'
 
   export function useContextMenu(event: MouseEvent, schema: ContextMenuSchema, overlay?: boolean) {
@@ -72,7 +72,7 @@
   import { createSvelteSignal, type SvelteSignal } from '$lib/solid'
   import { updateWindow } from '$lib/resize'
   import { cleanSubscribers } from '$lib/stores'
-  import { computed } from '@preact/signals-core'
+  import { createSvelteMemo } from '$lib/solid'
   import { onMount } from 'svelte'
   import Template, { defineTemplate } from '../template/Template.svelte'
   import Show from './Show.svelte'

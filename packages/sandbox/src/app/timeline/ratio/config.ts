@@ -1,8 +1,8 @@
 import type { pair } from '../slider/instance'
 import { createDiffBoundary, createDiffRatio } from './diff'
 import { createRatioBoundary } from './compute'
-import { createSvelteSignal } from '../../../lib/solid'
-import { computed } from '@preact/signals-core'
+import { createSvelteSignal } from '$lib/solid'
+import { createSvelteMemo } from '$lib/solid'
 import { Clone } from '$lib/polyfill'
 
 const createEvents = () => ({
@@ -22,7 +22,7 @@ export const createRangeConfig = () => {
     { start: 20, end: 80 },
     // { start: 95, end: 100 },
   ])
-  const runtimeValues = computed(() =>
+  const runtimeValues = createSvelteMemo(() =>
     staleValues.value.map(entry => createSvelteSignal(Clone(entry) as pair))
   )
 

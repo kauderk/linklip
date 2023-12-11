@@ -3,17 +3,16 @@
   import Storyboard from './Storyboard.svelte'
   import { mapRatio } from './timeline/ratio/map'
   import { Subscribe } from 'svelte-subscribe'
-  import { createSvelteSignal } from '../lib/solid'
+  import { createSvelteSignal, createSvelteMemo } from '$lib/solid'
   import { ignoreCssRules } from '$lib/no-invalidate'
   import { deriveScale } from './timeline/ratio/scale'
   import { getStoryboardContext } from './timeline/context'
-  import { computed } from '@preact/signals-core'
 
   export let rect: any
   export let store = createSvelteSignal({ ratio: 0, playing: false })
 
   const data = getStoryboardContext()
-  const scale = computed(() => deriveScale(rect.value, data.totalSize.value))
+  const scale = createSvelteMemo(() => deriveScale(rect.value, data.totalSize.value))
 
   const selector = 'button.storyboard-btn'
   const board = {

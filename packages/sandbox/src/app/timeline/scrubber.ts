@@ -1,4 +1,4 @@
-import type { SvelteSignal } from '../../lib/solid'
+import type { SvelteSignal } from '$lib/solid'
 import { createListeners } from '../../lib/event-life-cycle'
 import { createMouseTrack } from '../controller/mouse-track'
 

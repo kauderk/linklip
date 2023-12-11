@@ -1,5 +1,5 @@
 import { debounceWritable, diffStore } from '$lib/stores'
-import { computed } from '@preact/signals-core'
+import { createSvelteMemo } from '$lib/solid'
 import type { Progress } from '../scrubber'
 import { createRelativeRatio, createTiles, deriveRatio, type _boundary_ } from './compute'
 
@@ -7,7 +7,7 @@ export function createDiffBoundary() {
   const progress = createRelativeRatio()
   const preview = createRelativeRatio()
 
-  const results = computed(() => ({
+  const results = createSvelteMemo(() => ({
     progress: progress.value,
     preview: preview.value,
   }))
@@ -17,6 +17,7 @@ export function createDiffBoundary() {
       Object.entries({ progress, preview }).forEach(([key, store]) => {
         const previous = store.peek()
         const { boundary, progress } = args
+        // FIXME: why is this working, the types are all wrong
         const next = deriveRatio(previous, {
           boundary,
           // @ts-expect-error

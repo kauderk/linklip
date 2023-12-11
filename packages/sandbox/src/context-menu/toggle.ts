@@ -1,9 +1,9 @@
 import { createSvelteSignal } from '$lib/solid'
-import { computed } from '@preact/signals-core'
+import { createSvelteMemo } from '$lib/solid'
 
 export function createToggleStore<T extends o>(target: T, initial?: b) {
   const toggle = createSvelteSignal<boolean>(initial ?? false)
-  const listen = computed(() => {
+  const listen = createSvelteMemo(() => {
     toggle.value
     return props()
   })

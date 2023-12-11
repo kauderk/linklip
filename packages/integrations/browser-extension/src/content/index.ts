@@ -1,6 +1,6 @@
 import './../shared/dependencies.js'
 import App from './Content.svelte'
-import { createRoot } from 'solid-js'
+import { createRoot } from '@packages/sandbox/src/lib/solid'
 
 const div = document.createElement('div')
 div.style.setProperty('z-index', '100000')

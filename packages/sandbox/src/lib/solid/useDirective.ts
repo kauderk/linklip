@@ -1,17 +1,22 @@
-import type { SvelteSignal } from '$lib/solid'
+import { type SvelteSignal, createEffect } from '$lib/solid'
 import { cleanAction } from '$lib/stores'
-import { effect } from '@preact/signals-core'
 
 export function useClass(element: HTMLElement, signalList: Record<string, SvelteSignal<boolean>>) {
   const list: typeof signalList =
     // @ts-expect-error
     typeof signalList == 'function' ? signalList() : signalList
 
-  return cleanAction(
-    ...Object.entries(list).map(([className, signal]) =>
-      effect(() => {
-        element.classList.toggle(className, signal.value)
-      })
-    )
-  )
+  // TODO: check if this gets cleaned up
+  Object.entries(list).forEach(([className, signal]) => {
+    createEffect(() => {
+      element.classList.toggle(className, signal.value)
+    })
+  })
+  // return cleanAction(
+  //   ...Object.entries(list).map(([className, signal]) =>
+  //     effect(() => {
+  //       element.classList.toggle(className, signal.value)
+  //     })
+  //   )
+  // )
 }

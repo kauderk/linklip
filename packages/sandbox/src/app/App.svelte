@@ -1,10 +1,9 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { createSvelteSignal } from '$lib/solid'
+  import { createSvelteSignal, createSvelteMemo } from '$lib/solid'
   import { useClass } from '$lib/solid/useDirective'
   import { cleanSubscribers } from '$lib/stores'
-  import { computed } from '@preact/signals-core'
   import { onMount } from 'svelte'
   import Controls from './Controls.svelte'
   import { resize } from './Resize.svelte'
@@ -42,9 +41,9 @@
   const { rect } = config
   const { registerFollower } = follower
 
-  const tiny = computed(() => rect.value.width <= 80)
+  const tiny = createSvelteMemo(() => rect.value.width <= 80)
   // it seems the preact/signal is falling behind some frames... +5 should be enough
-  const normal = computed(() => rect.value.width + 5 > config.minWidth || fullScreen.value)
+  const normal = createSvelteMemo(() => rect.value.width + 5 > config.minWidth || fullScreen.value)
   let any = '' as any
 
   const scrubbing = createSvelteSignal(false)
