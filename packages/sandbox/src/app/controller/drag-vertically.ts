@@ -1,7 +1,10 @@
-import type { PreSignal } from '../../lib/pre-signal'
+import type { SvelteSignal } from '$lib/solid'
 import { createMouseTrack } from './mouse-track'
 
-export function createPreviewProgress(storyboardRatio: PreSignal<n>, timelineHeight: PreSignal<n>) {
+export function createPreviewProgress(
+  storyboardRatio: SvelteSignal<n>,
+  timelineHeight: SvelteSignal<n>
+) {
   let mouseY = 0
   let downRatio = 0
   return createMouseTrack({

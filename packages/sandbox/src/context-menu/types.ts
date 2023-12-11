@@ -1,4 +1,4 @@
-import type { PreSignal } from '$lib/pre-signal'
+import type { SvelteSignal } from '$lib/solid'
 
 export type ContextMenuSchema = {
   container?: HTMLElement
@@ -20,8 +20,8 @@ export type ContextMenuSchemaActionNode = {
     ref: HTMLButtonElement,
     item: {
       item: ContextMenuSchemaActionNode
-      open: PreSignal<boolean | undefined>
+      open: SvelteSignal<boolean | undefined>
     }
   ) => void
-  callback: (openState?: PreSignal<boolean>) => void
+  callback: (openState?: SvelteSignal<boolean>) => void
 }

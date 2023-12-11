@@ -3,7 +3,7 @@
   import { follower as setSharedControlsContext } from './controller/follower'
   import type { FollowerConfig } from './controller/follower-lib'
   import { cleanSubscribers } from '$lib/stores'
-  import { preSignal } from '$lib/pre-signal'
+  import { preSignal } from '$lib/solid'
   import { defaultCornerFollowerCycle, observerSelectors } from './follower/corner'
   import Controls from './Controls.svelte'
   import { createDefaultStage, getStagesContext } from './follower/store'

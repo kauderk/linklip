@@ -3,15 +3,15 @@ import { createToggleStore } from './toggle'
 
 import type { createRangeConfig } from '../app/timeline/ratio/config'
 type Context = ReturnType<typeof createRangeConfig>
-import type { PreSignal } from '$lib/pre-signal'
+import type { SvelteSignal } from '$lib/solid'
 
 type Props = {
   boundaries: Context['derivedRatios']['boundaries']
   states: Context['states']
-  ratioY: PreSignal<number>
+  ratioY: SvelteSignal<number>
   add: Context['add']
   remove: Context['remove']
-  progress: PreSignal<{
+  progress: SvelteSignal<{
     preview: number
     scrubbing: boolean
     progress: number
@@ -74,7 +74,7 @@ export function createContextMenuCallbacks({
       },
     }
   }
-  type EditId = typeof editSelect[number]['id']
+  type EditId = (typeof editSelect)[number]['id']
 
   const editAction = (id: EditId, index: n, target: any) => {
     if (id == 'focus') {

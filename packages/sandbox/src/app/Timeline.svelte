@@ -12,7 +12,7 @@
   import { cleanSubscribers } from '$lib/stores'
   import { mapTiles } from './timeline/ratio/compute'
   import { computed } from '@preact/signals-core'
-  import { preSignal } from '$lib/pre-signal'
+  import { preSignal } from '$lib/solid'
   import { resizeAction } from '$lib/resize'
 
   const { shared, progressBar, slider } = getTimelineContext()

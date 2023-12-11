@@ -1,7 +1,7 @@
-import type { PreSignal } from '$lib/pre-signal'
+import type { SvelteSignal } from '$lib/solid'
 // https://svelte.dev/repl/90847a5d2bac438184ce5548137853c2?version=3.50.0
 
-export function debounceWritable<T>(store: PreSignal<T>, delay = 400) {
+export function debounceWritable<T>(store: SvelteSignal<T>, delay = 400) {
   let timer: number
   const prevSubscribe = store.subscribe
 
@@ -23,7 +23,7 @@ export function debounceWritable<T>(store: PreSignal<T>, delay = 400) {
   return store
 }
 
-export function diffStore<T>(store: PreSignal<T>) {
+export function diffStore<T>(store: SvelteSignal<T>) {
   const prevSet = store.set
   store.set = ((next: T) => {
     const previous = store.peek()

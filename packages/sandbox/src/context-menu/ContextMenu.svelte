@@ -1,11 +1,11 @@
 <script lang="ts" context="module">
   import { contextMenuSchema } from './ContextMenuSchema'
   import type { ContextMenuSchema, ContextMenuSchemaActionNode } from './types'
-  let menu = deprecatedSignal(() => ({
+  let menu = createSvelteSignal(() => ({
     x: 0,
     y: 0,
   }))
-  let open = deprecatedSignal(false)
+  let open = createSvelteSignal(false)
   let contain$ = computed(() => contextMenuSchema.value.container)
   export type { ContextMenuSchemaActionNode as Schema } from './types'
 
@@ -69,7 +69,7 @@
 
 <script lang="ts">
   import { ignoreCssRules, tsAny } from '$lib/no-invalidate'
-  import { deprecatedSignal, type PreSignal } from '$lib/pre-signal'
+  import { createSvelteSignal, type SvelteSignal } from '$lib/solid'
   import { updateWindow } from '$lib/resize'
   import { cleanSubscribers } from '$lib/stores'
   import { computed } from '@preact/signals-core'
@@ -79,7 +79,7 @@
   import { fitToTarget, zIndex } from 'src/app/controller/follower-lib'
   let template = defineTemplate<{
     item: ContextMenuSchemaActionNode
-    open: PreSignal<boolean | undefined>
+    open: SvelteSignal<boolean | undefined>
   }>()
   onMount(() =>
     cleanSubscribers(
@@ -118,7 +118,7 @@
     <ul>
       {#each $contextMenuSchema.nodes as item}
         {#if 'children' in item}
-          {@const open = deprecatedSignal(tsAny(item.open))}
+          {@const open = createSvelteSignal(tsAny(item.open))}
           <li
             class="action"
             {...ignoreCssRules}

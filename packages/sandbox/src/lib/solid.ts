@@ -1,11 +1,11 @@
-import { createEffect, createSignal, type Accessor, createMemo } from 'solid-js'
+import { createEffect, createSignal, type Accessor, createMemo, untrack } from 'solid-js'
 // import type { Readable, Writable } from 'svelte/store'
 
 export interface $Writable<T> {
-  set: (newValue: Exclude<T, Function> | ((prev: T) => T)) => void
+  set: (newValue: T | ((prev: T) => T)) => void
   subscribe: (fn: (value: T) => void) => () => void
-  update: (fn: Exclude<T, Function> | ((prev: T) => T)) => void
-  mod: (newPartial: Partial<Exclude<T, Function>>) => void
+  update: (fn: T | ((prev: T) => T)) => void
+  mod: (newPartial: Partial<T>) => void
   get value(): T
   set value(newValue: T)
   toSignal: <T>() => ReturnType<typeof createSignal<T>>
@@ -15,7 +15,8 @@ export const createSvelteSignal = <T>(value: T) => {
   const [signal, setSignal] = createSignal<T>(value)
 
   return <$Writable<T>>{
-    set: newValue => setSignal(newValue),
+    // @ts-expect-error
+    set: newValue => setSignal(typeof newValue == 'function' ? newValue(signal()) : newValue),
     subscribe(fn) {
       createEffect(() => fn(signal()))
       return () => {}
@@ -32,7 +33,7 @@ export const createSvelteSignal = <T>(value: T) => {
         setSignal(newPartial as any)
       }
     },
-    peek: () => signal(),
+    peek: () => untrack(signal),
     get value() {
       return signal()
     },
@@ -60,5 +61,49 @@ export const createSvelteMemo = <T>(fn: () => T) => {
   return signal as Accessor<T> & $Readable<T>
 }
 
-// export const [count, setCount] = createSvelteSignal(0)
-// export const double = createSvelteMemo(() => count() * 2)
+/**
+ * Less Call Stack
+ */
+export function createObservable<T>(initialValue: T = {} as T) {
+  let _value: T = initialValue
+  let _subscribers: ((payload: T) => void)[] = []
+
+  return {
+    get value(): T {
+      return _value
+    },
+    set value(payload: T) {
+      this.set(payload)
+    },
+    set(payload: T) {
+      if (_value === payload) return
+
+      _value = payload
+      this.notify()
+    },
+    notify() {
+      _subscribers.forEach(observer => {
+        observer(_value)
+      })
+    },
+    subscribe(cb: (payload: T) => void) {
+      _subscribers.push(cb)
+      cb(_value)
+      return () => {
+        // unsubscribe
+        _subscribers = _subscribers.filter(o => o !== cb)
+      }
+    },
+    /**
+     * Subscribe without calling the callback immediately
+     */
+    $ubscribe(cb: (payload: T) => void) {
+      _subscribers.push(cb)
+      return () => {
+        // unsubscribe
+        _subscribers = _subscribers.filter(o => o !== cb)
+      }
+    },
+  }
+}
+export type Observable<T> = ReturnType<typeof createObservable<T>>

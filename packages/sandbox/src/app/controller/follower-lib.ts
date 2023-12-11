@@ -1,5 +1,5 @@
 import type { follower } from './follower'
-import { createObservable, deprecatedSignal } from '$lib/pre-signal'
+import { createObservable, createSvelteSignal } from '$lib/solid'
 import { createDebouncedListener, createDebouncedObserver } from '$lib/resize'
 import { cleanSubscribers } from '$lib/stores'
 import type { SvelteSignal } from '$lib/solid'
@@ -212,4 +212,4 @@ export function createCachedDomObserver(options?: { cache?: typeof cache }) {
   }
 }
 
-export const zIndex = deprecatedSignal(101)
+export const zIndex = createSvelteSignal(101)

@@ -16,7 +16,7 @@ import { signal } from '@preact/signals-core'
 // 	})
 // }
 
-export function deprecatedSignal<T>(value: T) {
+export function createSvelteSignal<T>(value: T) {
   const _signal = signal(value)
   type K = T //T extends boolean ? boolean : T
   let svelteContract = Object.assign(_signal, {
@@ -42,7 +42,7 @@ export function deprecatedSignal<T>(value: T) {
       }
     : typeof svelteContract
 }
-export type PreSignal<T> = ReturnType<typeof deprecatedSignal<T>>
+export type deprecatedPreSignal<T> = ReturnType<typeof createSvelteSignal<T>>
 
 /**
  * Less Call Stack

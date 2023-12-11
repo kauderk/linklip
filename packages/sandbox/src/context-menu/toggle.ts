@@ -1,4 +1,4 @@
-import { preSignal } from '$lib/pre-signal'
+import { preSignal } from '$lib/solid'
 import { computed } from '@preact/signals-core'
 
 export function createToggleStore<T extends o>(target: T, initial?: b) {

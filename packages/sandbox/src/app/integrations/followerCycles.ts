@@ -1,4 +1,4 @@
-import { preSignal } from '$lib/pre-signal'
+import { createSvelteSignal } from '$lib/solid'
 // @ts-ignore
 import { type resizeMode, aspectRatioFrom } from '../Resize.svelte'
 import type { FollowerCycle } from '../controller/follower'
@@ -15,7 +15,7 @@ export const _Config = {
   },
   resizing: {
     value: false,
-    decorator: preSignal,
+    decorator: createSvelteSignal,
   },
   stage: {
     value: createDefaultStage({ mode: 'host' }).peek(),
@@ -23,7 +23,7 @@ export const _Config = {
   },
   resizeMode: {
     value: 'inlineBlock' as resizeMode,
-    decorator: preSignal,
+    decorator: createSvelteSignal,
   },
   // FIXME: infer "this" type to non-functions or pure values for the derived functions
   // derived functions will execute after the pure values
@@ -42,14 +42,14 @@ export const _Config = {
           height,
         }
       },
-      decorator: preSignal,
+      decorator: createSvelteSignal,
     }
   },
 }
 
 export const createConfig = createSerializableStore(_Config)
 
-/**
+//**
 // type inference across packages is not great
 const testTypes = createConfig()
 //     ^?

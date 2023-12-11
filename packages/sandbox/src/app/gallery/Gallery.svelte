@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { preSignal } from '$lib/pre-signal'
+  import { preSignal } from '$lib/solid'
   import { onMount, tick } from 'svelte'
   import { resize, type ResizeConfig } from '../Resize.svelte'
   import { createMouseTrack } from '../controller/mouse-track'

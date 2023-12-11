@@ -1,5 +1,5 @@
 import { createContext } from '$lib/create-context'
-import { preSignal } from '$lib/pre-signal'
+import { preSignal } from '$lib/solid'
 import { resizeAction } from '$lib/resize'
 import { cleanSubscribers, diffStore } from '$lib/stores'
 import { computed, effect } from '@preact/signals-core'

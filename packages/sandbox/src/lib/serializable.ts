@@ -1,11 +1,8 @@
-import type { PreSignal } from '$lib/pre-signal'
+import type { SvelteSignal } from '$lib/solid'
 
-// FIXME: make it generic, for real
-type GenericUnwrap<T, V> = T extends PreSignal<any> ? PreSignal<V> : T
-type Unwrap<F> = F extends (...args: any) => infer V ? V : F
-
+// input of createSerializableStore
 type Shape<O> = O extends { value: infer V }
-  ? O extends { decorator: (value: Unwrap<V>) => infer W }
+  ? O extends { decorator: (value: any) => infer W }
     ? {
         value: ((override?: Unwrap<V>) => Unwrap<V>) | Unwrap<V>
         // if you could infer the actual typeWrapper instead of the parameter...
@@ -21,18 +18,15 @@ type Shape<O> = O extends { value: infer V }
       }
   : O
 
-export type FlatValues<T> = {
-  [key in keyof T]: Unwrap<T[key]> extends { value: infer V } ? Unwrap<V> : Unwrap<T[key]>
-}
+// output of createSerializableStore
 type FlatDecorators<T> = {
   [key in keyof T]: Unwrap<T[key]> extends { value: infer V }
-    ? Unwrap<T[key]> extends { decorator: (value: Unwrap<V>) => infer W }
+    ? Unwrap<T[key]> extends { decorator: (value: any) => infer W }
       ? // oh my god
         GenericUnwrap<W, Unwrap<V>> & { serialize(): Unwrap<V> }
       : V & { serialize(): Unwrap<V> }
     : Unwrap<T[key]>
 }
-export type Prettify<T> = { [K in keyof T]: T[K] } & {}
 
 /**
  * ```
@@ -125,6 +119,16 @@ export function createSerializableStore<T extends { [key in keyof T]: Shape<T[ke
     return result as any as FlatDecorators<T> & { serialize(): FlatValues<T> }
   }
 }
+
+// FIXME: make it generic, for real
+type GenericUnwrap<T, V> = T extends SvelteSignal<any> ? SvelteSignal<V> : T
+type Unwrap<F> = F extends (...args: any) => infer V ? V : F
+
+export type FlatValues<T> = {
+  [key in keyof T]: Unwrap<T[key]> extends { value: infer V } ? Unwrap<V> : Unwrap<T[key]>
+}
+export type Prettify<T> = { [K in keyof T]: T[K] } & {}
+
 // @ts-expect-error
 const Serialize = function <T>(self: ReturnType<typeof createSerializableStore<T>>) {
   return Object.entries(self).reduce((acc: any, [key, value]: any) => {

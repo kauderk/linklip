@@ -1,4 +1,4 @@
-import type { PreSignal } from '../../lib/pre-signal'
+import type { SvelteSignal } from '../../lib/pre-signal'
 import { createListeners } from '../../lib/event-life-cycle'
 import { createMouseTrack } from '../controller/mouse-track'
 
@@ -7,7 +7,7 @@ export type Progress = {
   scrubbing: boolean
   progress: number
 }
-export function createScrubber(progress: PreSignal<Progress>) {
+export function createScrubber(progress: SvelteSignal<Progress>) {
   let timelineRef: HTMLElement
 
   function mousedown(e: MouseEvent) {

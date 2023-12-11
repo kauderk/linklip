@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { preSignal } from '$lib/pre-signal'
+  import { createSvelteSignal } from '$lib/solid'
   import { useClass } from '$lib/solid/useDirective'
   import { cleanSubscribers } from '$lib/stores'
   import { computed } from '@preact/signals-core'
@@ -47,7 +47,7 @@
   const normal = computed(() => rect.value.width + 5 > config.minWidth || fullScreen.value)
   let any = '' as any
 
-  const scrubbing = preSignal(false)
+  const scrubbing = createSvelteSignal(false)
   // Because the follower hides the overflow
   // make the .progress-bar .scrubber-container visible
   const nudgeHeight = (nudge = 0) => (scrubbing.value = nudge != 0)

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { PreSignal } from '$lib/pre-signal'
+  import type { SvelteSignal } from '$lib/solid'
 
   type B = b | undefined | null //|((...args: any)=>b)|null|undefined
-  export let when: PreSignal<B> //|B;
+  export let when: SvelteSignal<B> //|B;
   //
 </script>
 
