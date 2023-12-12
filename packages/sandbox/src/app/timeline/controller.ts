@@ -52,8 +52,8 @@ const timeline = (config: { controlsMinHeight: number }) => {
     progress.mod({ progress: seekTo.signal / durationMs })
     diffBoundaries.forEach((diff, i) =>
       diff.tryInvalidate({
-        boundary: boundaries[i].peek(),
-        progress: progress.peek(),
+        boundary: boundaries[i].read,
+        progress: progress.read,
       })
     )
   })

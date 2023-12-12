@@ -54,10 +54,10 @@ export function createSelectorsConfig(
         observerSelectors,
         styleHost() {
           const { notionHref, containerID } = followerUpdate.notionRef()
-          if (playerConfig.stage.peek().mode == 'host' && isRendered(notionHref)) {
+          if (playerConfig.stage.read.mode == 'host' && isRendered(notionHref)) {
             // signals callbacks ignore the 'this' context
             const constraint = followerConfig.selectors.notionLink.constraint?.(notionHref)
-            const width = playerConfig.rect.peek().width
+            const width = playerConfig.rect.read.width
             const rect = {
               width: Math.min(width, constraint.width),
               height: Math.min(
@@ -160,7 +160,7 @@ export function createSelectorsConfig(
             if (!followerRef) return
             const width = 350 + 1 // TODO: _Config.width
             playerConfig.rect.set({
-              ...playerConfig.rect.peek(),
+              ...playerConfig.rect.read,
               width,
               height: width / playerConfig.aspectRatio.value,
             })
@@ -174,7 +174,7 @@ export function createSelectorsConfig(
         followerCycle: {
           update(hostRef, _, signal) {
             return () => {
-              const crr = signal.peek()
+              const crr = signal.read
               const v = selectorsFuncs.notionMainScroller.update(hostRef)
               return {
                 ...crr,
@@ -232,7 +232,7 @@ export function createSelectorsConfig(
 
         // if it was "affected" by the intersection observer
         // restore its full size when in free mode
-        const old = playerConfig.rect.peek()
+        const old = playerConfig.rect.read
         playerConfig.rect.set({
           ...old,
           height: old.width / playerConfig.aspectRatio.value,

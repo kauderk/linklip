@@ -56,7 +56,7 @@ export function createRangeSlider({ guard, rangeContext, calculateValue }: Props
 
   const useSliderSet = (node: HTMLElement, index: number) =>
     cleanAction(
-      rangeContext.runtimeValues.peek()[index].subscribe(pair => {
+      rangeContext.runtimeValues.read[index].subscribe(pair => {
         const { start, end, handles } = calculateValue(pair, index)
         node.style.setProperty('--percentage', start.toString())
         node.style.setProperty('--left', start.toString() + '%')
@@ -73,7 +73,7 @@ export function createRangeSlider({ guard, rangeContext, calculateValue }: Props
     range.mod({ active: false })
   }
   function canGoFurther(e: MouseEvent, index: n) {
-    const isBad = !instance || instance.state.peek().disabled || !guard(e, index)
+    const isBad = !instance || instance.state.read.disabled || !guard(e, index)
     if (isBad) {
       return false
     }
@@ -126,10 +126,10 @@ export function createRangeSlider({ guard, rangeContext, calculateValue }: Props
       if (!canGoFurther(e, index)) {
         return
       }
-      if (!rangeIndices.peek().length) {
+      if (!rangeIndices.read.length) {
         rangeIndices._set([index])
       }
-      const _rangeIndices = rangeIndices.peek()
+      const _rangeIndices = rangeIndices.read
       instance.resetHandle({
         index: _rangeIndices[_rangeIndices.length - 1],
       })
@@ -163,12 +163,12 @@ export function createRangeSlider({ guard, rangeContext, calculateValue }: Props
 
   const trackMouseDown = createMouseTrack({
     mousemove(e) {
-      const n = nub.peek()
-      if (!((n.active && n.pressed) || range.peek().active)) {
+      const n = nub.read
+      if (!((n.active && n.pressed) || range.read.active)) {
         return
       }
 
-      const _range = range.peek()
+      const _range = range.read
       const percentage = instance.getHandleValue(e, refs.slider)
       const backwards = _range.percentage > percentage
 

@@ -121,7 +121,7 @@
           deltaY = 0
         }
 
-        const _ogRect = rect.peek()
+        const _ogRect = rect.read
         let _rect = { ..._ogRect }
         const constraint = _config.constraint?.constraint?.(_rect) ?? _rect
         const resizeMode = resolveResizeMode()
@@ -293,7 +293,7 @@
     }
     // FIXME: this should be handled by the invoker
     function resolveResizeMode() {
-      return typeof _config.resizeMode === 'string' ? _config.resizeMode : _config.resizeMode.peek()
+      return typeof _config.resizeMode === 'string' ? _config.resizeMode : _config.resizeMode.read
     }
 
     grabbers.forEach(grabber => {

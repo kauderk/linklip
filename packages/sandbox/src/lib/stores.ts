@@ -7,7 +7,7 @@ export function debounceWritable<T>(store: SvelteSignal<T>, delay = 400) {
   const prevSubscribe = store.subscribe
 
   store.subscribe = ((fn: (value: T) => void) => {
-    fn(store.peek())
+    fn(store.read)
 
     const unsubscribe = prevSubscribe.bind(store)(value => {
       clearTimeout(timer)
@@ -28,7 +28,7 @@ export function debounceWritable<T>(store: SvelteSignal<T>, delay = 400) {
 export function diffStore<T>(store: SvelteSignal<T>) {
   const prevSet = store.set
   store.set = ((next: T) => {
-    const previous = store.peek()
+    const previous = store.read
 
     // DO NOT INVALIDATE the store if the values didn't change
     if (JSON.stringify(next) !== JSON.stringify(previous)) {

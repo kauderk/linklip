@@ -54,7 +54,7 @@
   use:registerFollower
   on:mouseenter={e => {
     zIndex.write++
-    e.currentTarget.style.zIndex = zIndex.peek().toString()
+    e.currentTarget.style.zIndex = zIndex.read.toString()
   }}
   style:--video-width="{$rect.width}px"
   style:--video-aspect-ratio={config.aspectRatio.toString()}

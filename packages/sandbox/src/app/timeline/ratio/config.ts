@@ -26,7 +26,7 @@ export const createRangeConfig = () => {
     staleValues.signal.map(entry => createSvelteSignal(Clone(entry) as pair))
   )
 
-  const $values = staleValues.peek()
+  const $values = staleValues.read
   const diffBoundaries = $values.map(createDiffBoundary)
   const diffRatios = $values.map(createDiffRatio)
   const boundaries = $values.map(createRatioBoundary)
@@ -34,7 +34,7 @@ export const createRangeConfig = () => {
   const states = $values.map(createState)
 
   async function change(fn: (previous: pair[]) => void) {
-    const previous = runtimeValues.peek().map(signal => signal.peek())
+    const previous = runtimeValues.read.map(signal => signal.read)
     fn(previous)
     // @ts-expect-error
     staleValues.set([...previous])
@@ -67,10 +67,10 @@ export const createRangeConfig = () => {
       }
       const ratio = Math.floor(params.byRatio * 100)
 
-      const $values = runtimeValues.peek()
+      const $values = runtimeValues.read
       for (let i = 0; i < $values.length; i++) {
         const stamp = $values[i]
-        if ((stamp.peek().start || 0) > ratio) {
+        if ((stamp.read.start || 0) > ratio) {
           _add(i)
           return
         }

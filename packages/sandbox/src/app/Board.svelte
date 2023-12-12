@@ -7,9 +7,9 @@
   import { ignoreCssRules } from '$lib/no-invalidate'
   import { deriveScale } from './timeline/ratio/scale'
   import { getStoryboardContext } from './timeline/context'
-  import type { Rect } from './controller/follower'
+  import type { TwoDimension } from './controller/follower'
 
-  export let rect: ReturnType<typeof createSvelteSignal<Rect>>
+  export let rect: ReturnType<typeof createSvelteSignal<TwoDimension>>
   export let store = createSvelteSignal({ ratio: 0, playing: false })
 
   const data = getStoryboardContext()

@@ -124,7 +124,7 @@ export async function ObserveLinks_DeployLinklip() {
             stages.sharedControls.compute((stage: any) => {
               const bottom = ['notionPage', 'notionMainScroller']
               const top = ['notionTopBar']
-              const self = baseConfig.stage.peek()
+              const self = baseConfig.stage.read
               if (stage.mode != 'host' || self.mode == 'free') return
 
               // FIXME: no side effects
@@ -164,7 +164,7 @@ export async function ObserveLinks_DeployLinklip() {
                   cleanSubscribers(
                     follower.mount(notionHref),
                     baseConfig.resizing.subscribe((resizing: any) => {
-                      if (!resizing && baseConfig.stage.peek().mode != 'free') {
+                      if (!resizing && baseConfig.stage.read.mode != 'free') {
                         follower.styleHost()
                       }
                     })
@@ -211,7 +211,7 @@ export async function ObserveLinks_DeployLinklip() {
                   notionHref,
                   containerID,
                 })
-                if (baseConfig.stage.peek().mode == 'host') {
+                if (baseConfig.stage.read.mode == 'host') {
                   follower.changeHost(notionHref)
                 }
               },

@@ -18,7 +18,7 @@ export const _Config = {
     decorator: createSvelteSignal,
   },
   stage: {
-    value: createDefaultStage({ mode: 'host' }).peek(),
+    value: createDefaultStage({ mode: 'host' }).read,
     decorator: createDefaultStage,
   },
   resizeMode: {
@@ -67,13 +67,13 @@ testTypes.stage.serialize()
 // prettier-ignore
 testTypes.stage.mode;
 //              ^?
-testTypes.stage.peek()
+testTypes.stage.read
 //              ^?
 testTypes.stage.value
 //              ^?
 testTypes.resizeMode.serialize()
 //                   ^?
-testTypes.resizeMode.peek()
+testTypes.resizeMode.read
 //                   ^?
 //*/
 

@@ -18,7 +18,7 @@ export function createScrubber(progress: SvelteSignal<Progress>) {
     const percentage = getPercentage(e)
     progress.mod({ preview: percentage })
 
-    if (progress.peek().scrubbing) {
+    if (progress.read.scrubbing) {
       e.preventDefault()
       progress.mod({ progress: percentage })
     }
@@ -41,10 +41,10 @@ export function createScrubber(progress: SvelteSignal<Progress>) {
     trackMouse: createMouseTrack({
       mousedown,
       mouseup(e: MouseEvent) {
-        if (progress.peek().scrubbing) progress.mod({ scrubbing: false })
+        if (progress.read.scrubbing) progress.mod({ scrubbing: false })
       },
       mousemove(e: MouseEvent) {
-        if (progress.peek().scrubbing) mousemove(e)
+        if (progress.read.scrubbing) mousemove(e)
       },
     }),
   }

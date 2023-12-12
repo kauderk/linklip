@@ -78,6 +78,10 @@ export type Rect = {
   width: number
   height: number
 }
+export type TwoDimension = {
+  width: number
+  height: number
+}
 export function fitToTarget(_rect: Rect) {
   // avoid going out of the screen
   if (_rect.x < 0) _rect.x = 0

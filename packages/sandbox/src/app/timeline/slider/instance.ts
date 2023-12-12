@@ -29,7 +29,7 @@ export function createInstance({ rangeContext }: Props) {
 
   const handle = createSvelteSignal(<DeepReadonly<handle>>{
     index: 0,
-    step: staleValues.peek()[0]?.start ? 'start' : 'end',
+    step: staleValues.read[0]?.start ? 'start' : 'end',
   })
   const settings = createSvelteSignal(<const>{
     min: 0,
@@ -55,7 +55,7 @@ export function createInstance({ rangeContext }: Props) {
         )
         if (i == arr.length - 1) {
           // why is this misaligned?
-          pair.start = (pair.end || 0) - rect.peek().min
+          pair.start = (pair.end || 0) - rect.read.min
         }
         return pair
       })
@@ -63,7 +63,7 @@ export function createInstance({ rangeContext }: Props) {
     previousValues: Clone(staleValues.read),
   }))
 
-  let startValue = staleValues.peek()[handle.peek().index][handle.peek().step]!
+  let startValue = staleValues.read[handle.read.index][handle.read.step]!
   let previousValue = startValue
   let pending = false
 
@@ -80,12 +80,12 @@ export function createInstance({ rangeContext }: Props) {
     threshold({
       ...params,
       with(entry) {
-        const edge = state.peek().push ? entry.tick + entry.offset : entry.value - entry.offset
+        const edge = state.read.push ? entry.tick + entry.offset : entry.value - entry.offset
 
-        if (state.peek().push) {
+        if (state.read.push) {
           // invalidate svelte variable
           // @err
-          runtimeValues.peek()[entry.index].mod({
+          runtimeValues.read[entry.index].mod({
             [entry.step]: getEdgeValue({
               index: entry.index,
               step: entry.step,
@@ -111,7 +111,7 @@ export function createInstance({ rangeContext }: Props) {
       })
       // invalidate svelte variable
       // @err
-      runtimeValues.peek()[params.index].mod({
+      runtimeValues.read[params.index].mod({
         [params.step]: tick,
       })
     }
@@ -131,14 +131,14 @@ export function createInstance({ rangeContext }: Props) {
   }
   function handleInteract(tick: n) {
     const params = {
-      ...handle.peek(),
+      ...handle.read,
 
       tick,
       backwards: false,
     }
     params.backwards = startValue > params.tick
 
-    const paramLink = state.peek().push == 'edges' ? getNextLink(params) : undefined
+    const paramLink = state.read.push == 'edges' ? getNextLink(params) : undefined
     if (paramLink?.hit) {
       // @ts-expect-error
       $state.disabled = true
@@ -152,7 +152,7 @@ export function createInstance({ rangeContext }: Props) {
       moveHandle({
         tick: resetTick(getEntryBy(paramLink)!),
         backwards: paramLink.backwards,
-        ...handle.peek(),
+        ...handle.read,
       })
 
       // @ts-expect-error
@@ -167,7 +167,7 @@ export function createInstance({ rangeContext }: Props) {
 
   //#region get percentage
   function alignValueToStep(val: n) {
-    const { min, max, pipStep, precision } = settings.peek()
+    const { min, max, pipStep, precision } = settings.read
     const fixFloat = (v: n) => parseFloat(v.toFixed(precision))
     // sanity check for performance
     if (val <= min) {
@@ -195,23 +195,23 @@ export function createInstance({ rangeContext }: Props) {
     const dims = target.getBoundingClientRect()
     const handlePos = clientPos.clientX - dims.left
     const handlePercent = (handlePos / dims.width) * 100
-    const { max, min } = settings.peek()
+    const { max, min } = settings.read
     return ((max - min) / 100) * handlePercent + min
   }
   //#endregion
 
   //#region getters
   function getEntry(): Readonly<EntryValue> {
-    return getPair()[handle.peek().step]!
+    return getPair()[handle.read.step]!
   }
   function getEntryBy(entry: { step: startEnd; index: number }): Readonly<EntryValue | undefined> {
-    return runtimeValues.peek()[entry.index].peek()[entry.step]
+    return runtimeValues.read[entry.index].read[entry.step]
   }
   function getEntryValue(pair = runtimeValues) {
-    return pair.peek()[handle.peek().index].peek()[handle.peek().step]!
+    return pair.read[handle.read.index].read[handle.read.step]!
   }
   function getLimit(step: startEnd) {
-    const { startLookup, endLookup } = look.peek()
+    const { startLookup, endLookup } = look.read
     const limit = step == 'start' ? startLookup : endLookup
     // @ts-expect-error
     return getEntryValue(limit)
@@ -220,34 +220,34 @@ export function createInstance({ rangeContext }: Props) {
     return getPair()[step as startEnd] // well
   }
   function getPair(): Readonly<pair> {
-    return runtimeValues.peek()[handle.peek().index].peek()
+    return runtimeValues.read[handle.read.index].read
   }
   function getPairs(slice: n[]): Readonly<pair[]> {
-    return slice.map(i => runtimeValues.peek()[i].peek())
+    return slice.map(i => runtimeValues.read[i].read)
   }
   function getPreviousOffset(index: n, step: startEnd) {
-    const previous = look.peek().previousValues[index]
+    const previous = look.read.previousValues[index]
     return (
       // prettier-ignore
       previous[step]! - previous[flipStep(step)]! || 0
     )
   }
   let stopIndices = states.map((state, index) => {
-    if (state.edit.peek() == 'lock') {
+    if (state.edit.read == 'lock') {
       return index
     }
   })
 
   function resetHandle(newHandle: Partial<handle>) {
     // which
-    const _handle = { ...handle.peek(), ...newHandle }
+    const _handle = { ...handle.read, ...newHandle }
     handle.set(_handle)
 
     // when
     // @ts-expect-error
-    look.peek().previousValues = Clone(runtimeValues.peek().map(entry => entry.peek()))
+    look.read.previousValues = Clone(runtimeValues.read.map(entry => entry.read))
     stopIndices = states.map((state, index) => {
-      if (state.edit.peek() == 'lock') {
+      if (state.edit.read == 'lock') {
         return index
       }
     })
@@ -268,7 +268,7 @@ export function createInstance({ rangeContext }: Props) {
       const overflow = i == values.length - 1
 
       const complete = isPair(pair)
-      const { min, gap } = rect.peek()
+      const { min, gap } = rect.read
       const margin = min * complete
       const padding = gap * complete
       const offset = !overflow ? margin + padding || gap : 0
@@ -306,15 +306,15 @@ export function createInstance({ rangeContext }: Props) {
         with: (entry: ENTRY & Pair & Omit<DeltaDirection, 'backwards'> & { offset: n }) => true | n
       }
   ) {
-    if (state.peek().push == 'set') {
+    if (state.read.push == 'set') {
       return
     }
 
     const check = createCollision(params)
-    const _rect = objectMap(rect.peek(), v => v * check.direction * (state.peek().range ? 1 : 0))
+    const _rect = objectMap(rect.read, v => v * check.direction * (state.read.range ? 1 : 0))
 
     // extract first iteration ("sibling") to avoid redundant calls
-    if (check.directionStep != params.step && state.peek().push == 'edges') {
+    if (check.directionStep != params.step && state.read.push == 'edges') {
       const sibling = getSibling(params)
       const offset = _rect.min
 
@@ -324,7 +324,7 @@ export function createInstance({ rangeContext }: Props) {
           tick: params.tick,
           value: sibling.value!,
           step: sibling.step,
-          index: handle.peek().index,
+          index: handle.read.index,
         })
         // TODO: better abstraction
         if (typeof returnValue == 'boolean') {
@@ -339,16 +339,16 @@ export function createInstance({ rangeContext }: Props) {
 
     // then loop over your siblings, exclude the ones behind you
     const range = Backwards(check.directionStep)
-      ? [...runtimeValues.peek()].slice(0, handle.peek().index).reverse()
-      : [...runtimeValues.peek()].slice(handle.peek().index + 1)
+      ? [...runtimeValues.read].slice(0, handle.read.index).reverse()
+      : [...runtimeValues.read].slice(handle.read.index + 1)
 
     for (const _pair of range) {
-      const pair = _pair.peek()
+      const pair = _pair.read
       const alignedPair = Object.entries(pair).sort((a, b) =>
         params.backwards ? b[1] - a[1] : a[1] - b[1]
       )
 
-      const index = runtimeValues.peek().indexOf(_pair)
+      const index = runtimeValues.read.indexOf(_pair)
       if (stopIndices.includes(index)) {
         return
       }
@@ -356,7 +356,7 @@ export function createInstance({ rangeContext }: Props) {
         const everyOther = step != check.directionStep || alignedPair.length == 1
         const offset = everyOther
           ? _rect.gap
-          : state.peek().push == 'rangeSets'
+          : state.read.push == 'rangeSets'
           ? getPreviousOffset(index, step)
           : _rect.min
         if (check.collision(entry - offset)) {
@@ -390,14 +390,14 @@ export function createInstance({ rangeContext }: Props) {
     index: n
   }
   function getEdgeValue(entry: ENTRY & Pair & Direction) {
-    if (!state.peek().range) {
-      const { min, max } = settings.peek()
+    if (!state.read.range) {
+      const { min, max } = settings.read
       const clamped = Math.min(Math.max(entry.value, min), max)
       return clamped
     }
 
     function computeEdge() {
-      const { startLookup, endLookup, previousValues } = look.peek()
+      const { startLookup, endLookup, previousValues } = look.read
       // all unlocked
       if (!stopIndices.length) {
         const pair = entry.backwards ? startLookup[entry.index] : endLookup[entry.index]
@@ -420,7 +420,7 @@ export function createInstance({ rangeContext }: Props) {
         return pair[entry.step]!
       }
 
-      const { min, gap } = rect.peek()
+      const { min, gap } = rect.read
       const separation = stop - entry.index //* stopDirection
       const direction = separation > 0 ? 1 : -1
       const relation = separation - 2 * direction // why 2?
@@ -488,12 +488,12 @@ export function createInstance({ rangeContext }: Props) {
           backwards: !params.backwards,
           step: sibling.step,
           value: sibling.value,
-          index: handle.peek().index,
+          index: handle.read.index,
         }
       }
     }
 
-    const index = handle.peek().index + check.direction
+    const index = handle.read.index + check.direction
     const pair = tryGetSibling(check.directionStep, index)
 
     if (typeof pair.entry === 'number') {
@@ -508,7 +508,7 @@ export function createInstance({ rangeContext }: Props) {
   }
   function tryGetSibling(directionStep: startEnd, nextIndex: n) {
     let step = flipStep(directionStep)
-    const nextPair = runtimeValues.peek()[nextIndex]?.peek() ?? {}
+    const nextPair = runtimeValues.read[nextIndex]?.read ?? {}
     const entry = nextPair[step] ?? nextPair[(step = directionStep)]
     return { entry, step }
   }

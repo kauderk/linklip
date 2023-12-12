@@ -15,7 +15,7 @@ export function createDiffBoundary() {
   return {
     tryInvalidate(args: { boundary: typeof _boundary_; progress: Progress }) {
       Object.entries({ progress, preview }).forEach(([key, store]) => {
-        const previous = store.peek()
+        const previous = store.read
         const { boundary, progress } = args
         // FIXME: why is this working, the types are all wrong
         const next = deriveRatio(previous, {

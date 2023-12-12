@@ -8,7 +8,7 @@ export function noInvalidate<T>(value: T) {
     _set(t: T) {
       value = t
     },
-    peek() {
+    get read() {
       return value
     },
     mod: mod as T extends object ? typeof mod : never,

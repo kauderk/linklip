@@ -53,8 +53,8 @@ export function createContextMenuCallbacks({
     return {
       content: props.name,
       callback() {
-        if (mutateToggle.peek()) {
-          add({ byRatio: progress.peek().preview })
+        if (mutateToggle.read) {
+          add({ byRatio: progress.read.preview })
         } else if (typeof index == 'number') {
           remove({ index })
         }
@@ -67,11 +67,11 @@ export function createContextMenuCallbacks({
     tooltip: ['Show storyboard', 'Show video Controls'],
   })
   const sizeAction = () => {
-    const props = sizeToggle.tap(ratioY.peek() == 0)
+    const props = sizeToggle.tap(ratioY.read == 0)
     return {
       content: props.name,
       callback() {
-        ratioY.set(ratioY.peek() ? 0 : 1)
+        ratioY.set(ratioY.read ? 0 : 1)
       },
     }
   }
@@ -80,7 +80,7 @@ export function createContextMenuCallbacks({
   const editAction = (id: EditId, index: n, target: any) => {
     if (id == 'focus') {
       states.forEach(state => {
-        if (state.edit.peek() == id) {
+        if (state.edit.read == id) {
           state.edit.set('free')
         }
       })
@@ -108,7 +108,7 @@ export function createContextMenuCallbacks({
     },
   ]
   const editNodes = (index: n, target: any) => {
-    const state = states[index].edit.peek()
+    const state = states[index].edit.read
     return Object.values(editSelect).map(entry => ({
       ...entry,
       hover: entry.id == state,

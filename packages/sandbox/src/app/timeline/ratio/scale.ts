@@ -1,7 +1,7 @@
 import { high as storyboard } from '$mock/storyboard.json'
-import type { Rect } from 'src/app/controller/follower'
+import type { TwoDimension } from 'src/app/controller/follower'
 
-export function deriveScale($rect: Rect, count: n) {
+export function deriveScale($rect: TwoDimension, count: n) {
   const { thumbnailWidth, thumbnailHeight } = storyboard.slot
   const height = $rect.height * 0.95
   const width = $rect.width * 1

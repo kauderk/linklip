@@ -42,7 +42,7 @@
     registerHandleEvent,
     registerRangeEvent,
   } = createRangeSlider({
-    guard: (e, index) => e.which == 1 && rangeContext.states[index].edit.peek() != 'lock',
+    guard: (e, index) => e.which == 1 && rangeContext.states[index].edit.read != 'lock',
     rangeContext,
     calculateValue(pair: any, index: number) {
       const start = pair.start || 0
@@ -52,7 +52,7 @@
       boundaries[index].set(boundary)
       diffBoundaries[index].tryInvalidate({
         boundary,
-        progress: progress.peek(),
+        progress: progress.read,
       })
       return {
         start,
@@ -65,7 +65,7 @@
   focus.compute(focus => (sharedFocus.write = focus))
   sharedFocus.compute(() => {
     rangeContext.derivedRatios.diffRatios.forEach((diff, i) => {
-      diff.set(mapTiles(boundaries[i].peek()))
+      diff.set(mapTiles(boundaries[i].read))
       // Notify the <Board /> that there are new tiles
       diffBoundaries[i].progress.update($ => $)
     })

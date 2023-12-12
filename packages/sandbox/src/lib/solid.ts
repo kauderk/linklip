@@ -27,8 +27,7 @@ export interface $Writable<T> {
   get value(): null
   get signal(): T
   set write(newValue: T)
-  toSignal: <T>() => ReturnType<typeof createSignal<T>>
-  peek: () => T
+  // toSignal: <T>() => ReturnType<typeof createSignal<T>>
   get read(): T
 }
 export const createSvelteSignal = <T>(value: T) => {
@@ -57,11 +56,7 @@ export const createSvelteSignal = <T>(value: T) => {
         setSignal(newPartial as any)
       }
     },
-    peek: () => untrack(signal),
     get signal() {
-      return signal()
-    },
-    get value() {
       return signal()
     },
     get read() {
@@ -72,7 +67,6 @@ export const createSvelteSignal = <T>(value: T) => {
       // @ts-ignore
       setSignal(newValue)
     },
-    toSignal: () => [signal, setSignal],
   }
 }
 
@@ -80,8 +74,7 @@ export type SvelteSignal<T> = ReturnType<typeof createSvelteSignal<T>>
 
 export interface $Readable<T> {
   subscribe: (fn: (value: T) => void) => () => void
-  get value(): T
-  peek: () => T
+  get read(): T
 }
 export const createSvelteMemo = <T>(fn: () => T) => {
   const signal = createMemo(fn)
@@ -92,7 +85,9 @@ export const createSvelteMemo = <T>(fn: () => T) => {
     get value() {
       return signal()
     },
-    peek: () => untrack(signal),
+    get read() {
+      return untrack(signal)
+    },
   }
 }
 

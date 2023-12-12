@@ -9,7 +9,7 @@ type Shape<O> = O extends { value: infer V }
         // for example Signal instead of number
         // in Signal<number>
         decorator: (value: Unwrap<V>) => GenericUnwrap<W, Unwrap<V>>
-        // TODO: should be optional if the decorator has the peek method
+        // TODO: should be optional if the decorator has the read getter
         serialize?(decorator: GenericUnwrap<W, Unwrap<V>>): Unwrap<V>
       }
     : {
@@ -98,8 +98,8 @@ export function createSerializableStore<T extends { [key in keyof T]: Shape<T[ke
 
         if ('serialize' in schema) {
           newType.serialize = () => serialize(newType)
-        } else if ('peek' in newType) {
-          newType.serialize = () => newType.peek()
+        } else if ('read' in newType) {
+          newType.serialize = () => newType.read
         }
 
         result[key] = newType

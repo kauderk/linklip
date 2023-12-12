@@ -9,15 +9,15 @@ export function createPreviewProgress(
   let downRatio = 0
   return createMouseTrack({
     mousedown(e: MouseEvent) {
-      const currentPreview = storyboardRatio.peek() * timelineHeight.peek()
+      const currentPreview = storyboardRatio.read * timelineHeight.read
       mouseY = e.clientY + currentPreview
-      downRatio = storyboardRatio.peek()
+      downRatio = storyboardRatio.read
     },
     mousemove(e: MouseEvent) {
       e.preventDefault()
       const delta = mouseY - e.clientY
-      const at = Math.min(Math.max(0, delta), timelineHeight.peek())
-      const newRatio = at / timelineHeight.peek()
+      const at = Math.min(Math.max(0, delta), timelineHeight.read)
+      const newRatio = at / timelineHeight.read
       if (downRatio < 0.5) {
         if (newRatio < 0.25) {
           storyboardRatio.write = 0
@@ -33,7 +33,7 @@ export function createPreviewProgress(
       storyboardRatio.write = newRatio
     },
     mouseup() {
-      storyboardRatio.write = Math.round(storyboardRatio.peek())
+      storyboardRatio.write = Math.round(storyboardRatio.read)
     },
   })
 }

@@ -30,7 +30,7 @@ export function deprecatedSignal<T>(value: T) {
     },
   })
   const mod = (newPartial: Partial<K>) => {
-    svelteContract.set({ ...svelteContract.peek(), ...newPartial })
+    svelteContract.set({ ...svelteContract.read, ...newPartial })
   }
   if (typeof value == 'object') {
     Object.assign(svelteContract, { mod })

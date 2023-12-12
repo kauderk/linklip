@@ -47,7 +47,7 @@
   }
   function update(menuRef: HTMLElement) {
     const fRect = fitToTarget({
-      ...menu.peek()(),
+      ...menu.read(),
       width: menuRef.offsetWidth,
       height: menuRef.offsetHeight,
     })

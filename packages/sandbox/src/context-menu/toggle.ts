@@ -9,7 +9,7 @@ export function createToggleStore<T extends o>(target: T, initial?: b) {
   })
 
   function props() {
-    const power = toggle.peek()
+    const power = toggle.read
     const index = power ? 0 : 1
 
     type filterStringArray<T> = {
@@ -28,7 +28,9 @@ export function createToggleStore<T extends o>(target: T, initial?: b) {
   }
   return {
     set: toggle.set.bind(toggle),
-    peek: toggle.peek.bind(toggle),
+    get read() {
+      return toggle.read
+    },
     derived: listen,
     props,
     tap(value: b | undefined) {

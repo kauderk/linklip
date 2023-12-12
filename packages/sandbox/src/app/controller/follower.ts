@@ -45,7 +45,7 @@ export function follower<F extends Props>(config: Props) {
       follower.ref.style.removeProperty('pointer-events')
     },
     tryHide(hidden: boolean) {
-      if (dragging.peek()) return
+      if (dragging.read) return
       // console.log('overlay tryHide', hidden)
       follower.ref?.style.setProperty('opacity', hidden ? '0' : '1')
       follower.ref?.style.setProperty('pointer-events', hidden ? 'none' : 'unset')
@@ -119,7 +119,7 @@ export function follower<F extends Props>(config: Props) {
     // FIXME: abstract stageSignal - createDefaultStage
     // const selector = getSelector()
     // if (selector.stageSignal) {
-    //   let pre = tryHost(selector.stageSignal.peek().selector)
+    //   let pre = tryHost(selector.stageSignal.read.selector)
     //   pre = maybeIsHost(pre)
     //   if (pre) {
     //     hostStack.selectorKey = selection.tryDock(pre)
@@ -140,7 +140,7 @@ export function follower<F extends Props>(config: Props) {
   const createFitToWindow = () => {
     destroyFitToWindowFrame = config.cachedDomObserver.tick.$ubscribe(function () {
       observer.disconnect()
-      send(fitToTarget({ ...rect.peek() }))
+      send(fitToTarget({ ...rect.read }))
     })
     config.cachedDomObserver.register({ window: true })
   }
@@ -176,8 +176,8 @@ export function follower<F extends Props>(config: Props) {
       hostStack.ref = tryFindHost(tryHost)
       createRectObserver()
 
-      getSelector().styleHost?.(hostStack.ref, rect.peek())
-      send(getSelector().followerCycle!.update(hostStack.ref, rect.peek(), rect))
+      getSelector().styleHost?.(hostStack.ref, rect.read)
+      send(getSelector().followerCycle!.update(hostStack.ref, rect.read, rect))
       getSelector().postBranch?.()
       observer.observe(hostStack.ref)
     } else {
@@ -187,7 +187,7 @@ export function follower<F extends Props>(config: Props) {
       createFitToWindow()
 
       send(() => ({
-        ...rect.peek(),
+        ...rect.read,
         x: freezeRect.x,
         y: freezeRect.y,
       }))
@@ -195,7 +195,7 @@ export function follower<F extends Props>(config: Props) {
     selection.mode(!!tryHost)
   }
   async function preBranch(key = '') {
-    const s = stage.peek()
+    const s = stage.read
     // deselect current
     await config.selectors[s.selector ?? '']?.preBranch?.({
       current: s.selector,
@@ -217,7 +217,7 @@ export function follower<F extends Props>(config: Props) {
 
   const observer = new IntersectionObserver(
     entries => {
-      if (stage.peek().mode !== 'host' || !isRendered(hostStack.ref!)) {
+      if (stage.read.mode !== 'host' || !isRendered(hostStack.ref!)) {
         return
       }
       // TODO: how do I tell the compiler that once 'host' is set, it will always be set?
@@ -234,7 +234,7 @@ export function follower<F extends Props>(config: Props) {
       if (ratio === 0) {
         return
       }
-      const res = cycle.resize(follower.ref, entry, rect.peek(), ratio === 0 || ratio === 1)
+      const res = cycle.resize(follower.ref, entry, rect.read, ratio === 0 || ratio === 1)
       if (!res) {
         hostStack.fn()
         return
@@ -247,7 +247,7 @@ export function follower<F extends Props>(config: Props) {
     }
   )
 
-  let delta = { ...rect.peek() }
+  let delta = { ...rect.read }
   let pointer: { ref?: HTMLElement } = {}
   const trackPointer = createMouseTrack({
     mousedown(e) {
@@ -258,9 +258,8 @@ export function follower<F extends Props>(config: Props) {
       observer.disconnect()
 
       // order matters
-      const oldRect =
-        stage.peek().mode == 'host' ? hostStack.ref?.getBoundingClientRect() : undefined
-      const _rect = rect.peek()
+      const oldRect = stage.read.mode == 'host' ? hostStack.ref?.getBoundingClientRect() : undefined
+      const _rect = rect.read
       delta = {
         x: e.clientX - _rect.x,
         y: e.clientY - _rect.y,
@@ -346,7 +345,7 @@ export function follower<F extends Props>(config: Props) {
       }
     },
     styleHost(addStyles = true) {
-      getSelector().styleHost?.(hostStack.ref, addStyles ? rect.peek() : undefined)
+      getSelector().styleHost?.(hostStack.ref, addStyles ? rect.read : undefined)
     },
     trySwitchHost(target?: Targets) {
       const newHost = resolveSelector(config.selectors[target as any]?.selector.target)
@@ -362,7 +361,7 @@ export function follower<F extends Props>(config: Props) {
       }
     },
     mount(host?: Element | Targets) {
-      if (stage.peek().mode != 'free') {
+      if (stage.read.mode != 'free') {
         this.changeHost(host)
       }
 
