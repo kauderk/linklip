@@ -24,7 +24,6 @@ export interface $Writable<T> {
   compute: (fn: (value: T) => void) => void
   update: (fn: T | ((prev: T) => T)) => void
   mod: (newPartial: Partial<T>) => void
-  get value(): null
   get signal(): T
   set write(newValue: T)
   // toSignal: <T>() => ReturnType<typeof createSignal<T>>
@@ -41,8 +40,10 @@ export const createSvelteSignal = <T>(value: T) => {
       return subscription<T>(signal, fn)
     },
     compute(fn) {
-      const v = signal()
-      createComputed(() => untrack(() => fn(v)))
+      createComputed(() => {
+        const v = signal()
+        untrack(() => fn(v))
+      })
     },
     update(incoming) {
       // @ts-expect-error
@@ -75,6 +76,7 @@ export type SvelteSignal<T> = ReturnType<typeof createSvelteSignal<T>>
 export interface $Readable<T> {
   subscribe: (fn: (value: T) => void) => () => void
   get read(): T
+  get signal(): T
 }
 export const createSvelteMemo = <T>(fn: () => T) => {
   const signal = createMemo(fn)
@@ -82,7 +84,7 @@ export const createSvelteMemo = <T>(fn: () => T) => {
     subscribe(fn) {
       return subscription<T>(signal, fn)
     },
-    get value() {
+    get signal() {
       return signal()
     },
     get read() {

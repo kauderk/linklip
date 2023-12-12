@@ -81,7 +81,10 @@
 
         let outOfBounds = false
         const padding = _config.padding
-        if (_config.bounds == 'mouse') {
+
+        if (typeof _config.constraint?.constraint == 'function') {
+          // FIXME: the constraint and the bounds conflict with each other
+        } else if (_config.bounds == 'mouse') {
           // if the domRect is out of the screen, exit
           if (
             isAboutToOverflow({
