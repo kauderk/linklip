@@ -273,7 +273,7 @@ export function follower<F extends Props>(config: Props) {
         getSelector().followerCycle?.clean?.(follower.ref)
       }
 
-      dragging.value = true
+      dragging.write = true
     },
 
     mousemove(e) {
@@ -311,7 +311,7 @@ export function follower<F extends Props>(config: Props) {
 
       branch(maybeHost)
 
-      dragging.value = false
+      dragging.write = false
     },
   })
 
@@ -324,7 +324,7 @@ export function follower<F extends Props>(config: Props) {
       branch,
       resolveSelector,
     },
-    registerFollower(ref: HTMLElement):ActionReturn<any> {
+    registerFollower(ref: HTMLElement): ActionReturn<any> {
       follower.ref = ref
       return {
         destroy: cleanSubscribers(

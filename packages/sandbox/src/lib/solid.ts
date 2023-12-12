@@ -24,7 +24,8 @@ export interface $Writable<T> {
   compute: (fn: (value: T) => void) => void
   update: (fn: T | ((prev: T) => T)) => void
   mod: (newPartial: Partial<T>) => void
-  get value(): T
+  get value(): null
+  get signal(): T
   set write(newValue: T)
   toSignal: <T>() => ReturnType<typeof createSignal<T>>
   peek: () => T
@@ -57,6 +58,9 @@ export const createSvelteSignal = <T>(value: T) => {
       }
     },
     peek: () => untrack(signal),
+    get signal() {
+      return signal()
+    },
     get value() {
       return signal()
     },

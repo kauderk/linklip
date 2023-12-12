@@ -7,12 +7,13 @@
   import { ignoreCssRules } from '$lib/no-invalidate'
   import { deriveScale } from './timeline/ratio/scale'
   import { getStoryboardContext } from './timeline/context'
+  import type { Rect } from './controller/follower'
 
-  export let rect: any
+  export let rect: ReturnType<typeof createSvelteSignal<Rect>>
   export let store = createSvelteSignal({ ratio: 0, playing: false })
 
   const data = getStoryboardContext()
-  const scale = createSvelteMemo(() => deriveScale(rect.value, data.totalSize.value))
+  const scale = createSvelteMemo(() => deriveScale(rect.signal, data.totalSize.signal))
 
   const selector = 'button.storyboard-btn'
   const board = {
@@ -24,19 +25,19 @@
       const tiles = Array.from(target.querySelectorAll(selector))
       // my math is inaccurate by 1 - log 1/2
       const ratioIndex = Math.floor(tiles.length * ratio)
-      const index = board.activeIndex.value ?? ratioIndex
+      const index = board.activeIndex.read ?? ratioIndex
       const tile = tiles[index] as HTMLElement
       if (!tile) {
         return
       }
-      board.activeIndex.value = null
+      board.activeIndex.write = null
 
       // update play head
       const edge = (i: n) => (ratioIndex + i) / tiles.length
       const progress = mapRatio(edge(0), ratio, edge(1))
       tile.style.setProperty('--progress', progress.toString())
 
-      const previousTile = tiles[board.previousIndex.value]
+      const previousTile = tiles[board.previousIndex.read]
       // TODO: how to allow only when there's a change or a repaint?
       // if (tile === previousTile) {
       // 	return console.log({ same: index, ratio })
@@ -46,7 +47,7 @@
       previousTile?.classList.remove('active', 'timer')
       tile.classList.add('active', 'timer')
 
-      board.previousIndex.value = index
+      board.previousIndex.write = index
     },
   })
 
@@ -65,7 +66,7 @@
       {...ignoreCssRules}
       on:click={() => {
         // my math is inaccurate by 1 - log 2/2
-        board.activeIndex.value = props.relativeCount
+        board.activeIndex.write = props.relativeCount
         console.warn(`videoContext.seekTo.set(props.count)`)
       }}
       on:mouseleave={props.mouseleave}

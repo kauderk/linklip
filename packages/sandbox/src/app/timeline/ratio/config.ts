@@ -23,7 +23,7 @@ export const createRangeConfig = () => {
     // { start: 95, end: 100 },
   ])
   const runtimeValues = createSvelteMemo(() =>
-    staleValues.value.map(entry => createSvelteSignal(Clone(entry) as pair))
+    staleValues.signal.map(entry => createSvelteSignal(Clone(entry) as pair))
   )
 
   const $values = staleValues.peek()

@@ -4,7 +4,7 @@ import { createSvelteMemo } from '$lib/solid'
 export function createToggleStore<T extends o>(target: T, initial?: b) {
   const toggle = createSvelteSignal<boolean>(initial ?? false)
   const listen = createSvelteMemo(() => {
-    toggle.value
+    toggle.signal
     return props()
   })
 

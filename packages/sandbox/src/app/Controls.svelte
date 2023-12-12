@@ -20,7 +20,7 @@
       use:keydown={{
         on: 'm',
         click: function toggleMute() {
-          player.muted.value = !player.muted.value
+          player.muted.write = !player.muted.read
         },
       }}
     >
@@ -35,8 +35,8 @@
       bind:value={$volume}
       on:input={e => {
         const value = e.currentTarget.value
-        volume.value = Number(value)
-        player.muted.value = value === '0'
+        volume.write = Number(value)
+        player.muted.write = value === '0'
       }}
     />
   </div>
@@ -61,7 +61,7 @@
         const captionsTrack = player.refs.video.textTracks[0]
         const isHidden = captionsTrack.mode === 'hidden'
         captionsTrack.mode = isHidden ? 'showing' : 'hidden'
-        player.captions.value = isHidden
+        player.captions.write = isHidden
       },
     }}
   >
@@ -71,10 +71,10 @@
   <button
     class="speed-btn wide-btn"
     on:click={function changePlaybackSpeed() {
-      let newPlaybackRate = player.playbackRate.value + 0.25
+      let newPlaybackRate = player.playbackRate.read + 0.25
       if (newPlaybackRate > 2) newPlaybackRate = 0.25
-      player.playbackRate.value = newPlaybackRate
-      speedBtnTxt.value = `${newPlaybackRate}x`
+      player.playbackRate.write = newPlaybackRate
+      speedBtnTxt.write = `${newPlaybackRate}x`
     }}
   >
     {$speedBtnTxt}
@@ -85,13 +85,13 @@
     use:keydown={{
       on: 'i',
       click: function toggleMiniPlayerMode() {
-        if (player.miniPlayer.value) {
-          document.exitPictureInPicture().finally(() => (fullScreen.value = false))
+        if (player.miniPlayer.read) {
+          document.exitPictureInPicture().finally(() => (fullScreen.write = false))
         } else {
           player.refs.video
             .requestPictureInPicture()
-            .then(() => (fullScreen.value = true))
-            .catch(() => (fullScreen.value = false))
+            .then(() => (fullScreen.write = true))
+            .catch(() => (fullScreen.write = false))
         }
       },
     }}
@@ -104,7 +104,7 @@
     use:keydown={{
       on: 't',
       click: function toggleTheaterMode() {
-        theater.value = !theater.value
+        theater.write = !theater.read
       },
     }}
   >
@@ -158,7 +158,9 @@
         transform-origin: left;
         --tns: translate(0px, 0px);
         transform: scaleX(0) var(--tns);
-        transition: width 150ms ease-in-out, transform 150ms ease-in-out;
+        transition:
+          width 150ms ease-in-out,
+          transform 150ms ease-in-out;
         appearance: auto;
       }
       &:hover .volume-slider,

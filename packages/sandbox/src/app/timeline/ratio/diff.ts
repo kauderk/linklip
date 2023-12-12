@@ -8,8 +8,8 @@ export function createDiffBoundary() {
   const preview = createRelativeRatio()
 
   const results = createSvelteMemo(() => ({
-    progress: progress.value,
-    preview: preview.value,
+    progress: progress.signal,
+    preview: preview.signal,
   }))
 
   return {

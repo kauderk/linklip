@@ -45,8 +45,8 @@ export function createInstance({ rangeContext }: Props) {
   })
 
   const look = createSvelteMemo(() => ({
-    startLookup: walkValuesLimit([...staleValues.value], 'start'),
-    endLookup: walkValuesLimit([...staleValues.value].reverse(), 'end')
+    startLookup: walkValuesLimit([...staleValues.read], 'start'),
+    endLookup: walkValuesLimit([...staleValues.read].reverse(), 'end')
       .map((pair, i, arr) => {
         Object.entries(pair).forEach(
           ([key, value]) =>
@@ -60,7 +60,7 @@ export function createInstance({ rangeContext }: Props) {
         return pair
       })
       .reverse(),
-    previousValues: Clone(staleValues.value) as typeof staleValues.value,
+    previousValues: Clone(staleValues.read),
   }))
 
   let startValue = staleValues.peek()[handle.peek().index][handle.peek().step]!

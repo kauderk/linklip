@@ -29,9 +29,11 @@
   const { rect } = config
   const { registerFollower } = follower
 
-  const tiny = createSvelteMemo(() => rect.value.width <= 80)
+  const tiny = createSvelteMemo(() => rect.signal.width <= 80)
   // it seems the preact/signal is falling behind some frames... +5 should be enough
-  const normal = createSvelteMemo(() => rect.value.width + 5 > config.minWidth || fullScreen.value)
+  const normal = createSvelteMemo(
+    () => rect.signal.width + 5 > config.minWidth || fullScreen.signal
+  )
   let any = '' as any
 
   const scrubbing = createSvelteSignal(false)

@@ -62,7 +62,7 @@
     },
   })
 
-  focus.compute(focus => (sharedFocus.value = focus))
+  focus.compute(focus => (sharedFocus.write = focus))
   sharedFocus.compute(() => {
     rangeContext.derivedRatios.diffRatios.forEach((diff, i) => {
       diff.set(mapTiles(boundaries[i].peek()))
@@ -212,7 +212,7 @@
           >
             <Board rect={sliderRect} store={ratios.diffBoundaries[index].progress} let:template>
               <!-- FIXME: the types are all wrong -->
-              <Subscribe tiles={createSvelteMemo(() => ratios.diffRatios[index].value)} let:tiles>
+              <Subscribe tiles={createSvelteMemo(() => ratios.diffRatios[index].signal)} let:tiles>
                 {#each Array(tiles.size) as _, relativeCount (relativeCount)}
                   <svelte:component
                     this={template}

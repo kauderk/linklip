@@ -20,20 +20,20 @@ export function createPreviewProgress(
       const newRatio = at / timelineHeight.peek()
       if (downRatio < 0.5) {
         if (newRatio < 0.25) {
-          storyboardRatio.value = 0
+          storyboardRatio.write = 0
           return
         }
       } else {
         if (newRatio > 0.8) {
-          storyboardRatio.value = 1
+          storyboardRatio.write = 1
           return
         }
       }
 
-      storyboardRatio.value = newRatio
+      storyboardRatio.write = newRatio
     },
     mouseup() {
-      storyboardRatio.value = Math.round(storyboardRatio.peek())
+      storyboardRatio.write = Math.round(storyboardRatio.peek())
     },
   })
 }

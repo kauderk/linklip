@@ -19,34 +19,34 @@
   on:dblclick={player.fullScreen.toggle}
   on:mousedown
   on:volumechange={() => {
-    if (muted.value || volume.value === 0) {
-      volume.value = 0
-      player.volumeLevel.value = 'muted'
-    } else if (volume.value >= 0.5) {
-      player.volumeLevel.value = 'high'
+    if (muted.read || volume.read === 0) {
+      volume.write = 0
+      player.volumeLevel.write = 'muted'
+    } else if (volume.read >= 0.5) {
+      player.volumeLevel.write = 'high'
     } else {
-      player.volumeLevel.value = 'low'
+      player.volumeLevel.write = 'low'
     }
   }}
   on:loadeddata={() => {
-    player.time.mod({ total: ms2Hm(duration.value) })
+    player.time.mod({ total: ms2Hm(duration.read) })
   }}
   on:timeupdate={() => {
-    player.time.mod({ current: ms2Hm(currentTime.value) })
-    const percent = currentTime.value / duration.value
+    player.time.mod({ current: ms2Hm(currentTime.read) })
+    const percent = currentTime.read / duration.read
 
     player.progress.mod({ timeline: percent })
   }}
   use:down={{
     on: ['arrowleft', 'j'],
     action() {
-      currentTime.value += -5
+      currentTime.write += -5
     },
   }}
   use:down={{
     on: ['arrowright', 'l'],
     action() {
-      currentTime.value += 5
+      currentTime.write += 5
     },
   }}
   use:down={{
@@ -61,10 +61,10 @@
   }}
   use:Event={{
     enterpictureinpicture() {
-      player.miniPlayer.value = true
+      player.miniPlayer.write = true
     },
     leavepictureinpicture() {
-      player.miniPlayer.value = false
+      player.miniPlayer.write = false
     },
   }}
   bind:this={player.refs.video}

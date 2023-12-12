@@ -9,7 +9,7 @@ export function useClass(element: HTMLElement, signalList: Record<string, Svelte
   return cleanAction(
     ...Object.entries(list).map(([className, signal]) =>
       effect(() => {
-        element.classList.toggle(className, signal.value)
+        element.classList.toggle(className, signal.signal)
       })
     )
   )

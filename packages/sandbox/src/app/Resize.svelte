@@ -58,12 +58,12 @@
         assignInitialRects(event)
 
         original.classList.add('selected')
-        _config.resizing.value = true
+        _config.resizing.write = true
       },
 
       mouseup(event, original) {
         original.classList.remove('selected')
-        _config.resizing.value = false
+        _config.resizing.write = false
       },
 
       // resize on the eight directions, but respect the aspect ratio of 16 / 9
