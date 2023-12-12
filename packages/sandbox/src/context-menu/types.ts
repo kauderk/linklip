@@ -20,7 +20,7 @@ export type ContextMenuSchemaActionNode = {
     ref: HTMLButtonElement,
     item: {
       item: ContextMenuSchemaActionNode
-      open: SvelteSignal<boolean | undefined>
+      open: SvelteSignal<boolean>
     }
   ) => void
   callback: (openState?: SvelteSignal<boolean>) => void

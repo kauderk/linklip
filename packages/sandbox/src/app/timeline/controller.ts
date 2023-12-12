@@ -62,11 +62,11 @@ const timeline = (config: { controlsMinHeight: number }) => {
       resizeRect: (el: HTMLElement) =>
         resizeAction(el, [
           rect => {
-            videoRect.set({
+            videoRect.write = {
               width: rect.width,
               height: rect.height,
-            })
-            timelineHeight.set(rect.height * tuneStoryboardRatio)
+            }
+            timelineHeight.write = rect.height * tuneStoryboardRatio
           },
         ]),
       controlsHeight: createSvelteMemo(
@@ -99,7 +99,7 @@ const timeline = (config: { controlsMinHeight: number }) => {
 
     slider: {
       updateBoard(index: number) {
-        tick().then(() => rangeContext.derivedRatios.diffBoundaries[index].progress.update($ => $))
+        tick().then(() => rangeContext.derivedRatios.diffBoundaries[index].progress.mod({}))
       },
 
       sliderHeight: createSvelteMemo(() => timelineHeight.signal * storyboardRatio.signal),

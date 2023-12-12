@@ -71,7 +71,7 @@ export function createContextMenuCallbacks({
     return {
       content: props.name,
       callback() {
-        ratioY.set(ratioY.read ? 0 : 1)
+        ratioY.write = ratioY.read ? 0 : 1
       },
     }
   }
@@ -81,11 +81,11 @@ export function createContextMenuCallbacks({
     if (id == 'focus') {
       states.forEach(state => {
         if (state.edit.read == id) {
-          state.edit.set('free')
+          state.edit.write = 'free'
         }
       })
     }
-    states[index].edit.set(id)
+    states[index].edit.write = id
   }
   const editSelect = <const>[
     {

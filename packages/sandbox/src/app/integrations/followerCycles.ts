@@ -1,10 +1,17 @@
 import { createSvelteSignal } from '$lib/solid'
 // @ts-ignore
-import { type resizeMode, aspectRatioFrom } from '../Resize.svelte'
+import type { resizeMode } from '../Resize.svelte'
 import type { FollowerCycle } from '../controller/follower'
 import { createDefaultStage } from '../follower/store'
 import { createSerializableStore } from '../../lib/serializable'
 
+export function aspectRatioFrom(aspectRatio: [number, number]) {
+  return {
+    toString: () => aspectRatio.join('/'),
+    tuple: aspectRatio,
+    value: aspectRatio[0] / aspectRatio[1],
+  }
+}
 export const _Config = {
   width: 350,
   minWidth: 300,

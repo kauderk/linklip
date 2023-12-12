@@ -37,13 +37,13 @@
 
     const offsetX = event.offsetX
     const offsetY = event.offsetY
-    menu.set(() => {
+    menu.write = () => {
       const rect = target.getBoundingClientRect()
       return {
         x: rect.left + rect.width * (offsetX / rect.width),
         y: rect.top + rect.height * (offsetY / rect.height),
       }
-    })
+    }
   }
   function update(menuRef: HTMLElement) {
     const fRect = fitToTarget({
@@ -82,7 +82,7 @@
   import type { ActionReturn } from '$lib/event-life-cycle'
   let template = defineTemplate<{
     item: ContextMenuSchemaActionNode
-    open: SvelteSignal<boolean | undefined>
+    open: SvelteSignal<boolean>
   }>()
   onMount(() =>
     cleanSubscribers(
@@ -106,7 +106,6 @@
   <li class="action" class:hover={props.item.hover} on:mouseleave={e=>e.currentTarget.classList.remove('hover')}>
 		<button
 			on:click={() => {
-				// @ts-expect-error undefined
 				props.item.callback(props.open)
 				close()
 			}}
@@ -122,6 +121,7 @@
       {#each $GlobalContextMenuSchema.nodes as item}
         {#if 'children' in item}
           {@const open = createSvelteSignal(tsAny(item.open))}
+          <!-- trick svelte to ignore 'open' is declared using {@const ...} and is read-only  -->
           <li
             class="action"
             {...ignoreCssRules}

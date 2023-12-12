@@ -68,8 +68,8 @@ export function createRangeSlider({ guard, rangeContext, calculateValue }: Props
   let focus = createSvelteSignal(false as any)
 
   function blur() {
-    focus.set(false)
-    nub.set({ active: false, pressed: false })
+    focus.write = false
+    nub.write = { active: false, pressed: false }
     range.mod({ active: false })
   }
   function canGoFurther(e: MouseEvent, index: n) {
@@ -77,7 +77,7 @@ export function createRangeSlider({ guard, rangeContext, calculateValue }: Props
     if (isBad) {
       return false
     }
-    focus.set(true)
+    focus.write = true
     return true
   }
 
@@ -92,10 +92,9 @@ export function createRangeSlider({ guard, rangeContext, calculateValue }: Props
       if (!canGoFurther(e, index)) {
         return
       }
-      instance.state.update($ => ({
-        ...$,
+      instance.state.mod({
         push: 'edges',
-      }))
+      })
       instance.resetHandle(reset)
       const percentage = instance.getHandleValue(e, refs.slider)
       range.mod({
@@ -107,7 +106,7 @@ export function createRangeSlider({ guard, rangeContext, calculateValue }: Props
           step: flipStep(reset.step),
         })),
       })
-      nub.set({ active: true, pressed: true })
+      nub.write = { active: true, pressed: true }
       trackMouseDown(e)
     }
 
@@ -133,10 +132,9 @@ export function createRangeSlider({ guard, rangeContext, calculateValue }: Props
       instance.resetHandle({
         index: _rangeIndices[_rangeIndices.length - 1],
       })
-      instance.state.update($ => ({
-        ...$,
+      instance.state.mod({
         push: _rangeIndices.length ? 'rangeSets' : 'set',
-      }))
+      })
       const percentage = instance.getHandleValue(e, refs.slider)
       range.mod({
         percentage,
@@ -173,12 +171,11 @@ export function createRangeSlider({ guard, rangeContext, calculateValue }: Props
       const backwards = _range.percentage > percentage
 
       if (_range.reminder.length > 1) {
-        instance.handle.update($ => ({
-          ...$,
+        instance.handle.mod({
           index: backwards
             ? _range.reminder[0].index
             : _range.reminder[_range.reminder.length - 1].index,
-        }))
+        })
       }
 
       // @ts-expect-error

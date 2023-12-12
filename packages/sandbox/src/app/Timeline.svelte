@@ -49,7 +49,7 @@
       const end = pair.end || 100
       const boundary = { startRatio: start / 100, endRatio: end / 100 }
       // onTick
-      boundaries[index].set(boundary)
+      boundaries[index].write = boundary
       diffBoundaries[index].tryInvalidate({
         boundary,
         progress: progress.read,
@@ -65,7 +65,7 @@
   focus.compute(focus => (sharedFocus.write = focus))
   sharedFocus.compute(() => {
     rangeContext.derivedRatios.diffRatios.forEach((diff, i) => {
-      diff.set(mapTiles(boundaries[i].read))
+      diff.write = mapTiles(boundaries[i].read)
       // Notify the <Board /> that there are new tiles
       diffBoundaries[i].progress.update($ => $)
     })
@@ -191,7 +191,7 @@
     use:useSlider
     use:resizeAction={[
       rect => {
-        sliderRect.set(rect)
+        sliderRect.write = rect
       },
       resizing,
     ]}

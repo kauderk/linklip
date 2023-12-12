@@ -159,8 +159,7 @@ export function createSelectorsConfig(
           clean(followerRef) {
             if (!followerRef) return
             const width = 350 + 1 // TODO: _Config.width
-            playerConfig.rect.set({
-              ...playerConfig.rect.read,
+            playerConfig.rect.mod({
               width,
               height: width / playerConfig.aspectRatio.value,
             })
@@ -233,10 +232,10 @@ export function createSelectorsConfig(
         // if it was "affected" by the intersection observer
         // restore its full size when in free mode
         const old = playerConfig.rect.read
-        playerConfig.rect.set({
+        playerConfig.rect.write = {
           ...old,
           height: old.width / playerConfig.aspectRatio.value,
-        })
+        }
       },
     },
   } satisfies FollowerConfig

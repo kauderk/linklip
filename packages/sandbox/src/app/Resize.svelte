@@ -237,7 +237,7 @@
         }
 
         // invalidate the signal!
-        rect.set({ ..._ogRect, ..._rect })
+        rect.write = { ..._ogRect, ..._rect }
 
         function isOutOfBounds() {
           return outOfBounds && _rect.width > _ogRect.width

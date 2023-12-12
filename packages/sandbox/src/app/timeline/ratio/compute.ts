@@ -16,8 +16,8 @@ export const createRatioBoundary = () => createSvelteSignal({ ..._boundary_ })
 export const createTiles = () => createSvelteSignal(mapTiles({ ..._boundary_ }))
 export type Boundary = ReturnType<typeof createRatioBoundary>
 
-export function deriveRatio(
-  store: Progress,
+export function deriveRatio<T>(
+  store: T,
   deriveOn: { boundary: typeof _boundary_; globalRatio: n }
 ) {
   const boundary = deriveOn.boundary

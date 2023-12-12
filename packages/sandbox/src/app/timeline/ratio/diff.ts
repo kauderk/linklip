@@ -17,7 +17,7 @@ export function createDiffBoundary() {
       Object.entries({ progress, preview }).forEach(([key, store]) => {
         const previous = store.read
         const { boundary, progress } = args
-        // FIXME: why is this working, the types are all wrong
+
         const next = deriveRatio(previous, {
           boundary,
           // @ts-expect-error
@@ -27,7 +27,7 @@ export function createDiffBoundary() {
         // DO NOT INVALIDATE the store if the values didn't change
         if (JSON.stringify(next) !== JSON.stringify(previous)) {
           // console.log('set', key)
-          store.set(next)
+          store.write = next
         } else {
           // // console.log('extra rerender')
         }

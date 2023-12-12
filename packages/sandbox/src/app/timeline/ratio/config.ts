@@ -37,7 +37,7 @@ export const createRangeConfig = () => {
     const previous = runtimeValues.read.map(signal => signal.read)
     fn(previous)
     // @ts-expect-error
-    staleValues.set([...previous])
+    staleValues.write = [...previous]
   }
 
   return {

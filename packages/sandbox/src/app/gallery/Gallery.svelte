@@ -99,12 +99,12 @@
 
   function useRect(ref: HTMLElement) {
     const r = ref.getBoundingClientRect()
-    resizeConfig.rect.set({
+    resizeConfig.rect.write = {
       height: isTop ? lookRect.itemWidth / (16 / 9) : r.height,
       width: r.width || lookRect.itemWidth,
       x: r.left,
       y: r.top,
-    })
+    }
     return {
       destroy: resizeConfig.rect.subscribe(rect => {
         const to = isTop ? 'height' : 'width'

@@ -76,7 +76,7 @@
     cleanSubscribers(
       follower.mount('notionMainScroller'),
       config.stage.subscribe(stage => {
-        stages.sharedControls.set(stage)
+        stages.sharedControls.write = stage
       })
     )
   )

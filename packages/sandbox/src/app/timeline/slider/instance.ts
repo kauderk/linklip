@@ -144,10 +144,10 @@ export function createInstance({ rangeContext }: Props) {
       $state.disabled = true
       pending = false
 
-      handle.mod({
+      handle.write = {
         index: paramLink.index,
         step: paramLink.step,
-      })
+      }
 
       moveHandle({
         tick: resetTick(getEntryBy(paramLink)!),
@@ -240,8 +240,7 @@ export function createInstance({ rangeContext }: Props) {
 
   function resetHandle(newHandle: Partial<handle>) {
     // which
-    const _handle = { ...handle.read, ...newHandle }
-    handle.set(_handle)
+    handle.mod(newHandle)
 
     // when
     // @ts-expect-error

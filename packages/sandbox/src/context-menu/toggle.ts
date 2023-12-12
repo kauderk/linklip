@@ -27,7 +27,6 @@ export function createToggleStore<T extends o>(target: T, initial?: b) {
     }, {} as filterStringArray<T>)
   }
   return {
-    set: toggle.set.bind(toggle),
     get read() {
       return toggle.read
     },
@@ -35,7 +34,7 @@ export function createToggleStore<T extends o>(target: T, initial?: b) {
     props,
     tap(value: b | undefined) {
       if (typeof value == 'boolean') {
-        toggle.set(value)
+        toggle.write = value
       }
       return props()
     },

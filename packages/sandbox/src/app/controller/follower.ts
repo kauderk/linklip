@@ -31,9 +31,9 @@ export function follower<F extends Props>(config: Props) {
     const newRect = () => (typeof value === 'function' ? value() : value)
 
     if (typeof value === 'function') {
-      hostStack.fn = () => rect.set(newRect())
+      hostStack.fn = () => (rect.write = newRect())
     } else {
-      rect.set(newRect())
+      rect.write = newRect()
     }
   }
 
@@ -67,10 +67,10 @@ export function follower<F extends Props>(config: Props) {
       return selector
     },
     mode(mode: boolean) {
-      stage.set({
+      stage.write = {
         mode: mode ? 'host' : 'free',
         selector: hostStack.selectorKey,
-      })
+      }
     },
   }
   //#endregion
