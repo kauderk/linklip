@@ -29,14 +29,14 @@ function resizeSubscription(
 
   let _busy = busy || createSvelteSignal(false)
   const debounced = debounce((el: HTMLElement) => {
-    _busy.value = false
+    _busy.write = false
 
     deriveRect(el)
   }, 300)
 
   return cleanSubscribers(
     resize(el, e => {
-      _busy.value = true
+      _busy.write = true
       debounced.fn(e.target as HTMLElement)
     }),
     // fallback.destroy,

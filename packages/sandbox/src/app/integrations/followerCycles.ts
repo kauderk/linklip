@@ -49,7 +49,7 @@ export const _Config = {
 
 export const createConfig = createSerializableStore(_Config)
 
-//**
+/**
 // type inference across packages is not great
 const testTypes = createConfig()
 //     ^?

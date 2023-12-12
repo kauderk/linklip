@@ -37,7 +37,7 @@
   const scrubbing = createSvelteSignal(false)
   // Because the follower hides the overflow
   // make the .progress-bar .scrubber-container visible
-  const nudgeHeight = (nudge = 0) => (scrubbing.value = nudge != 0)
+  const nudgeHeight = (nudge = 0) => (scrubbing.write = nudge != 0)
   const timelineTracker = createHoverTrack({
     mouseenter: () => nudgeHeight(5),
     mouseleave: () => nudgeHeight(),
@@ -51,7 +51,7 @@
   hidden
   use:registerFollower
   on:mouseenter={e => {
-    zIndex.value++
+    zIndex.write++
     e.currentTarget.style.zIndex = zIndex.peek().toString()
   }}
   style:--video-width="{$rect.width}px"

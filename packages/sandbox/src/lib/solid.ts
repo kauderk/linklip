@@ -25,9 +25,10 @@ export interface $Writable<T> {
   update: (fn: T | ((prev: T) => T)) => void
   mod: (newPartial: Partial<T>) => void
   get value(): T
-  set value(newValue: T)
+  set write(newValue: T)
   toSignal: <T>() => ReturnType<typeof createSignal<T>>
   peek: () => T
+  get read(): T
 }
 export const createSvelteSignal = <T>(value: T) => {
   const [signal, setSignal] = createSignal<T>(value)
@@ -59,8 +60,12 @@ export const createSvelteSignal = <T>(value: T) => {
     get value() {
       return signal()
     },
-    set value(newValue) {
-      // @ts-expect-error
+    get read() {
+      return untrack(signal)
+    },
+    // @ts-expect-error
+    set write(newValue) {
+      // @ts-ignore
       setSignal(newValue)
     },
     toSignal: () => [signal, setSignal],

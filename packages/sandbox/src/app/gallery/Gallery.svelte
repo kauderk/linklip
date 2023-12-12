@@ -119,11 +119,11 @@
       currentTarget.classList.toggle('whole', whole)
       requestAnimationFrame(() => {
         if (isTop) {
-          if (resizeConfig.rect.value.height < lookRect.minHeight) {
+          if (resizeConfig.rect.read.height < lookRect.minHeight) {
             resizeConfig.rect.mod({ height: lookRect.minHeight })
           }
         } else {
-          if (resizeConfig.rect.value.width < lookRect.minWidth) {
+          if (resizeConfig.rect.read.width < lookRect.minWidth) {
             resizeConfig.rect.mod({ width: lookRect.minWidth })
           }
         }

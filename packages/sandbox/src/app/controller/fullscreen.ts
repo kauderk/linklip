@@ -6,13 +6,13 @@ export const createFullScreenController = (props: { videoContainer: HTMLElement 
   const fullScreen = Object.assign(createSvelteSignal(false), { toggle, off })
   function off() {
     if (document.fullscreenElement) return
-    fullScreen.value = false
+    fullScreen.write = false
   }
   function toggle() {
     if (document.fullscreenElement == null) {
-      props.videoContainer.requestFullscreen().finally(() => (fullScreen.value = true))
+      props.videoContainer.requestFullscreen().finally(() => (fullScreen.write = true))
     } else {
-      document.exitFullscreen().finally(() => (fullScreen.value = false))
+      document.exitFullscreen().finally(() => (fullScreen.write = false))
     }
   }
   onMount(() =>

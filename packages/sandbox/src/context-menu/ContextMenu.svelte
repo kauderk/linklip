@@ -25,7 +25,7 @@
   }
   function openContextMenu(event: MouseEvent) {
     const target = event.target as HTMLElement
-    open.value = false
+    open.write = false
 
     const contain = GlobalContextMenuSchema.value.container
     if (!!contain && target !== contain && !Array.from(contain.children).includes(target)) {
@@ -33,7 +33,7 @@
     }
 
     event.preventDefault()
-    open.value = true
+    open.write = true
 
     const offsetX = event.offsetX
     const offsetY = event.offsetY
@@ -66,7 +66,7 @@
     }
   }
   function close() {
-    open.value = false
+    open.write = false
   }
 </script>
 

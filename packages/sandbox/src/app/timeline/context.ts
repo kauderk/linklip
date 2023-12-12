@@ -49,7 +49,7 @@ export const player = () => {
     refs,
 
     togglePlay() {
-      paused.value ? refs.video.play() : refs.video.pause()
+      paused.peek() ? refs.video.play() : refs.video.pause()
     },
   }
 }
