@@ -9,7 +9,7 @@ javascript: (async () => {
     script.src = src + '?' + new Date().getTime()
     script.id = id
     script.async = false
-    script.type = 'text/javascript'
+    script.type = 'module'
     document.getElementsByTagName('head')[0].appendChild(script)
     return new Promise(resolve => script.addEventListener('load', () => resolve(script)))
   }

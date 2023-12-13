@@ -14,10 +14,10 @@
       "command": "${input:goOffline}"
     },
     {
-      "label": "build:extension",
+      "label": "build:extension-qwik",
       "type": "npm",
       "path": "packages/integrations/browser-extension",
-      "script": "build:extension",
+      "script": "build:extension-qwik",
       "group": "build"
     },
     {
@@ -29,7 +29,7 @@
     //
     {
       "label": "WatchBuild_LiveServer",
-      "dependsOn": ["goOnline", "build:extension"]
+      "dependsOn": ["goOnline", "build:extension-qwik"]
     },
     {
       "label": "StopBuild_LiveServer",
