@@ -1,73 +1,5 @@
 <svelte:options accessors />
 
-<script lang="ts" context="module">
-  const _Config = {
-    width: 350,
-    minWidth: 300,
-    aspectRatio: [16, 9] as [number, number],
-  }
-  export function createConfig(config?: Partial<typeof _Config>) {
-    const _config = { ..._Config, ...config }
-    const width = _config.width
-    const aspectRatio = aspectRatioFrom([..._config.aspectRatio])
-    const height = width / aspectRatio.value
-    const windowed = typeof window !== 'undefined'
-    const offset = 200
-    return {
-      ..._config,
-      aspectRatio,
-      // prettier-ignore
-      rect: preSignal({
-				x: (windowed ? window.innerWidth  / 2 : offset) - width / 2,
-				y: (windowed ? window.innerHeight / 2 : offset) - height / 2,
-				width,
-				height,
-			}),
-      resizing: preSignal(false),
-      stage: createDefaultStage(),
-      resizeMode: 'inlineBlock' as ResizeConfig['resizeMode'],
-    }
-  }
-  const followerCycle = {
-    update(hostRef, initRect) {
-      return () => {
-        // https://stackoverflow.com/q/39417566
-        const rect = hostRef.getBoundingClientRect()
-        return {
-          x: rect.x,
-          y: rect.y,
-          width: rect.width,
-          height: rect.height,
-        }
-      }
-    },
-    clean(followerRef) {
-      // console.log('styleHost remove offset')
-
-      followerRef?.style.removeProperty('--topOffset')
-      followerRef?.style.removeProperty('--leftOffset')
-    },
-    resize(followerRef, entry, initRect, isFull) {
-      if (isFull) {
-        this.clean!(followerRef)
-        return
-      }
-      const topOffset = entry.boundingClientRect.top - entry.intersectionRect.top
-      const leftOffset = entry.boundingClientRect.left - entry.intersectionRect.left
-      // console.log('styleHost add   offset')
-      followerRef?.style.setProperty('--topOffset', topOffset + 'px')
-      followerRef?.style.setProperty('--leftOffset', leftOffset + 'px')
-
-      return {
-        x: entry.intersectionRect.x,
-        y: entry.intersectionRect.y,
-        width: entry.intersectionRect.width,
-        height: entry.intersectionRect.height,
-      }
-    },
-  } satisfies FollowerCycle
-</script>
-
 <script lang="ts">
   import { preSignal } from '$lib/pre-signal'
   import { useClass } from '$lib/solid/useDirective'
@@ -75,261 +7,50 @@
   import { computed } from '@preact/signals-core'
   import { onMount } from 'svelte'
   import Controls from './Controls.svelte'
-  import { aspectRatioFrom, resize, type ResizeConfig } from './Resize.svelte'
+  import { resize } from './Resize.svelte'
   import SVG from './SVG.svelte'
   import Timeline from './Timeline.svelte'
   import Video from './Video.svelte'
-  import {
-    setFollowerContext,
-    toggleStyle,
-    type FollowerConfig,
-    type FollowerCycle,
-  } from './controller/follower'
+  import { type getFollowerContext, zIndex } from './controller/follower'
   import { createHoverTrack } from './controller/hover-tracker'
-  import { cornerFollowerCycle, observerSelectors } from './follower/corner'
   import { getPlayerContext } from './timeline/context'
   import { setTimelineContext } from './timeline/controller'
-  import { createDefaultStage, getStagesContext } from './follower/store'
-  import { selectorsFuncs } from './follower/selectors'
+  import { createConfig } from './integrations/followerCycles'
 
-  export let baseConfig = createConfig()
-  export let styleHost = (hostRef?: HTMLElement) => {}
-  const stages = getStagesContext()
-
-  let cornerOffset = { y: 70, x: 20 }
-  const originalCornerOffset = { ...cornerOffset }
-  const config = {
-    ...baseConfig,
-    selectors: {
-      notionLink: {
-        selector: {
-          target: `[href*="youtu"]`,
-          pointerTarget: `[href*="youtu"]>span`,
-          outline: `[href*="youtu"]`,
-          pointer: true,
-        },
-        observerSelectors,
-        styleHost() {
-          // getter
-          styleHost()
-        },
-        followerCycle,
-        postBranch() {
-          config.resizeMode = 'inlineBlock'
-        },
-      },
-      theater: {
-        selector: {
-          target: `.theater_content`,
-        },
-        followerCycle: {
-          update: followerCycle.update,
-        },
-        preBranch(payload) {
-          const gallery = document.querySelector('.theater_content')
-          // @ts-expect-error
-          return gallery?.branch(null, payload.selected) // Promise
-        },
-      },
-      sharedControls: {
-        selector: {
-          target: '.shared-controls *',
-          outline: '.shared-controls',
-          pointer: true,
-        },
-        observerSelectors,
-        stageSignal: stages.sharedControls,
-        followerCycle,
-      },
-      notionPage: {
-        selector: {
-          target: '.notion-page-content',
-        },
-        observerSelectors,
-        followerCycle: cornerFollowerCycle({
-          update: r => ({
-            ...r,
-            x: r.x - cornerOffset.x,
-            y: r.y - cornerOffset.y,
-          }),
-          resize: (r, i, e) => ({
-            ...r,
-            width: i.width,
-            x: e.right - i.width - cornerOffset.x,
-            y: r.y - cornerOffset.y,
-          }),
-        }),
-      },
-      notionTopBar: {
-        selector: {
-          target: '.notion-topbar > div',
-        },
-        followerCycle: {
-          update(hostRef) {
-            return () => {
-              // prettier-ignore
-              const startFrom = hostRef.querySelector('div.notranslate.shadow-cursor-breadcrumb')!.getBoundingClientRect()
-              const hostRect = hostRef.getBoundingClientRect()
-              // if the hostRect is at x:0, y: 0, width: 100, height: 30
-              // return at x: 20%, y: 0, width: 60%, height: 30
-              const xPadding = 15
-              const height = hostRect.height
-              const width = height * (16 / 9)
-              return {
-                x: startFrom.right + xPadding,
-                y: hostRect.top,
-                width,
-                height,
-              }
-            }
-          },
-          // TODO: should provide the rect
-          clean(followerRef) {
-            if (!followerRef) return
-            const width = 350 + 1 // TODO: _Config.width
-            config.rect.set({
-              ...config.rect.peek(),
-              width,
-              height: width / config.aspectRatio.value,
-            })
-          },
-        },
-      },
-      notionMainScroller: {
-        selector: {
-          target: '.notion-scroller main',
-        },
-        followerCycle: {
-          update(hostRef, _, signal) {
-            return () => {
-              const crr = signal.peek()
-              const v = selectorsFuncs.notionMainScroller.update(hostRef)
-              return {
-                ...crr,
-                x: v.x + v.width - crr.width - cornerOffset.x,
-                y: window.innerHeight - crr.height - cornerOffset.y,
-              }
-            }
-          },
-        },
-        postBranch() {
-          config.resizeMode = 'inlineBlockReversed'
-        },
-      },
-      leftGallery: {
-        selector: {
-          target: '.left .item.block',
-        },
-        followerCycle,
-        preBranch,
-        observerSelectors: {
-          scroll: '.gallery .left .items',
-          resize: '.gallery .left .items',
-        },
-      },
-      rightGallery: {
-        selector: {
-          target: '.right .item.block',
-        },
-        followerCycle,
-        preBranch,
-        observerSelectors: {
-          scroll: '.gallery .right .items',
-          resize: '.gallery .right .items',
-        },
-      },
-      topGallery: {
-        selector: {
-          target: '.top .item.block',
-        },
-        followerCycle,
-        preBranch,
-        observerSelectors: {
-          scroll: '.gallery .top .items',
-          resize: '.gallery .top .items',
-          window: false,
-        },
-      },
-    },
-    hostLess: {
-      postBranch() {
-        config.resizeMode = 'pictureInPicture'
-
-        follower.styleHost(false)
-
-        // if it was "affected" by the intersection observer
-        // restore its full size when in free mode
-        const old = config.rect.peek()
-        config.rect.set({
-          ...old,
-          height: old.width / config.aspectRatio.value,
-        })
-      },
-    },
-    pictureInPicture: true,
-  } satisfies FollowerConfig
-  function preBranch(payload: { selected: boolean }) {
-    // @ts-expect-error
-    const direction = this.selector.target.split(' ')[0].slice(1)
-    const gallery = document.querySelector('.gallery-' + direction)
-    // @ts-expect-error
-    return gallery?.branch('[href*="youtu"]>span', payload.selected) // Promise
-  }
-
+  export let config = createConfig()
   export let player = getPlayerContext()
   export let timeline = setTimelineContext({ controlsMinHeight: 38 })
-  export let follower = setFollowerContext(config)
-  export let host: Element | undefined | string = undefined
+  export let follower: ReturnType<typeof getFollowerContext>
+  export let mount = () => () => {}
+  export let dragThreshold = (e: MouseEvent) => {}
 
-  const bottom = ['notionPage', 'notionMainScroller']
-  const top = ['notionTopBar']
   onMount(() =>
     cleanSubscribers(
-      follower.mount(host),
+      mount(),
       timeline.context.mount(),
       player.mount(),
       config.resizing.subscribe(resizing => {
         if (!resizing && config.stage.peek().mode != 'free') {
           follower.styleHost()
         }
-      }),
-      stages.sharedControls.subscribe(stage => {
-        const self = config.stage.peek()
-        if (stage.mode != 'host' || self.mode == 'free') return
-
-        // FIXME: no side effects
-        cornerOffset = {
-          ...originalCornerOffset,
-          y: !bottom.includes(stage.selector!) ? 10 : originalCornerOffset.y,
-        }
-        if ([...bottom, ...top].includes(self.selector!)) {
-          follower.trySwitchHost(stage.selector)
-        }
       })
     )
   )
-  $: if (host && config.stage.peek().mode != 'free') {
-    // avoid infinite loop
-    follower.changeHost(host)
-  }
-
-  // ---
 
   const { paused, fullScreen, time } = player
   const { resizeRect } = timeline.context
-  export let { rect } = config
+  const { rect } = config
   const { registerFollower } = follower
 
-  const tiny = computed(() => config.rect.value.width <= 80)
-  $: normal = $fullScreen || $rect.width > config.minWidth
+  const tiny = computed(() => rect.value.width <= 80)
+  // it seems the preact/signal is falling behind some frames... +5 should be enough
+  const normal = computed(() => rect.value.width + 5 > config.minWidth || fullScreen.value)
   let any = '' as any
 
   const scrubbing = preSignal(false)
   // Because the follower hides the overflow
   // make the .progress-bar .scrubber-container visible
-  const nudgeHeight = (nudge = 0) => {
-    scrubbing.value = nudge != 0
-  }
+  const nudgeHeight = (nudge = 0) => (scrubbing.value = nudge != 0)
   const timelineTracker = createHoverTrack({
     mouseenter: () => nudgeHeight(5),
     mouseleave: () => nudgeHeight(),
@@ -342,6 +63,10 @@
   use:useClass={{ resizing: config.resizing, fullScreen }}
   hidden
   use:registerFollower
+  on:mouseenter={e => {
+    zIndex.value++
+    e.currentTarget.style.zIndex = zIndex.peek().toString()
+  }}
   style:--video-width="{$rect.width}px"
   style:--video-aspect-ratio={config.aspectRatio.toString()}
 >
@@ -350,7 +75,7 @@
 		class="followerContent"
 	>
 	<div
-		class:mini={!normal}
+		class:mini={!$normal}
 		class="video-container video-cover context-menu-boundary {any}"
 		class:tiny={$tiny}
 		use:resize={config}
@@ -365,12 +90,12 @@
 		bind:this={player.refs.videoContainer}
 		use:resizeRect
 	>
-		<Video on:mousedown={follower.dragThreshold} />
+		<Video on:mousedown={dragThreshold} />
 
 		{#if normal}
 			<div class="video-controls-container bottom">
 				<!-- <Timeline /> -->
-				<Controls dragThreshold={follower.dragThreshold} />
+				<Controls dragThreshold={dragThreshold} />
 			</div>
 		{:else}
 			<div class="miniPlayer" class:inactive={$progress.scrubbing || $scrubbing || !$paused} class:tiny={$tiny}>

@@ -6,6 +6,7 @@
   import Resize from './Resize.svelte'
   // @ts-ignore
   import Theater from './gallery/Theater.svelte'
+  import { createContextMenu } from 'src/context-menu/fullscreen'
 
   export let ObserveLinks_DeployLinklip = () => Promise.resolve(null as any)
 
@@ -40,7 +41,7 @@
       new Resize({
         target: document.body,
       }).$destroy,
-      // createContextMenu(),
+      createContextMenu(),
       () => document.body.classList.remove('debug')
     )
   })

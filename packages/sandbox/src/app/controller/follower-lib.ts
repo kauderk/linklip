@@ -1,29 +1,40 @@
-import { createContext } from '$lib/create-context'
 import type { PreSignal } from '$lib/pre-signal'
-import type { StageSignal } from '../follower/store'
 import type { follower } from './follower'
-export type FollowerConfig = Omit<Config, 'aspectRatio'>
-export type Config = {
+import { createObservable, preSignal } from '$lib/pre-signal'
+import { createDebouncedListener, createDebouncedObserver } from '$lib/resize'
+import { cleanSubscribers } from '$lib/stores'
+
+export type PlayerConfig = {
   width: number
   aspectRatio: [number, number]
+  rect: PreSignal<Rect>
+  dragging?: PreSignal<boolean>
+  stage?: Stage
+}
+export type Selector =
+  | string
+  | (() => string | undefined)
+  | (() => HTMLElement | undefined)
+  | HTMLElement
+export type FollowerConfig = {
   selectors: Record<
     string,
     {
       selector: {
-        target: string
-        pointerTarget?: string
-        outline?: string
+        target: Selector
+        pointerTarget?: Selector
+        outline?: Selector
         pointer?: boolean
         panicToLast?: boolean
       }
       observerSelectors?: {
-        resize?: string
-        scroll?: string
+        resize?: string | string[]
+        scroll?: string | string[]
         window?: boolean
       }
-      followerCycle: FollowerCycle
+      followerCycle: FollowerCycle | undefined
       styleHost?: (hostRef?: HTMLElement, rect?: Rect) => void
-      stageSignal?: StageSignal
+      constraint?: (hostRef: HTMLElement) => Rect
       preBranch?: (payload: {
         current?: string
         next: string
@@ -35,10 +46,6 @@ export type Config = {
   hostLess?: {
     postBranch?: () => void
   }
-  pictureInPicture?: boolean
-  rect: PreSignal<Rect>
-  dragging?: PreSignal<boolean>
-  stage?: Stage
 }
 export type Stage = PreSignal<{
   mode: 'host' | 'free' | 'theater' | 'panic'
@@ -106,27 +113,31 @@ export function toggleStyle(key: string, value: string, add: boolean, el?: HTMLE
   }
 }
 
-export function animationFrameInterval(callback: () => any) {
+export function animationFrameInterval<Args extends Array<any>>(
+  callback: (on: boolean, ...args: Args) => void,
+  Interval = 0
+) {
   let framing: any, interval: any
   const clearTimers = () => {
     clearInterval(interval)
     cancelAnimationFrame(framing)
-    framing = interval = undefined
   }
 
-  // args type is a mutation observer parameters
-  function debounced(on: boolean, ...args: any) {
+  function switchAnimation(on: boolean, ...args: Args) {
+    clearTimers()
+    const Args = [on, ...args] as any
     if (on && interval === undefined) {
+      callback.apply(null, Args)
       interval = setInterval(() => {
-        framing = requestAnimationFrame(callback)
-      }, 0)
+        framing = requestAnimationFrame(() => callback.apply(null, Args))
+      }, Interval)
     } else {
-      callback()
-      clearTimers()
+      callback.apply(null, Args)
+      interval = undefined
     }
   }
   return {
-    debounced,
+    switchAnimation,
     clearTimers,
   }
 }
@@ -134,3 +145,71 @@ export function animationFrameInterval(callback: () => any) {
 export function camelCaseToTitleCase(camel: string) {
   return camel.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())
 }
+
+const cache = {
+  resize: [] as HTMLElement[],
+  scroll: [] as HTMLElement[],
+}
+
+export function createCachedDomObserver(options?: { cache?: typeof cache }) {
+  const tick = createObservable()
+  const animationFrame = animationFrameInterval(tick.notify, 0)
+  let potentialObservers: (() => void)[] = []
+  let _cache = options?.cache ?? cache
+
+  return {
+    tick,
+    destroy() {
+      animationFrame.clearTimers()
+      cleanSubscribers(...potentialObservers)()
+    },
+    register(observerSelectors?: FollowerConfig['selectors'][string]['observerSelectors']) {
+      if (!observerSelectors) return
+
+      const selectors = observerSelectors ?? {}
+      const switchAnim = animationFrame.switchAnimation
+
+      if (selectors?.window !== false) {
+        tryRegisterListener(
+          'resize',
+          _ => createDebouncedListener(window, 'resize', switchAnim),
+          window as any
+        )
+      }
+
+      annoyingAbstraction('scroll', el => createDebouncedListener(el, 'scroll', switchAnim))
+      annoyingAbstraction('resize', el => createDebouncedObserver(el, switchAnim, 300, true))
+
+      function tryRegisterListener(accessor: A, listenerCb: F, el: HTMLElement) {
+        const elementWasRegistered = _cache?.[accessor].includes(el)
+
+        if (!elementWasRegistered) {
+          const stopListening = listenerCb(el)
+
+          _cache = {
+            ..._cache,
+            // push the element
+            [accessor]: [_cache?.[accessor] ?? [], el].flat(),
+          }
+
+          potentialObservers.push(stopListening)
+        }
+      }
+
+      //#region annoyingAbstraction
+      type F = (el: HTMLElement) => () => void
+      type A = 'resize' | 'scroll'
+      function annoyingAbstraction(accessor: A, listenerCb: F) {
+        ;[selectors[accessor] ?? []].flat().map(s => {
+          const el = document.querySelector(s) as HTMLElement
+          if (!el) return
+
+          tryRegisterListener(accessor, listenerCb, el)
+        })
+      }
+      //#endregion
+    },
+  }
+}
+
+export const zIndex = preSignal(101)

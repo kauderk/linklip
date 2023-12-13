@@ -10,7 +10,7 @@ const dev = process.env.NODE_ENV !== 'production'
 export default defineConfig({
   build: {
     sourcemap: true,
-    minify: true,
+    minify: false,
     lib: {
       entry: 'src/content/index.ts',
       formats: ['umd'],

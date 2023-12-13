@@ -1,0 +1,2004 @@
+[
+  {
+    "html": "<div data-block-id=\"809927ba-f876-4076-b9bb-093659ae4953\" class=\"notion-selectable notion-text-block\" style=\"width: 100%; max-width: 100%; margin-top: 2px; margin-bottom: 1px;\"><div style=\"color: inherit; fill: inherit;\"><div style=\"display: flex;\"><div class=\"notranslate\" spellcheck=\"true\" placeholder=\" \" data-content-editable-leaf=\"true\" contenteditable=\"true\" style=\"max-width: 100%; width: 100%; white-space: pre-wrap; word-break: break-word; caret-color: rgba(255, 255, 255, 0.81); padding: 3px 2px;\"><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"0\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-809927ba-f876-4076-b9bb-093659ae4953--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a></div></div></div></div>",
+    "object": "block",
+    "id": "809927ba-f876-4076-b9bb-093659ae4953",
+    "parent": { "type": "block_id", "block_id": "82e00074-08cc-4088-a61c-3f319f2c5c3f" },
+    "created_time": "2023-12-06T05:13:00.000Z",
+    "last_edited_time": "2023-12-06T12:18:00.000Z",
+    "created_by": { "object": "user", "id": "userId" },
+    "last_edited_by": { "object": "user", "id": "userId" },
+    "has_children": false,
+    "archived": false,
+    "type": "paragraph",
+    "paragraph": {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        }
+      ],
+      "color": "default"
+    },
+    "request_id": "request_id",
+    "fetch_path": "blocks.retrieve"
+  },
+  {
+    "html": "<div data-block-id=\"c818d248-6c82-44a0-9062-dd6180ac6530\" class=\"notion-selectable notion-text-block\" style=\"width: 100%; max-width: 100%; margin-top: 1px; margin-bottom: 1px;\"><div style=\"color: inherit; fill: inherit;\"><div style=\"display: flex;\"><div class=\"notranslate\" spellcheck=\"true\" placeholder=\" \" data-content-editable-leaf=\"true\" style=\"max-width: 100%; width: 100%; white-space: pre-wrap; word-break: break-word; caret-color: rgba(255, 255, 255, 0.81); padding: 3px 2px;\" contenteditable=\"true\"><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"0\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-c818d248-6c82-44a0-9062-dd6180ac6530--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"2\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-c818d248-6c82-44a0-9062-dd6180ac6530--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"4\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-c818d248-6c82-44a0-9062-dd6180ac6530--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a></div></div></div></div>",
+    "object": "block",
+    "id": "c818d248-6c82-44a0-9062-dd6180ac6530",
+    "parent": { "type": "block_id", "block_id": "82e00074-08cc-4088-a61c-3f319f2c5c3f" },
+    "created_time": "2023-12-06T05:11:00.000Z",
+    "last_edited_time": "2023-12-06T05:14:00.000Z",
+    "created_by": { "object": "user", "id": "userId" },
+    "last_edited_by": { "object": "user", "id": "userId" },
+    "has_children": false,
+    "archived": false,
+    "type": "paragraph",
+    "paragraph": {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        }
+      ],
+      "color": "default"
+    },
+    "request_id": "request_id",
+    "fetch_path": "blocks.retrieve"
+  },
+  {
+    "html": "<div data-block-id=\"fb2c15f8-f050-4e28-9980-bab65ba608be\" class=\"notion-selectable notion-text-block\" style=\"width: 100%; max-width: 100%; margin-top: 1px; margin-bottom: 1px;\"><div style=\"color: inherit; fill: inherit;\"><div style=\"display: flex;\"><div class=\"notranslate\" spellcheck=\"true\" placeholder=\" \" data-content-editable-leaf=\"true\" style=\"max-width: 100%; width: 100%; white-space: pre-wrap; word-break: break-word; caret-color: rgba(255, 255, 255, 0.81); padding: 3px 2px;\" contenteditable=\"true\">text <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"1\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-fb2c15f8-f050-4e28-9980-bab65ba608be--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> text <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"3\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-fb2c15f8-f050-4e28-9980-bab65ba608be--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"5\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-fb2c15f8-f050-4e28-9980-bab65ba608be--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> text</div></div></div></div>",
+    "object": "block",
+    "id": "fb2c15f8-f050-4e28-9980-bab65ba608be",
+    "parent": { "type": "block_id", "block_id": "82e00074-08cc-4088-a61c-3f319f2c5c3f" },
+    "created_time": "2023-12-06T05:11:00.000Z",
+    "last_edited_time": "2023-12-06T05:14:00.000Z",
+    "created_by": { "object": "user", "id": "userId" },
+    "last_edited_by": { "object": "user", "id": "userId" },
+    "has_children": false,
+    "archived": false,
+    "type": "paragraph",
+    "paragraph": {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": { "content": "text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " text",
+          "href": null
+        }
+      ],
+      "color": "default"
+    },
+    "request_id": "request_id",
+    "fetch_path": "blocks.retrieve"
+  },
+  {
+    "html": "<div data-block-id=\"afc3d9ef-2858-4563-9437-035dfa766e5d\" class=\"notion-selectable notion-text-block\" style=\"width: 100%; max-width: 100%; margin-top: 1px; margin-bottom: 1px;\"><div style=\"color: inherit; fill: inherit;\"><div style=\"display: flex;\"><div class=\"notranslate\" spellcheck=\"true\" placeholder=\" \" data-content-editable-leaf=\"true\" style=\"max-width: 100%; width: 100%; white-space: pre-wrap; word-break: break-word; caret-color: rgba(255, 255, 255, 0.81); padding: 3px 2px;\" contenteditable=\"true\">text <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"1\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-afc3d9ef-2858-4563-9437-035dfa766e5d--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> text <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"3\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-afc3d9ef-2858-4563-9437-035dfa766e5d--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"5\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-afc3d9ef-2858-4563-9437-035dfa766e5d--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> text\nline break text <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"7\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-afc3d9ef-2858-4563-9437-035dfa766e5d--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> text <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"9\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-afc3d9ef-2858-4563-9437-035dfa766e5d--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"11\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-afc3d9ef-2858-4563-9437-035dfa766e5d--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> text</div></div></div></div>",
+    "object": "block",
+    "id": "afc3d9ef-2858-4563-9437-035dfa766e5d",
+    "parent": { "type": "block_id", "block_id": "82e00074-08cc-4088-a61c-3f319f2c5c3f" },
+    "created_time": "2023-12-06T05:11:00.000Z",
+    "last_edited_time": "2023-12-06T05:14:00.000Z",
+    "created_by": { "object": "user", "id": "userId" },
+    "last_edited_by": { "object": "user", "id": "userId" },
+    "has_children": false,
+    "archived": false,
+    "type": "paragraph",
+    "paragraph": {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": { "content": "text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text\nline break text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " text\nline break text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " text",
+          "href": null
+        }
+      ],
+      "color": "default"
+    },
+    "request_id": "request_id",
+    "fetch_path": "blocks.retrieve"
+  },
+  {
+    "html": "<div data-block-id=\"a62b84fa-dc80-4423-a6e1-144be1823ccc\" class=\"notion-selectable notion-text-block\" style=\"width: 100%; max-width: 100%; margin-top: 1px; margin-bottom: 1px;\"><div style=\"color: inherit; fill: inherit;\"><div style=\"display: flex;\"><div class=\"notranslate\" spellcheck=\"true\" placeholder=\" \" data-content-editable-leaf=\"true\" style=\"max-width: 100%; width: 100%; white-space: pre-wrap; word-break: break-word; caret-color: rgba(255, 255, 255, 0.81); padding: 3px 2px;\" contenteditable=\"true\">paragraph <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"1\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-a62b84fa-dc80-4423-a6e1-144be1823ccc--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a>\nparagraph line break\nparagraph <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"3\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-a62b84fa-dc80-4423-a6e1-144be1823ccc--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a>\nparagraph line break <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"5\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-a62b84fa-dc80-4423-a6e1-144be1823ccc--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"7\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-a62b84fa-dc80-4423-a6e1-144be1823ccc--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"9\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-a62b84fa-dc80-4423-a6e1-144be1823ccc--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a>\nparagraph line break <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"11\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-a62b84fa-dc80-4423-a6e1-144be1823ccc--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a></div></div></div></div>",
+    "object": "block",
+    "id": "a62b84fa-dc80-4423-a6e1-144be1823ccc",
+    "parent": { "type": "block_id", "block_id": "82e00074-08cc-4088-a61c-3f319f2c5c3f" },
+    "created_time": "2023-12-06T05:03:00.000Z",
+    "last_edited_time": "2023-12-06T05:14:00.000Z",
+    "created_by": { "object": "user", "id": "userId" },
+    "last_edited_by": { "object": "user", "id": "userId" },
+    "has_children": false,
+    "archived": false,
+    "type": "paragraph",
+    "paragraph": {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": { "content": "paragraph ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "paragraph ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line break\nparagraph ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line break\nparagraph ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line break ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line break ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line break ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line break ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        }
+      ],
+      "color": "default"
+    },
+    "request_id": "request_id",
+    "fetch_path": "blocks.retrieve"
+  },
+  {
+    "html": "<div data-block-id=\"409e96d0-5bdf-4d8a-b756-afe81b6ba1e6\" class=\"notion-selectable notion-text-block\" style=\"width: 100%; max-width: 100%; margin-top: 1px; margin-bottom: 1px;\"><div style=\"color: inherit; fill: inherit;\"><div style=\"display: flex;\"><div class=\"notranslate\" spellcheck=\"true\" placeholder=\" \" data-content-editable-leaf=\"true\" style=\"max-width: 100%; width: 100%; white-space: pre-wrap; word-break: break-word; caret-color: rgba(255, 255, 255, 0.81); padding: 3px 2px;\" contenteditable=\"true\">paragrap<span style=\"font-weight:600\" data-token-index=\"1\" class=\"notion-enable-hover\">h </span><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;font-weight:600;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"2\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-409e96d0-5bdf-4d8a-b756-afe81b6ba1e6--1275260481\">https://youtu.be/h</span></a><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"3\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-409e96d0-5bdf-4d8a-b756-afe81b6ba1e6--1275260481\">OfRN0KihOU?t=100&amp;end=200</span></a>\nparagraph line<span style=\"text-decoration:line-through\" data-token-index=\"5\" class=\"notion-enable-hover\"> break\nparagraph </span><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:line-through\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"6\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-409e96d0-5bdf-4d8a-b756-afe81b6ba1e6--1275260481\">https://you</span></a><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"7\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-409e96d0-5bdf-4d8a-b756-afe81b6ba1e6--1275260481\">tu.be/hOfRN0KihOU?t=100&amp;end=200</span></a>\nparagraph line bre<span style=\"background:rgba(255,212,0,.14);border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2px\" data-token-index=\"9\" class=\"discussion-level-1 discussion-id-729e4f24-570f-4930-b717-1251a676365b notion-enable-hover\">ak </span><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;background:rgba(255,212,0,.14);border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2px;text-decoration:inherit\" class=\"discussion-level-1 discussion-id-729e4f24-570f-4930-b717-1251a676365b notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"10\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-409e96d0-5bdf-4d8a-b756-afe81b6ba1e6--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a><span style=\"background:rgba(255,212,0,.14);border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2px\" data-token-index=\"11\" class=\"discussion-level-1 discussion-id-729e4f24-570f-4930-b717-1251a676365b notion-enable-hover\"> </span><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;background:rgba(255,212,0,.14);border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2px;text-decoration:inherit\" class=\"discussion-level-1 discussion-id-729e4f24-570f-4930-b717-1251a676365b notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"12\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-409e96d0-5bdf-4d8a-b756-afe81b6ba1e6--1275260481\">https://youtu.be/hOfRN0Ki</span></a><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"13\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-409e96d0-5bdf-4d8a-b756-afe81b6ba1e6--1275260481\">hOU?t=100&amp;end=200</span></a> <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"15\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-409e96d0-5bdf-4d8a-b756-afe81b6ba1e6--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a>\nparagraph line break <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;font-style:italic;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"17\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-409e96d0-5bdf-4d8a-b756-afe81b6ba1e6--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a></div><div contenteditable=\"false\" class=\"pseudoSelection\" data-content-editable-void=\"true\" style=\"user-select: none; --pseudoSelection--background: transparent; width: 0px; height: 0px;\"><div role=\"button\" tabindex=\"0\" style=\"user-select: none; transition: background 20ms ease-in 0s; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 4px; height: 24px; padding: 0px 6px; position: relative; align-self: flex-start; margin-left: 4px; margin-top: 3px;\"><svg role=\"graphics-symbol\" viewBox=\"0 0 16 16\" class=\"speechBubble\" style=\"width: 14px; height: 14px; display: block; fill: rgba(255, 255, 255, 0.443); flex-shrink: 0;\"><path d=\"M4.32 15.424c.39 0 .677-.192 1.149-.609l2.344-2.064h4.116c2.057 0 3.213-1.19 3.213-3.22V4.22c0-2.03-1.156-3.22-3.213-3.22H3.213C1.163 1 0 2.19 0 4.22V9.53c0 2.037 1.196 3.22 3.165 3.22h.28v1.675c0 .608.322.998.875.998zm.342-1.531v-1.949c0-.403-.178-.56-.56-.56H3.26c-1.285 0-1.9-.65-1.9-1.894V4.26c0-1.243.615-1.893 1.9-1.893h8.627c1.278 0 1.893.65 1.893 1.894v5.23c0 1.243-.615 1.893-1.893 1.893h-4.15c-.417 0-.622.068-.909.369l-2.167 2.14z\"></path></svg><div style=\"font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255, 255, 255, 0.443); margin-left: 4px;\"><span style=\"margin-left: 2px; color: rgba(255, 255, 255, 0.282); font-weight: 600;\">1</span></div></div></div></div></div></div>",
+    "object": "block",
+    "id": "409e96d0-5bdf-4d8a-b756-afe81b6ba1e6",
+    "parent": { "type": "block_id", "block_id": "82e00074-08cc-4088-a61c-3f319f2c5c3f" },
+    "created_time": "2023-12-06T05:04:00.000Z",
+    "last_edited_time": "2023-12-06T05:14:00.000Z",
+    "created_by": { "object": "user", "id": "userId" },
+    "last_edited_by": { "object": "user", "id": "userId" },
+    "has_children": false,
+    "archived": false,
+    "type": "paragraph",
+    "paragraph": {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": { "content": "paragrap", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "paragrap",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": { "content": "h ", "link": null },
+          "annotations": {
+            "bold": true,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "h ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/h",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": true,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/h",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "OfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "OfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": { "content": " break\nparagraph ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": true,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " break\nparagraph ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://you",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": true,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://you",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "tu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "tu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line bre", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line bre",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": { "content": "ak ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "ak ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0Ki",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0Ki",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "hOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "hOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line break ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line break ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        }
+      ],
+      "color": "default"
+    },
+    "request_id": "request_id",
+    "fetch_path": "blocks.retrieve"
+  },
+  {
+    "html": "<div data-block-id=\"91782b3e-719f-4a0a-bfc0-bd3e7d25548a\" class=\"notion-selectable notion-text-block\" style=\"width: 100%; max-width: 100%; margin-top: 1px; margin-bottom: 1px;\"><div style=\"color: inherit; fill: inherit;\"><div style=\"display: flex;\"><div class=\"notranslate\" spellcheck=\"true\" placeholder=\" \" data-content-editable-leaf=\"true\" style=\"max-width: 100%; width: 100%; white-space: pre-wrap; word-break: break-word; caret-color: rgba(255, 255, 255, 0.81); padding: 3px 2px;\" contenteditable=\"true\">paragraph <span data-token-index=\"1\" contenteditable=\"false\" class=\"notion-text-equation-token\" style=\"user-select:all;-webkit-user-select:all;-moz-user-select:all;display:inline-flex;align-items:center;vertical-align:top;padding:0.2em 0.4em;border-radius:4px;background:rgba(135,131,120,.15);color:#EB5757;cursor:pointer;word-wrap:break-word;border-bottom:0.05em solid;text-decoration:line-through;font-family:&quot;SFMono-Regular&quot;, Menlo, Consolas, &quot;PT Mono&quot;, &quot;Liberation Mono&quot;, Courier, monospace;line-height:normal;font-size:85%;font-style:italic;font-weight:600\"><svg role=\"graphics-symbol\" viewBox=\"0 0 30 30\" style=\"width:16px;height:16px;display:inline-block;fill:currentColor;flex-shrink:0;margin-right:4px\" class=\"equation\"><path d=\"M6.04883 27.3232C7.24219 27.3232 7.86426 26.4854 8.20703 25.3936L13.9834 6.79492H27.5039C28.2275 6.79492 28.7227 6.35059 28.7227 5.65234C28.7227 4.97949 28.2275 4.53516 27.5039 4.53516H13.958C12.6631 4.53516 12.0791 5.01758 11.7363 6.13477L6.18848 24.3525H5.97266L3.58594 15.9355C3.38281 15.2373 3.00195 14.9072 2.40527 14.9072C1.73242 14.9072 1.2373 15.3896 1.2373 16.0117C1.2373 16.2656 1.30078 16.4941 1.35156 16.6846L4.04297 25.5332C4.36035 26.5615 4.93164 27.3232 6.04883 27.3232ZM16.3955 24.7334C16.8652 24.7334 17.1064 24.5684 17.4619 24.0732L20.4707 19.8203H20.5215L23.5049 24.0732C23.873 24.5684 24.1143 24.7334 24.5713 24.7334C25.2061 24.7334 25.6758 24.3018 25.6758 23.7051C25.6758 23.4258 25.6123 23.1973 25.4219 22.9561L21.9307 18.208L25.4473 13.4346C25.6377 13.168 25.7139 12.9395 25.7139 12.6855C25.7139 12.127 25.2568 11.6953 24.6475 11.6953C24.2031 11.6953 23.9365 11.8477 23.6064 12.3174L20.7246 16.5957H20.6611L17.6904 12.3047C17.373 11.8477 17.0938 11.6953 16.624 11.6953C16.0146 11.6953 15.5068 12.165 15.5068 12.7363C15.5068 13.0537 15.583 13.2568 15.8115 13.5488L19.1504 18.1445L15.6084 23.0322C15.418 23.2861 15.3672 23.4639 15.3672 23.7559C15.3672 24.3018 15.8115 24.7334 16.3955 24.7334Z\"></path></svg>Invalid equation</span>\nparagraph line break\nparagraph <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:rgba(186, 133, 111, 1);word-wrap:break-word;border-bottom:0.05em solid;text-decoration:line-through;font-family:&quot;SFMono-Regular&quot;, Menlo, Consolas, &quot;PT Mono&quot;, &quot;Liberation Mono&quot;, Courier, monospace;line-height:normal;background:rgba(135,131,120,.15);border-radius:4px;font-size:85%;padding:0.2em 0.4em;font-style:italic;font-weight:600;fill:rgba(186, 133, 111, 1)\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"3\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-91782b3e-719f-4a0a-bfc0-bd3e7d25548a--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a><span style=\"color:rgba(186, 133, 111, 1);border-bottom:0.05em solid;word-wrap:break-word;text-decoration:line-through;font-style:italic;font-weight:600;fill:rgba(186, 133, 111, 1)\" data-token-index=\"4\" class=\"notion-enable-hover\"> </span><span style=\"color:rgba(186, 133, 111, 1);border-bottom:0.05em solid;word-wrap:break-word;text-decoration:line-through;font-style:italic;font-weight:600;fill:rgba(186, 133, 111, 1)\" contenteditable=\"false\" class=\"notion-text-mention-token notion-enable-hover\" data-token-index=\"5\"><span></span><span><span style=\"opacity:0.6\">@</span>Joakin </span><span></span></span><span style=\"color:rgba(186, 133, 111, 1);border-bottom:0.05em solid;word-wrap:break-word;text-decoration:line-through;font-style:italic;font-weight:600;fill:rgba(186, 133, 111, 1)\" data-token-index=\"6\" class=\"notion-enable-hover\"> </span>\nparagraph line break <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:line-through;font-style:italic\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"8\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-91782b3e-719f-4a0a-bfc0-bd3e7d25548a--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"10\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-91782b3e-719f-4a0a-bfc0-bd3e7d25548a--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:line-through;font-weight:600\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"12\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-91782b3e-719f-4a0a-bfc0-bd3e7d25548a--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a>\nparagraph line break <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;border-bottom:2px solid rgb(255, 212, 0);text-decoration:line-through;background:rgba(255,212,0,.14);padding-bottom:2px\" class=\"discussion-level-1 discussion-id-c1f84dd0-e851-4873-abce-9fdefb0d3fb3 notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"14\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-91782b3e-719f-4a0a-bfc0-bd3e7d25548a--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a></div><div contenteditable=\"false\" class=\"pseudoSelection\" data-content-editable-void=\"true\" style=\"user-select: none; --pseudoSelection--background: transparent; width: 0px; height: 0px;\"><div role=\"button\" tabindex=\"0\" style=\"user-select: none; transition: background 20ms ease-in 0s; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 4px; height: 24px; padding: 0px 6px; position: relative; align-self: flex-start; margin-left: 4px; margin-top: 3px;\"><svg role=\"graphics-symbol\" viewBox=\"0 0 16 16\" class=\"speechBubble\" style=\"width: 14px; height: 14px; display: block; fill: rgba(255, 255, 255, 0.443); flex-shrink: 0;\"><path d=\"M4.32 15.424c.39 0 .677-.192 1.149-.609l2.344-2.064h4.116c2.057 0 3.213-1.19 3.213-3.22V4.22c0-2.03-1.156-3.22-3.213-3.22H3.213C1.163 1 0 2.19 0 4.22V9.53c0 2.037 1.196 3.22 3.165 3.22h.28v1.675c0 .608.322.998.875.998zm.342-1.531v-1.949c0-.403-.178-.56-.56-.56H3.26c-1.285 0-1.9-.65-1.9-1.894V4.26c0-1.243.615-1.893 1.9-1.893h8.627c1.278 0 1.893.65 1.893 1.894v5.23c0 1.243-.615 1.893-1.893 1.893h-4.15c-.417 0-.622.068-.909.369l-2.167 2.14z\"></path></svg><div style=\"font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255, 255, 255, 0.443); margin-left: 4px;\"><span style=\"margin-left: 2px; color: rgba(255, 255, 255, 0.282); font-weight: 600;\">1</span></div></div></div></div></div></div>",
+    "object": "block",
+    "id": "91782b3e-719f-4a0a-bfc0-bd3e7d25548a",
+    "parent": { "type": "block_id", "block_id": "82e00074-08cc-4088-a61c-3f319f2c5c3f" },
+    "created_time": "2023-12-06T05:06:00.000Z",
+    "last_edited_time": "2023-12-06T05:14:00.000Z",
+    "created_by": { "object": "user", "id": "userId" },
+    "last_edited_by": { "object": "user", "id": "userId" },
+    "has_children": false,
+    "archived": false,
+    "type": "paragraph",
+    "paragraph": {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": { "content": "paragraph ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "paragraph ",
+          "href": null
+        },
+        {
+          "type": "equation",
+          "equation": { "expression": "https://youtu.be/hOfRN0KihOU?t=100&end=200" },
+          "annotations": {
+            "bold": true,
+            "italic": true,
+            "strikethrough": true,
+            "underline": true,
+            "code": true,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line break\nparagraph ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line break\nparagraph ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": true,
+            "italic": true,
+            "strikethrough": true,
+            "underline": true,
+            "code": true,
+            "color": "brown"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": true,
+            "italic": true,
+            "strikethrough": true,
+            "underline": true,
+            "code": false,
+            "color": "brown"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "mention",
+          "mention": {
+            "type": "user",
+            "user": {
+              "object": "user",
+              "id": "userId",
+              "name": "Joakin ",
+              "avatar_url": null,
+              "type": "person",
+              "person": { "email": "estudio1kau@gmail.com" }
+            }
+          },
+          "annotations": {
+            "bold": true,
+            "italic": true,
+            "strikethrough": true,
+            "underline": true,
+            "code": false,
+            "color": "brown"
+          },
+          "plain_text": "@Joakin ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": true,
+            "italic": true,
+            "strikethrough": true,
+            "underline": true,
+            "code": false,
+            "color": "brown"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line break ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line break ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": true,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": true,
+            "italic": false,
+            "strikethrough": true,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line break ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line break ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": true,
+            "underline": true,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        }
+      ],
+      "color": "default"
+    },
+    "request_id": "request_id",
+    "fetch_path": "blocks.retrieve"
+  },
+  {
+    "html": "<div data-block-id=\"e94ffdb6-667e-47e6-8cca-f14834dca701\" class=\"notion-selectable notion-text-block\" style=\"width: 100%; max-width: 100%; margin-top: 1px; margin-bottom: 1px;\"><div style=\"color: inherit; fill: inherit;\"><div style=\"display: flex;\"><div class=\"notranslate\" spellcheck=\"true\" placeholder=\" \" data-content-editable-leaf=\"true\" style=\"max-width: 100%; width: 100%; white-space: pre-wrap; word-break: break-word; caret-color: rgba(255, 255, 255, 0.81); padding: 3px 2px;\" contenteditable=\"true\">paragraph <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"1\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-e94ffdb6-667e-47e6-8cca-f14834dca701--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> text <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"3\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-e94ffdb6-667e-47e6-8cca-f14834dca701--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> text <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"5\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-e94ffdb6-667e-47e6-8cca-f14834dca701--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a>\nparagraph line break\nparagraph <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"7\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-e94ffdb6-667e-47e6-8cca-f14834dca701--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> text <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"9\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-e94ffdb6-667e-47e6-8cca-f14834dca701--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a>\nparagraph line break <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"11\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-e94ffdb6-667e-47e6-8cca-f14834dca701--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> text <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"13\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-e94ffdb6-667e-47e6-8cca-f14834dca701--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"15\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-e94ffdb6-667e-47e6-8cca-f14834dca701--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a>\nparagraph line break <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"17\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-e94ffdb6-667e-47e6-8cca-f14834dca701--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a> text <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"19\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-e94ffdb6-667e-47e6-8cca-f14834dca701--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a></div></div></div></div>",
+    "object": "block",
+    "id": "e94ffdb6-667e-47e6-8cca-f14834dca701",
+    "parent": { "type": "block_id", "block_id": "82e00074-08cc-4088-a61c-3f319f2c5c3f" },
+    "created_time": "2023-12-06T05:08:00.000Z",
+    "last_edited_time": "2023-12-06T12:20:00.000Z",
+    "created_by": { "object": "user", "id": "userId" },
+    "last_edited_by": { "object": "user", "id": "userId" },
+    "has_children": false,
+    "archived": false,
+    "type": "paragraph",
+    "paragraph": {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": { "content": "paragraph ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "paragraph ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line break\nparagraph ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line break\nparagraph ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line break ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line break ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line break ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line break ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        }
+      ],
+      "color": "default"
+    },
+    "request_id": "request_id",
+    "fetch_path": "blocks.retrieve"
+  },
+  {
+    "html": "<div data-block-id=\"6751e85f-4a96-405b-b80d-f61b77072e62\" class=\"notion-selectable notion-text-block\" style=\"width: 100%; max-width: 100%; margin-top: 1px; margin-bottom: 0px;\"><div style=\"color: inherit; fill: inherit;\"><div style=\"display: flex;\"><div class=\"notranslate\" spellcheck=\"true\" placeholder=\" \" data-content-editable-leaf=\"true\" style=\"max-width: 100%; width: 100%; white-space: pre-wrap; word-break: break-word; caret-color: rgba(255, 255, 255, 0.81); padding: 3px 2px;\" contenteditable=\"true\">\nparagraph <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"1\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">https://youtu.be/hOfRN0KihOU</span></a><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:rgba(202, 152, 73, 1);word-wrap:break-word;border-bottom:0.05em solid;font-style:italic;fill:rgba(202, 152, 73, 1);text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"2\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">?t=100&amp;end=200</span></a><span style=\"color:rgba(202, 152, 73, 1);border-bottom:0.05em solid;word-wrap:break-word;font-style:italic;fill:rgba(202, 152, 73, 1)\" data-token-index=\"3\" class=\"notion-enable-hover\"> text </span><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:rgba(202, 152, 73, 1);word-wrap:break-word;border-bottom:0.05em solid;font-style:italic;fill:rgba(202, 152, 73, 1);text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"4\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a><span style=\"color:rgba(202, 152, 73, 1);border-bottom:0.05em solid;word-wrap:break-word;font-style:italic;fill:rgba(202, 152, 73, 1)\" data-token-index=\"5\" class=\"notion-enable-hover\"> text </span><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:rgba(202, 152, 73, 1);word-wrap:break-word;border-bottom:0.05em solid;font-style:italic;fill:rgba(202, 152, 73, 1);text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"6\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a><span style=\"color:rgba(202, 152, 73, 1);border-bottom:0.05em solid;word-wrap:break-word;font-style:italic;fill:rgba(202, 152, 73, 1)\" data-token-index=\"7\" class=\"notion-enable-hover\">\nparagraph line break</span><span style=\"text-decoration:line-through;font-style:italic;background:rgba(255,212,0,.14);border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2px\" data-token-index=\"8\" class=\"discussion-level-1 discussion-id-e1ec055d-b3fb-47f9-a5e4-fbc8262b6a0c notion-enable-hover\">\nparagraph </span><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:line-through;font-style:italic;background:rgba(255,212,0,.14);border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2px\" class=\"discussion-level-1 discussion-id-e1ec055d-b3fb-47f9-a5e4-fbc8262b6a0c notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"9\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a><span style=\"text-decoration:line-through;font-style:italic;background:rgba(255,212,0,.14);border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2px\" data-token-index=\"10\" class=\"discussion-level-1 discussion-id-e1ec055d-b3fb-47f9-a5e4-fbc8262b6a0c notion-enable-hover\"> text </span><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:line-through;font-style:italic;background:rgba(255,212,0,.14);border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2px\" class=\"discussion-level-1 discussion-id-e1ec055d-b3fb-47f9-a5e4-fbc8262b6a0c notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"11\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a><span style=\"text-decoration:line-through;font-style:italic;background:rgba(255,212,0,.14);border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2px\" data-token-index=\"12\" class=\"discussion-level-1 discussion-id-e1ec055d-b3fb-47f9-a5e4-fbc8262b6a0c notion-enable-hover\">\nparagraph line break </span><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:line-through;font-style:italic;background:rgba(255,212,0,.14);border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2px\" class=\"discussion-level-1 discussion-id-e1ec055d-b3fb-47f9-a5e4-fbc8262b6a0c notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"13\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">https://youtu.be/hOfRN0Kih</span></a><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;background:rgba(255,212,0,.14);border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2px;text-decoration:inherit\" class=\"discussion-level-1 discussion-id-e1ec055d-b3fb-47f9-a5e4-fbc8262b6a0c notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"14\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">OU?t=100&amp;e</span></a><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:rgba(94, 135, 201, 1);word-wrap:break-word;font-family:&quot;SFMono-Regular&quot;, Menlo, Consolas, &quot;PT Mono&quot;, &quot;Liberation Mono&quot;, Courier, monospace;line-height:normal;background:rgba(255,212,0,.14);border-radius:0;font-size:85%;padding:0.2em 0.4em;border-top-right-radius:0;border-bottom-right-radius:0;padding-right:0;font-style:italic;border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2.5px;fill:rgba(94, 135, 201, 1);text-decoration:inherit\" class=\"discussion-level-1 discussion-id-e1ec055d-b3fb-47f9-a5e4-fbc8262b6a0c notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"15\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">nd=200</span></a><span style=\"font-family:&quot;SFMono-Regular&quot;, Menlo, Consolas, &quot;PT Mono&quot;, &quot;Liberation Mono&quot;, Courier, monospace;line-height:normal;background:rgba(255,212,0,.14);color:rgba(94, 135, 201, 1);border-radius:0;font-size:85%;padding:0.2em 0.4em;border-top-left-radius:0;border-bottom-left-radius:0;padding-left:0;font-style:italic;border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2.5px;fill:rgba(94, 135, 201, 1)\" data-token-index=\"16\" spellcheck=\"false\" class=\"discussion-level-1 discussion-id-e1ec055d-b3fb-47f9-a5e4-fbc8262b6a0c notion-enable-hover\"> text </span><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;background:rgba(255,212,0,.14);border-bottom:2px solid rgb(255, 212, 0);padding-bottom:2px;text-decoration:inherit\" class=\"discussion-level-1 discussion-id-e1ec055d-b3fb-47f9-a5e4-fbc8262b6a0c notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"17\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">https://youtu.be/hOfRN0KihOU?t=1</span></a><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"18\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">00&amp;end=200</span></a> <a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:inherit;word-wrap:break-word;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"20\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">htt</span></a><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:#EB5757;word-wrap:break-word;font-family:&quot;SFMono-Regular&quot;, Menlo, Consolas, &quot;PT Mono&quot;, &quot;Liberation Mono&quot;, Courier, monospace;line-height:normal;background:rgba(135,131,120,.15);border-radius:4px;font-size:85%;padding:0.2em 0.4em;border-top-right-radius:0;border-bottom-right-radius:0;padding-right:0;font-weight:600;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"21\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">ps://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a><span style=\"font-family:&quot;SFMono-Regular&quot;, Menlo, Consolas, &quot;PT Mono&quot;, &quot;Liberation Mono&quot;, Courier, monospace;line-height:normal;background:rgba(135,131,120,.15);color:#EB5757;border-radius:0;font-size:85%;padding:0.2em 0.4em;padding-left:0;padding-right:0;font-weight:600\" data-token-index=\"22\" spellcheck=\"false\" class=\"notion-enable-hover\">\nparagraph line break </span><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:#EB5757;word-wrap:break-word;font-family:&quot;SFMono-Regular&quot;, Menlo, Consolas, &quot;PT Mono&quot;, &quot;Liberation Mono&quot;, Courier, monospace;line-height:normal;background:rgba(135,131,120,.15);border-radius:0;font-size:85%;padding:0.2em 0.4em;padding-left:0;padding-right:0;font-weight:600;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"23\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a><span style=\"font-family:&quot;SFMono-Regular&quot;, Menlo, Consolas, &quot;PT Mono&quot;, &quot;Liberation Mono&quot;, Courier, monospace;line-height:normal;background:rgba(135,131,120,.15);color:#EB5757;border-radius:0;font-size:85%;padding:0.2em 0.4em;padding-left:0;padding-right:0;font-weight:600\" data-token-index=\"24\" spellcheck=\"false\" class=\"notion-enable-hover\"> text </span><a href=\"https://youtu.be/hOfRN0KihOU?t=100&amp;end=200\" style=\"cursor:pointer;color:#EB5757;word-wrap:break-word;font-family:&quot;SFMono-Regular&quot;, Menlo, Consolas, &quot;PT Mono&quot;, &quot;Liberation Mono&quot;, Courier, monospace;line-height:normal;background:rgba(135,131,120,.15);border-radius:4px;font-size:85%;padding:0.2em 0.4em;border-top-left-radius:0;border-bottom-left-radius:0;padding-left:0;font-weight:600;text-decoration:inherit\" class=\"notion-link-token notion-focusable-token notion-enable-hover\" rel=\"noopener noreferrer\" data-token-index=\"25\" tabindex=\"0\"><span style=\"border-bottom:0.05em solid;border-color:rgba(255, 255, 255, 0.283);opacity:0.7\" class=\"link-annotation-6751e85f-4a96-405b-b80d-f61b77072e62--1275260481\">https://youtu.be/hOfRN0KihOU?t=100&amp;end=200</span></a></div><div contenteditable=\"false\" class=\"pseudoSelection\" data-content-editable-void=\"true\" style=\"user-select: none; --pseudoSelection--background: transparent; width: 0px; height: 0px;\"><div role=\"button\" tabindex=\"0\" style=\"user-select: none; transition: background 20ms ease-in 0s; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 4px; height: 24px; padding: 0px 6px; position: relative; align-self: flex-start; margin-left: 4px; margin-top: 3px;\"><svg role=\"graphics-symbol\" viewBox=\"0 0 16 16\" class=\"speechBubble\" style=\"width: 14px; height: 14px; display: block; fill: rgba(255, 255, 255, 0.443); flex-shrink: 0;\"><path d=\"M4.32 15.424c.39 0 .677-.192 1.149-.609l2.344-2.064h4.116c2.057 0 3.213-1.19 3.213-3.22V4.22c0-2.03-1.156-3.22-3.213-3.22H3.213C1.163 1 0 2.19 0 4.22V9.53c0 2.037 1.196 3.22 3.165 3.22h.28v1.675c0 .608.322.998.875.998zm.342-1.531v-1.949c0-.403-.178-.56-.56-.56H3.26c-1.285 0-1.9-.65-1.9-1.894V4.26c0-1.243.615-1.893 1.9-1.893h8.627c1.278 0 1.893.65 1.893 1.894v5.23c0 1.243-.615 1.893-1.893 1.893h-4.15c-.417 0-.622.068-.909.369l-2.167 2.14z\"></path></svg><div style=\"font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255, 255, 255, 0.443); margin-left: 4px;\"><span style=\"margin-left: 2px; color: rgba(255, 255, 255, 0.282); font-weight: 600;\">1</span></div></div></div></div></div></div>",
+    "object": "block",
+    "id": "6751e85f-4a96-405b-b80d-f61b77072e62",
+    "parent": { "type": "block_id", "block_id": "82e00074-08cc-4088-a61c-3f319f2c5c3f" },
+    "created_time": "2023-12-06T12:20:00.000Z",
+    "last_edited_time": "2023-12-06T12:20:00.000Z",
+    "created_by": { "object": "user", "id": "userId" },
+    "last_edited_by": { "object": "user", "id": "userId" },
+    "has_children": false,
+    "archived": false,
+    "type": "paragraph",
+    "paragraph": {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": false,
+            "underline": true,
+            "code": false,
+            "color": "yellow"
+          },
+          "plain_text": "?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": false,
+            "underline": true,
+            "code": false,
+            "color": "yellow"
+          },
+          "plain_text": " text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": false,
+            "underline": true,
+            "code": false,
+            "color": "yellow"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": false,
+            "underline": true,
+            "code": false,
+            "color": "yellow"
+          },
+          "plain_text": " text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": false,
+            "underline": true,
+            "code": false,
+            "color": "yellow"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line break", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": false,
+            "underline": true,
+            "code": false,
+            "color": "yellow"
+          },
+          "plain_text": "\nparagraph line break",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": true,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": true,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": true,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": true,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line break ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": true,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line break ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0Kih",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": true,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0Kih",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "OU?t=100&e",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "OU?t=100&e",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "nd=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": false,
+            "underline": false,
+            "code": true,
+            "color": "blue"
+          },
+          "plain_text": "nd=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": true,
+            "strikethrough": false,
+            "underline": false,
+            "code": true,
+            "color": "blue"
+          },
+          "plain_text": " text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=1",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=1",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "00&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "00&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " ", "link": null },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "htt",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "htt",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "ps://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": true,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": true,
+            "color": "default"
+          },
+          "plain_text": "ps://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": "\nparagraph line break ", "link": null },
+          "annotations": {
+            "bold": true,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": true,
+            "color": "default"
+          },
+          "plain_text": "\nparagraph line break ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": true,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": true,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        },
+        {
+          "type": "text",
+          "text": { "content": " text ", "link": null },
+          "annotations": {
+            "bold": true,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": true,
+            "color": "default"
+          },
+          "plain_text": " text ",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+            "link": { "url": "https://youtu.be/hOfRN0KihOU?t=100&end=200" }
+          },
+          "annotations": {
+            "bold": true,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": true,
+            "color": "default"
+          },
+          "plain_text": "https://youtu.be/hOfRN0KihOU?t=100&end=200",
+          "href": "https://youtu.be/hOfRN0KihOU?t=100&end=200"
+        }
+      ],
+      "color": "default"
+    },
+    "request_id": "request_id",
+    "fetch_path": "blocks.retrieve"
+  }
+]

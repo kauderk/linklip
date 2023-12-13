@@ -76,7 +76,7 @@
   import { onMount } from 'svelte'
   import Template, { defineTemplate } from '../template/Template.svelte'
   import Show from './Show.svelte'
-  import { fitToTarget } from 'src/app/controller/follower-lib'
+  import { fitToTarget, zIndex } from 'src/app/controller/follower-lib'
   let template = defineTemplate<{
     item: ContextMenuSchemaActionNode
     open: PreSignal<boolean | undefined>
@@ -114,7 +114,7 @@
 </Template>
 
 {#if $open}
-  <div class="context-menu" use:adjustRect>
+  <div class="context-menu" style:z-index={$zIndex + 1} use:adjustRect>
     <ul>
       {#each $contextMenuSchema.nodes as item}
         {#if 'children' in item}

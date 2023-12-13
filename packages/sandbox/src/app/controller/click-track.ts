@@ -13,7 +13,7 @@ export function createTrackMouseHold(props: Partial<typeof Props>) {
   const moveThreshold = props.moveThreshold ?? Props.moveThreshold
 
   // hold
-  let timer: number
+  let timer: NodeJS.Timeout
   let up = false
   const holdDelay = props.holdDelay ?? Props.holdDelay
 
